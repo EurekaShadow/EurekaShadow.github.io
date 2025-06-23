@@ -2,11 +2,48 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://EurekaShadow.github.io/blog</id>
     <title>My test Site Blog</title>
-    <updated>2021-08-26T00:00:00.000Z</updated>
+    <updated>2025-06-05T00:00:00.000Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://EurekaShadow.github.io/blog"/>
     <subtitle>My test Site Blog</subtitle>
     <icon>https://EurekaShadow.github.io/img/favicon.ico</icon>
+    <entry>
+        <title type="html"><![CDATA[Greetings!]]></title>
+        <id>https://EurekaShadow.github.io/blog/greetings</id>
+        <link href="https://EurekaShadow.github.io/blog/greetings"/>
+        <updated>2025-06-05T00:00:00.000Z</updated>
+        <summary type="html"><![CDATA[Congratulations, you have made your first post!]]></summary>
+        <content type="html"><![CDATA[<p>Congratulations, you have made your first post!</p>
+<p>Feel free to play around and edit this post as much as you like.AAAA</p>
+<p><strong>I MADE MY FIRST BLOG POST!!!</strong></p>
+<p>这是后续内容：</p>
+<ul>
+<li>哈哈哈</li>
+<li>舒适</li>
+<li>反复</li>
+</ul>]]></content>
+        <author>
+            <name>Eureka X</name>
+            <uri>https://github.com/Eureka12138github</uri>
+        </author>
+        <category label="Greetings" term="Greetings"/>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[TEST!]]></title>
+        <id>https://EurekaShadow.github.io/blog/TEST</id>
+        <link href="https://EurekaShadow.github.io/blog/TEST"/>
+        <updated>2025-06-05T00:00:00.000Z</updated>
+        <summary type="html"><![CDATA[This is the summary of a very long blog post,]]></summary>
+        <content type="html"><![CDATA[<p>This is the summary of a very long blog post,</p>
+<p>Use a <code>&lt;!--</code> <code>truncate</code> <code>--&gt;</code> comment to limit blog post size in the list view.</p>
+<p><strong>TEST</strong></p>
+<p>插入<code>&lt;!--</code> <code>truncate</code> <code>--&gt;</code>，表示<code>&lt;!--</code> <code>truncate</code> <code>--&gt;</code>以上的内容为预览，<code>&lt;!--</code> <code>truncate</code> <code>--&gt;</code>一下的内容为完整内容。</p>]]></content>
+        <author>
+            <name>Eureka X</name>
+            <uri>https://github.com/Eureka12138github</uri>
+        </author>
+        <category label="Greetings" term="Greetings"/>
+    </entry>
     <entry>
         <title type="html"><![CDATA[Welcome]]></title>
         <id>https://EurekaShadow.github.io/blog/welcome</id>

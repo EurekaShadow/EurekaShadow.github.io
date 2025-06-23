@@ -4,10 +4,39 @@
         <title>My test Site Blog</title>
         <link>https://EurekaShadow.github.io/blog</link>
         <description>My test Site Blog</description>
-        <lastBuildDate>Thu, 26 Aug 2021 00:00:00 GMT</lastBuildDate>
+        <lastBuildDate>Thu, 05 Jun 2025 00:00:00 GMT</lastBuildDate>
         <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
         <generator>https://github.com/jpmonette/feed</generator>
         <language>en</language>
+        <item>
+            <title><![CDATA[Greetings!]]></title>
+            <link>https://EurekaShadow.github.io/blog/greetings</link>
+            <guid>https://EurekaShadow.github.io/blog/greetings</guid>
+            <pubDate>Thu, 05 Jun 2025 00:00:00 GMT</pubDate>
+            <description><![CDATA[Congratulations, you have made your first post!]]></description>
+            <content:encoded><![CDATA[<p>Congratulations, you have made your first post!</p>
+<p>Feel free to play around and edit this post as much as you like.AAAA</p>
+<p><strong>I MADE MY FIRST BLOG POST!!!</strong></p>
+<p>这是后续内容：</p>
+<ul>
+<li>哈哈哈</li>
+<li>舒适</li>
+<li>反复</li>
+</ul>]]></content:encoded>
+            <category>Greetings</category>
+        </item>
+        <item>
+            <title><![CDATA[TEST!]]></title>
+            <link>https://EurekaShadow.github.io/blog/TEST</link>
+            <guid>https://EurekaShadow.github.io/blog/TEST</guid>
+            <pubDate>Thu, 05 Jun 2025 00:00:00 GMT</pubDate>
+            <description><![CDATA[This is the summary of a very long blog post,]]></description>
+            <content:encoded><![CDATA[<p>This is the summary of a very long blog post,</p>
+<p>Use a <code>&lt;!--</code> <code>truncate</code> <code>--&gt;</code> comment to limit blog post size in the list view.</p>
+<p><strong>TEST</strong></p>
+<p>插入<code>&lt;!--</code> <code>truncate</code> <code>--&gt;</code>，表示<code>&lt;!--</code> <code>truncate</code> <code>--&gt;</code>以上的内容为预览，<code>&lt;!--</code> <code>truncate</code> <code>--&gt;</code>一下的内容为完整内容。</p>]]></content:encoded>
+            <category>Greetings</category>
+        </item>
         <item>
             <title><![CDATA[Welcome]]></title>
             <link>https://EurekaShadow.github.io/blog/welcome</link>
