@@ -1,0 +1,124 @@
+---
+sidebar_label: 'Hi!'
+sidebar_position: 1
+
+---
+
+
+
+# Hello
+
+This is my **first Docusaurus document**!
+
+*this is a test document*
+
+**2025/06/23**
+
+<div class="text-blue-500 p-4">Tailwind 测试文字</div>
+
+<div className="text-blue-500 p-4">Tailwind 测试文字</div>
+
+export const Highlight = ({children, color}) => (
+  <span
+    style={{
+      backgroundColor: color,
+      borderRadius: '2px',
+      color: '#fff',
+      padding: '0.2rem',
+    }}>
+    {children}
+  </span>
+);
+/**
+
+ * 自定义通用按钮组件
+ * 支持图标、跳转链接、颜色、文字颜色、尺寸等自定义
+   */
+   export const Button = ({ 
+     icon, 
+     href, 
+     children, 
+     color = '#F6D2F4',    // 默认粉色背景
+     textColor = 'white',   // 默认白色文字
+     size = 'medium'       // 尺寸支持 small / medium / large
+   }) => {
+
+  /* 定义不同尺寸的 padding 值 */
+  const sizes = {
+    small: '0.3rem 1rem',
+    medium: '0.5rem 1.5rem',
+    large: '0.7rem 2rem'
+  };
+
+  /* 基础样式对象 */
+  const style = {
+    display: 'inline-flex',
+    alignItems: 'center',
+    gap: '0.5rem',
+    padding: sizes[size],
+    borderRadius: '20px',
+    backgroundColor: color,
+    color: textColor,
+    boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
+    fontWeight: 'bold',
+    textDecoration: 'none',
+    cursor: 'pointer',
+    transition: 'transform 0.15s ease-in-out, box-shadow 0.15s ease-in-out',
+    marginBottom: '1rem',
+    fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'
+  };
+
+  /* 悬停样式 */
+  const hoverStyle = {
+    transform: 'scale(1.05)',
+    boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)'
+  };
+
+  /* 离开时恢复原状 */
+  const leaveStyle = {
+    transform: 'scale(1)',
+    boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)'
+  };
+
+  return (
+    /* 返回一个带图标的可点击按钮 */
+    <a
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      style={style}
+      onMouseEnter={(e) => Object.assign(e.currentTarget.style, hoverStyle)}
+      onMouseLeave={(e) => Object.assign(e.currentTarget.style, leaveStyle)}
+    >
+      {icon}
+      <span style={{ color: textColor, textDecoration: 'none' }}>{children}</span>
+    </a>
+  );
+};
+
+
+
+> <Highlight color="#25c2a0">Docusaurus green</Highlight> and <Highlight color="#1877F2">Facebook blue</Highlight> are my favorite colors.
+>
+> I can write **Markdown** alongside my _JSX_!
+
+<div style={{ display: 'flex', gap: '1rem' }}>
+  <Button icon="📘" href="https://example.com">默认按钮</Button>
+  <Button icon="📘" href="https://example.com" color="#2D8E0A">绿色按钮</Button>
+  <Button icon="📘" href="https://example.com" color="#1877F2" size="large">蓝色大按钮</Button>
+</div>
+
+
+<div style={{ display: 'flex', gap: '1rem' }}>
+  <Button icon="📘" href="https://example.com">默认按钮</Button>
+  <Button icon="📘" href="#">按钮1</Button>
+</div>
+
+上面 MDX 示例说明了：
+
+- **要在 MDX 中定义 React 组件，必须使用 `export` 导出**。
+- 可以在 Markdown 中混合使用 JSX 和普通文本。
+- **MDX 中的 HTML 实际上是 JSX**，写内联样式时要使用对象语法（如 `style={{color: 'red'}}`），而不是字符串（如 `style="color: red"`）。
+- 最终，React 组件和 Markdown 内容会被正确渲染成网页内容。
+
+✅ 简单说：**MDX = Markdown + React 组件，写法要符合 JSX 规范。**
