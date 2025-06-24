@@ -38,8 +38,8 @@ const config = {
   // useful metadata like html lang. For example, if your site is Chinese, you
   // may want to replace "en" with "zh-Hans".
   i18n: {
-    defaultLocale: 'en',
-    locales: ['en'],
+    defaultLocale: 'zh-Hans',
+    locales: ['zh-Hans'],
   },
 
   presets: [
@@ -52,7 +52,7 @@ const config = {
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
           editUrl:
-            'https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/',
+            'https://github.com/EurekaShadow/EurekaShadow.github.io/tree/master',
         },
         blog: {
           showReadingTime: true,
@@ -63,7 +63,7 @@ const config = {
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
           editUrl:
-            'https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/',
+            'https://github.com/EurekaShadow/EurekaShadow.github.io/tree/master',
           // Useful options to enforce blogging best practices
           onInlineTags: 'warn',
           onInlineAuthors: 'warn',
@@ -92,11 +92,11 @@ const config = {
             type: 'docSidebar',
             sidebarId: 'DocumentSidebar',
             position: 'left',
-            label: 'Doc',
+            label: '记录',
           },
-          {to: '/blog', label: 'Blog', position: 'left'},
+          {to: '/blog', label: '博客', position: 'left'},
           {
-            href: 'https://github.com/EurekaShadow/EurekaShadow.github.io/tree/gh-pages',
+            href: 'https://github.com/EurekaShadow/EurekaShadow.github.io/tree/master',
             label: 'GitHub',
             position: 'right',
           },
@@ -106,45 +106,45 @@ const config = {
         style: 'dark',
         links: [
           {
-            title: 'Docs',
+            title: '记录',
             items: [
               {
-                label: 'Tutorial',
+                label: 'Hi',
                 to: '/docs/hello',
               },
             ],
           },
           {
-            title: 'Community',
+            title: '社交媒体',
             items: [
               {
-                label: 'Stack Overflow',
-                href: 'https://stackoverflow.com/questions/tagged/docusaurus',
+                label: 'Bilibili',
+                href: 'https://space.bilibili.com/283665748',
               },
               {
-                label: 'Discord',
-                href: 'https://discordapp.com/invite/docusaurus',
+                label: 'Github',
+                href: 'https://github.com/EurekaShadow',
               },
-              {
-                label: 'X',
-                href: 'https://x.com/docusaurus',
-              },
+//              {
+//                label: 'X',
+//                href: 'https://x.com/docusaurus',
+//              },
             ],
           },
           {
-            title: 'More',
+            title: '更多',
             items: [
               {
-                label: 'Blog',
+                label: '博客',
                 to: '/blog',
-              },
-              {
-                label: 'GitHub',
-                href: 'https://github.com/facebook/docusaurus',
               },
               {
                 label: 'My first page',
                 href: '/my-first-markdown-page',
+              },
+              {
+                label: 'ChangeLog',
+                href: '/change-log-page',
               },			  
             ],
           },

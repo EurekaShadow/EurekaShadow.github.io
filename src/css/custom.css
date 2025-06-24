@@ -1,7 +1,7 @@
 /**
  * Any CSS included here will be global. The classic template
  * bundles Infima by default. Infima is a CSS framework designed to
- * work well for content-centric websites.
+ * work well for content-centric websites.@import "tailwindcss";
  */
 
 /* You can override the default Infima variables here. */
@@ -28,4 +28,53 @@
   --ifm-color-primary-lighter: #ffcce0;
   --ifm-color-primary-lightest: #ffe6f0;
   --docusaurus-highlighted-code-line-bg: rgba(255, 38, 130, 0.2);
+}
+
+/* 下载按钮样式 */
+.source_download_button {
+  display: inline-block;      /* 行内块元素，可设置宽高 */
+  padding: 6px 16px;          /* 内边距 */
+  margin-right: 15px;         /* 右侧外边距 */
+  color: #fff;                /* 白色文字 */
+  background-color: #2d8e0a;  /* 绿色背景 */
+  border: none;               /* 无边框 */
+  font-weight: 600;           /* 加粗字体 */
+  border-radius: 6px;         /* 圆角按钮 */
+  text-decoration: none;      /* 去掉链接下划线 */
+  animation: buttonAnimation 0.5s ease-in-out; /* 添加动画效果 */
+}
+
+/* 卡片按钮样式 */
+.source_card_button {
+  display: inline-block;      /* 行内块元素 */
+  padding: 9px 16px;          /* 较大的内边距 */
+  margin-right: 0px;          /* 右侧无外边距 */
+  color: #fff;                /* 白色文字 */
+  background-color: #2d8e0a;  /* 绿色背景 */
+  border: none;               /* 无边框 */
+  font-weight: 600;           /* 加粗字体 */
+  border-radius: 6px;         /* 圆角按钮 */
+  text-decoration: none;      /* 去掉链接下划线 */
+  animation: buttonAnimation 0.5s ease-in-out; /* 添加动画效果 */
+}
+
+/* 定义按钮的“放大再缩小”的动画效果 */
+@keyframes buttonAnimation {
+  0% { transform: scale(1); }       /* 初始大小 */
+  50% { transform: scale(1.1); }    /* 中间放大 */
+  100% { transform: scale(1); }     /* 最终恢复大小 */
+}
+
+/* 鼠标悬停时的下载按钮样式 */
+.source_download_button:hover {
+  color: #fff;                /* 白色文字 */
+  background-color: #39b10d;  /* 背景色变浅绿 */
+  text-decoration: none;      /* 仍然不显示下划线 */
+}
+
+/* 鼠标悬停时的卡片按钮样式 */
+.source_card_button:hover {
+  color: #fff;                /* 白色文字 */
+  background-color: #39b10d;  /* 背景色变浅绿 */
+  text-decoration: none;      /* 仍然不显示下划线 */
 }
