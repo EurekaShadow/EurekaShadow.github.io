@@ -50,7 +50,7 @@
   padding: 9px 16px;          /* 较大的内边距 */
   margin-right: 0px;          /* 右侧无外边距 */
   color: #fff;                /* 白色文字 */
-  background-color: #2d8e0a;  /* 绿色背景 */
+  background-color: #87CDFD;  /* 粉色背景 */
   border: none;               /* 无边框 */
   font-weight: 600;           /* 加粗字体 */
   border-radius: 6px;         /* 圆角按钮 */
@@ -75,6 +75,6 @@
 /* 鼠标悬停时的卡片按钮样式 */
 .source_card_button:hover {
   color: #fff;                /* 白色文字 */
-  background-color: #39b10d;  /* 背景色变浅绿 */
+  background-color: #F2BBE0;  /* 背景色变浅粉 */
   text-decoration: none;      /* 仍然不显示下划线 */
 }

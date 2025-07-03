@@ -1,6 +1,6 @@
 ## To do list:
 
-- [ ] 重修修改Sherry1、SHerry2、Sherry3图片
+- [x] 重修修改Sherry1、SHerry2、Sherry3图片
   - 重新抠图
   - 使得三张图片大小小于500kb
   - 使得三种图片人像大小基本一致

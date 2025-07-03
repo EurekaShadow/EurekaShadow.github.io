@@ -27,3 +27,8 @@ recording:
   label: Recording
   permalink: /recording
   description: 在Recording标签下的博客主要为学习记录 
+  
+数组:
+  label: 数组
+  permalink: /数组
+  description: 关于数组的题目  
