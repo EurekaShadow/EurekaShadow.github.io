@@ -4,10 +4,68 @@
         <title>我的网站 Blog</title>
         <link>https://EurekaShadow.github.io/blog</link>
         <description>我的网站 Blog</description>
-        <lastBuildDate>Mon, 23 Jun 2025 00:00:00 GMT</lastBuildDate>
+        <lastBuildDate>Fri, 04 Jul 2025 00:00:00 GMT</lastBuildDate>
         <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
         <generator>https://github.com/jpmonette/feed</generator>
         <language>zh-Hans</language>
+        <item>
+            <title><![CDATA[合并两个有序数组]]></title>
+            <link>https://EurekaShadow.github.io/blog/LeetCode88</link>
+            <guid>https://EurekaShadow.github.io/blog/LeetCode88</guid>
+            <pubDate>Fri, 04 Jul 2025 00:00:00 GMT</pubDate>
+            <description><![CDATA[力扣面试经典——88题]]></description>
+            <content:encoded><![CDATA[<h3 class="anchor anchorWithStickyNavbar_LWe7" id="力扣面试经典88题">力扣面试经典——88题<a href="https://eurekashadow.github.io/blog/LeetCode88#%E5%8A%9B%E6%89%A3%E9%9D%A2%E8%AF%95%E7%BB%8F%E5%85%B888%E9%A2%98" class="hash-link" aria-label="力扣面试经典——88题的直接链接" title="力扣面试经典——88题的直接链接">​</a></h3>
+<p>给你两个按<strong>非递减顺序</strong>排列的整数数组 <code>nums1</code> 和 <code>nums2</code>，另有两个整数 <code>m</code> 和 <code>n</code>，分别表示 <code>nums1</code> 和 <code>nums2</code> 中的元素数目。</p>
+<p>请你合并 <code>nums2</code> 到 <code>nums1</code> 中，使合并后的数组同样按<strong>非递减顺序</strong>排列。</p>
+<blockquote>
+<p>⚠️ 注意：最终，合并后数组不应由函数返回，而是存储在数组 <code>nums1</code> 中。为了应对这种情况，<code>nums1</code> 的初始长度为 <code>m + n</code>，其中前 <code>m</code> 个元素表示应合并的元素，后 <code>n</code> 个元素为 <code>0</code>，应忽略。<code>nums2</code> 的长度为 <code>n</code>。</p>
+</blockquote>
+<hr>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="-示例说明">🧪 示例说明<a href="https://eurekashadow.github.io/blog/LeetCode88#-%E7%A4%BA%E4%BE%8B%E8%AF%B4%E6%98%8E" class="hash-link" aria-label="🧪 示例说明的直接链接" title="🧪 示例说明的直接链接">​</a></h3>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="示例-1">示例 1：<a href="https://eurekashadow.github.io/blog/LeetCode88#%E7%A4%BA%E4%BE%8B-1" class="hash-link" aria-label="示例 1：的直接链接" title="示例 1：的直接链接">​</a></h4>
+<blockquote>
+<p>输入：<br>
+<code>nums1 = [1, 2, 3, 0, 0, 0]</code>, <code>m = 3</code><br>
+<code>nums2 = [2, 5, 6]</code>, <code>n = 3</code></p>
+<p>输出：<br>
+<code>[1, 2, 2, 3, 5, 6]</code></p>
+<p>解释：需要合并 <code>[1,2,3]</code> 和 <code>[2,5,6]</code>。<br>
+<!-- -->合并结果是 <code>[1, 2, 2, 3, 5, 6]</code>，其中斜体加粗标注的为 <code>nums1</code> 中的原始元素。</p>
+</blockquote>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="示例-2">示例 2：<a href="https://eurekashadow.github.io/blog/LeetCode88#%E7%A4%BA%E4%BE%8B-2" class="hash-link" aria-label="示例 2：的直接链接" title="示例 2：的直接链接">​</a></h4>
+<blockquote>
+<p>输入：<br>
+<code>nums1 = [1]</code>, <code>m = 1</code><br>
+<code>nums2 = []</code>, <code>n = 0</code></p>
+<p>输出：<br>
+<code>[1]</code></p>
+</blockquote>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="示例-3">示例 3：<a href="https://eurekashadow.github.io/blog/LeetCode88#%E7%A4%BA%E4%BE%8B-3" class="hash-link" aria-label="示例 3：的直接链接" title="示例 3：的直接链接">​</a></h4>
+<blockquote>
+<p>输入：<br>
+<code>nums1 = [0]</code>, <code>m = 0</code><br>
+<code>nums2 = [1]</code>, <code>n = 1</code></p>
+<p>输出：<br>
+<code>[1]</code></p>
+<p>解释：因为 <code>m = 0</code>，所以 <code>nums1</code> 中没有有效元素。<code>0</code> 只是为了确保合并结果可以顺利存放到 <code>nums1</code> 中。</p>
+</blockquote>
+<hr>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="-提示">🔍 提示：<a href="https://eurekashadow.github.io/blog/LeetCode88#-%E6%8F%90%E7%A4%BA" class="hash-link" aria-label="🔍 提示：的直接链接" title="🔍 提示：的直接链接">​</a></h3>
+<ul>
+<li><code>nums1.length == m + n</code></li>
+<li><code>nums2.length == n</code></li>
+<li><code>0 &lt;= m, n &lt;= 200</code></li>
+<li><code>-10^9 &lt;= nums1[i], nums2[j] &lt;= 10^9</code></li>
+</ul>
+<hr>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="-进阶挑战">🚀 进阶挑战：<a href="https://eurekashadow.github.io/blog/LeetCode88#-%E8%BF%9B%E9%98%B6%E6%8C%91%E6%88%98" class="hash-link" aria-label="🚀 进阶挑战：的直接链接" title="🚀 进阶挑战：的直接链接">​</a></h3>
+<p>你可以设计实现一个时间复杂度为 <code>O(m + n)</code> 的算法解决此问题吗？</p>
+<hr>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="-推荐阅读">💡 推荐阅读：<a href="https://eurekashadow.github.io/blog/LeetCode88#-%E6%8E%A8%E8%8D%90%E9%98%85%E8%AF%BB" class="hash-link" aria-label="💡 推荐阅读：的直接链接" title="💡 推荐阅读：的直接链接">​</a></h3>
+<p>如果你正在开发文档站点（如 Docusaurus），也可以考虑将代码片段封装到 <code>&lt;details&gt;</code> 标签中，避免页面过于冗长：</p>
+<details class="details_lb9f alert alert--info details_b_Ee" data-collapsed="true"><summary>点击展开 C 语言参考答案</summary><div><div class="collapsibleContent_i85q"><div class="language-c codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-c codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token keyword" style="color:#00009f">void</span><span class="token plain"> </span><span class="token function" style="color:#d73a49">merge</span><span class="token punctuation" style="color:#393A34">(</span><span class="token keyword" style="color:#00009f">int</span><span class="token operator" style="color:#393A34">*</span><span class="token plain"> nums1</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> </span><span class="token keyword" style="color:#00009f">int</span><span class="token plain"> nums1Size</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> </span><span class="token keyword" style="color:#00009f">int</span><span class="token plain"> m</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> </span><span class="token keyword" style="color:#00009f">int</span><span class="token operator" style="color:#393A34">*</span><span class="token plain"> nums2</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> </span><span class="token keyword" style="color:#00009f">int</span><span class="token plain"> nums2Size</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> </span><span class="token keyword" style="color:#00009f">int</span><span class="token plain"> n</span><span class="token punctuation" style="color:#393A34">)</span><span class="token plain"> </span><span class="token punctuation" style="color:#393A34">{</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token keyword" style="color:#00009f">int</span><span class="token plain"> i </span><span class="token operator" style="color:#393A34">=</span><span class="token plain"> m </span><span class="token operator" style="color:#393A34">-</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">1</span><span class="token punctuation" style="color:#393A34">;</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token keyword" style="color:#00009f">int</span><span class="token plain"> j </span><span class="token operator" style="color:#393A34">=</span><span class="token plain"> n </span><span class="token operator" style="color:#393A34">-</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">1</span><span class="token punctuation" style="color:#393A34">;</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token keyword" style="color:#00009f">int</span><span class="token plain"> k </span><span class="token operator" style="color:#393A34">=</span><span class="token plain"> m </span><span class="token operator" style="color:#393A34">+</span><span class="token plain"> n </span><span class="token operator" style="color:#393A34">-</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">1</span><span class="token punctuation" style="color:#393A34">;</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token keyword" style="color:#00009f">while</span><span class="token plain"> </span><span class="token punctuation" style="color:#393A34">(</span><span class="token plain">i </span><span class="token operator" style="color:#393A34">&gt;=</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">0</span><span class="token plain"> </span><span class="token operator" style="color:#393A34">&amp;&amp;</span><span class="token plain"> j </span><span class="token operator" style="color:#393A34">&gt;=</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">0</span><span class="token punctuation" style="color:#393A34">)</span><span class="token plain"> </span><span class="token punctuation" style="color:#393A34">{</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">        </span><span class="token keyword" style="color:#00009f">if</span><span class="token plain"> </span><span class="token punctuation" style="color:#393A34">(</span><span class="token plain">nums1</span><span class="token punctuation" style="color:#393A34">[</span><span class="token plain">i</span><span class="token punctuation" style="color:#393A34">]</span><span class="token plain"> </span><span class="token operator" style="color:#393A34">&gt;</span><span class="token plain"> nums2</span><span class="token punctuation" style="color:#393A34">[</span><span class="token plain">j</span><span class="token punctuation" style="color:#393A34">]</span><span class="token punctuation" style="color:#393A34">)</span><span class="token plain"> </span><span class="token punctuation" style="color:#393A34">{</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">            nums1</span><span class="token punctuation" style="color:#393A34">[</span><span class="token plain">k</span><span class="token operator" style="color:#393A34">--</span><span class="token punctuation" style="color:#393A34">]</span><span class="token plain"> </span><span class="token operator" style="color:#393A34">=</span><span class="token plain"> nums1</span><span class="token punctuation" style="color:#393A34">[</span><span class="token plain">i</span><span class="token operator" style="color:#393A34">--</span><span class="token punctuation" style="color:#393A34">]</span><span class="token punctuation" style="color:#393A34">;</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">        </span><span class="token punctuation" style="color:#393A34">}</span><span class="token plain"> </span><span class="token keyword" style="color:#00009f">else</span><span class="token plain"> </span><span class="token punctuation" style="color:#393A34">{</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">            nums1</span><span class="token punctuation" style="color:#393A34">[</span><span class="token plain">k</span><span class="token operator" style="color:#393A34">--</span><span class="token punctuation" style="color:#393A34">]</span><span class="token plain"> </span><span class="token operator" style="color:#393A34">=</span><span class="token plain"> nums2</span><span class="token punctuation" style="color:#393A34">[</span><span class="token plain">j</span><span class="token operator" style="color:#393A34">--</span><span class="token punctuation" style="color:#393A34">]</span><span class="token punctuation" style="color:#393A34">;</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">        </span><span class="token punctuation" style="color:#393A34">}</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token punctuation" style="color:#393A34">}</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token keyword" style="color:#00009f">while</span><span class="token plain"> </span><span class="token punctuation" style="color:#393A34">(</span><span class="token plain">j </span><span class="token operator" style="color:#393A34">&gt;=</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">0</span><span class="token punctuation" style="color:#393A34">)</span><span class="token plain"> </span><span class="token punctuation" style="color:#393A34">{</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">        nums1</span><span class="token punctuation" style="color:#393A34">[</span><span class="token plain">k</span><span class="token operator" style="color:#393A34">--</span><span class="token punctuation" style="color:#393A34">]</span><span class="token plain"> </span><span class="token operator" style="color:#393A34">=</span><span class="token plain"> nums2</span><span class="token punctuation" style="color:#393A34">[</span><span class="token plain">j</span><span class="token operator" style="color:#393A34">--</span><span class="token punctuation" style="color:#393A34">]</span><span class="token punctuation" style="color:#393A34">;</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token punctuation" style="color:#393A34">}</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token punctuation" style="color:#393A34">}</span><br></span></code></pre></div></div></div></div></details>]]></content:encoded>
+            <category>数组</category>
+        </item>
         <item>
             <title><![CDATA[Blog1!]]></title>
             <link>https://EurekaShadow.github.io/blog/Blog1</link>
@@ -15,6 +73,12 @@
             <pubDate>Mon, 23 Jun 2025 00:00:00 GMT</pubDate>
             <description><![CDATA[关于图标的替换]]></description>
             <content:encoded><![CDATA[<p><strong>关于图标的替换</strong></p>
+<p>总结：
+字段	含义
+slug	页面的自定义 URL 路径
+title	页面显示的标题
+authors	作者名
+tags	文章标签，用于分类</p>
 <p>一个用于生成ICON图标的<a href="https://favicon.io/favicon-converter/" target="_blank" rel="noopener noreferrer" title="图片生成ICON">网站</a></p>]]></content:encoded>
             <category>Recording</category>
         </item>
