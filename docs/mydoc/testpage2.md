@@ -1,5 +1,7 @@
 ---
-sidebar_position: 2
+sidebar_label: '测试页2'
+sidebar_position: 1.2
+description: 这是我的测试页2！
 ---
 
 ### testpage2

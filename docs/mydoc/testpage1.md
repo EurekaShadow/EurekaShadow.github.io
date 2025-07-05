@@ -1,7 +1,7 @@
 ---
-title: My testpage1
-sidebar_position: 1
-description: This is my testpage1!
+sidebar_label: '测试页1'
+sidebar_position: 1.1
+description: 这是我的测试页1！
 ---
 
 ### testpage1
@@ -19,6 +19,8 @@ hhh
 ![](./img/docusaurus.png "this is a dinosaur")
 
 ![](.\img\Eureka.png "This is Sherry")
+
+
 
 ```c
 int main(){

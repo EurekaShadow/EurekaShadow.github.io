@@ -19,7 +19,7 @@ function HomepageHeader() {
         <div className={styles.buttons}>
           <Link
             className="button button--secondary button--lg"
-            to="/docs/hello">
+            to="/docs/reflection-space">
             回想空间 🌸
           </Link>
         </div>
@@ -32,8 +32,8 @@ export default function Home() {
   const {siteConfig} = useDocusaurusContext();
   return (
     <Layout
-      title={`Hello from ${siteConfig.title}`}
-      description="Description will go into a meta tag in <head />">
+      title={`学习轨迹 - ${siteConfig.title}`}
+      description="这里是我在技术探索和日常学习中的点滴记录，涵盖编程笔记、项目复盘与成长感悟。">
       <HomepageHeader />
       <main>
         <HomepageFeatures />
