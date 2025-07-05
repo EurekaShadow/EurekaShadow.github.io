@@ -14,7 +14,7 @@
             <guid>https://www.eurekashadow.xin/blog/LeetCode88</guid>
             <pubDate>Fri, 04 Jul 2025 00:00:00 GMT</pubDate>
             <description><![CDATA[力扣面试经典——88题]]></description>
-            <content:encoded><![CDATA[<h3 class="anchor anchorWithStickyNavbar_LWe7" id="力扣面试经典88题">力扣面试经典——88题<a href="https://www.eurekashadow.xin/blog/LeetCode88#%E5%8A%9B%E6%89%A3%E9%9D%A2%E8%AF%95%E7%BB%8F%E5%85%B888%E9%A2%98" class="hash-link" aria-label="力扣面试经典——88题的直接链接" title="力扣面试经典——88题的直接链接">​</a></h3>
+            <content:encoded><![CDATA[<h3 class="anchor anchorWithStickyNavbar_LWe7" id="力扣面试经典88题"><a href="https://leetcode.cn/problems/merge-sorted-array/description/?envType=study-plan-v2&amp;envId=top-interview-150" target="_blank" rel="noopener noreferrer" title="力扣">力扣面试经典——88题</a><a href="https://www.eurekashadow.xin/blog/LeetCode88#%E5%8A%9B%E6%89%A3%E9%9D%A2%E8%AF%95%E7%BB%8F%E5%85%B888%E9%A2%98" class="hash-link" aria-label="力扣面试经典88题的直接链接" title="力扣面试经典88题的直接链接">​</a></h3>
 <p>给你两个按<strong>非递减顺序</strong>排列的整数数组 <code>nums1</code> 和 <code>nums2</code>，另有两个整数 <code>m</code> 和 <code>n</code>，分别表示 <code>nums1</code> 和 <code>nums2</code> 中的元素数目。</p>
 <p>请你合并 <code>nums2</code> 到 <code>nums1</code> 中，使合并后的数组同样按<strong>非递减顺序</strong>排列。</p>
 <blockquote>
