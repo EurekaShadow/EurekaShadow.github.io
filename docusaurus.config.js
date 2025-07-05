@@ -109,8 +109,8 @@ const config = {
             title: '记录',
             items: [
               {
-                label: 'Hi',
-                to: '/docs/hello',
+                label: '模板',
+                to: '/docs/category/模板',
               },
             ],
           },
