@@ -25,4 +25,13 @@ import CardImg from '@site/src/components/CardImg';
 />
 
 使用组件：
-<CardImg src="/img/example.jpg" alt="我的图片" isCenter={true} />
+<div style={{
+  display: 'flex',
+  flexDirection: 'column',
+  gap: '10px',
+}}>
+  <h3>这是第一张图片</h3>
+  <CardImg src="/img/example.jpg" alt="示例图1" isCenter={true} />
+  <h3>这是第二张图片（带卡片装饰）</h3>
+  <CardImg src="/img/example.jpg" alt="示例图2" isCenter={true} isBoxed={true} />
+</div>

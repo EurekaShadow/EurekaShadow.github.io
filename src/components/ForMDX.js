@@ -19,6 +19,8 @@ export const MyColor =
   black:'black',
   qing:'#f0f5fa',
   Purple: '#5c62d5',
+  Pink: '#F2BBE0',
+  Blue: '#87CEFA'
 }
 
 
@@ -26,7 +28,7 @@ export const MyColor =
  * 改自 docusaurus 文档 MDX 和 React 一节中的高亮代码
  * 功能：为文字加上背景色，并设置字体颜色  
  ********************************************************************************/
-export function Highlight({children, bgColor,fontColor}) {
+export function Highlight({children, bgColor = MyColor.yellow, fontColor = MyColor.black}) {
   return (
     <span
       style={{
@@ -34,6 +36,8 @@ export function Highlight({children, bgColor,fontColor}) {
         borderRadius: '4px',
         color: fontColor,
         padding: '0.2rem',
+        marginRight: '0.5rem', // 添加右边距
+        display: 'inline-block', // 确保 margin 生效
       }}>
       {children}
     </span>
@@ -42,33 +46,12 @@ export function Highlight({children, bgColor,fontColor}) {
 /* end */
 
 
-/**********************************************************************************
-* 功能：高亮某个词
-* 其他：light 和 W 效果一样(现在不一样了我换了颜色)，我一开始写的时候，用的 light ，后来嫌 light 太长了，就改成 W，
-*       W 是 Word 的缩写
-***********************************************************************************/
-export function W({children}) {
+export function Keyword({children}) {
   return (
-    <span className={BStyles.W}
+    <span className={BStyles.InlineHighlight}
       style={{
-       /*  backgroundColor: '#f0f5fa',
-        borderRadius: '4px', */
-        // color: '#5c62d5',
-        padding: '0.2rem',
-      }}>
-      {children}
-    </span>
-  )
-}
-
-export function Light({children}) {
-  return (
-    <span
-      style={{
-        backgroundColor: '#f0f5fa',
-        borderRadius: '4px',
-        color: '#25c2a0',
-        padding: '0.2rem',
+        padding: '0.2rem',        // 内部留白（已有）
+        margin: '0.4rem 0.4rem',       // 左右各 0.4rem 空隙，上下为 0
       }}>
       {children}
     </span>
@@ -77,13 +60,29 @@ export function Light({children}) {
 /* end */
 
 /*************************************************************************************
-* 功能：为二级标题左边加一小块背景色
-* 其他：H2 是标签的关键字，所以改成了 B2
-*************************************************************************************/
+ * 功能：为一级标题添加装饰性样式（如下方渐变横线）
+ * 说明：
+ *   - 使用 <span> 包裹标题内容，并添加 className={BStyles.B1}
+ *   - 实际装饰效果由 CSS 控制（如渐变线条 + hover 拉伸动画）
+ *   - 命名从 H1 改为 B1 是为了避免与 HTML 标签冲突
+ *************************************************************************************/
+export function B1({children}) {
+  return (
+    <span className={BStyles.B1}>
+      {children}
+    </span>
+  )
+}
+/*************************************************************************************
+ * 功能：为二级标题添加装饰性样式（如下方渐变横线）
+ * 说明：
+ *   - 使用 <span> 包裹标题内容，并添加 className={BStyles.B2}
+ *   - 实际装饰效果由 CSS 控制（如渐变线条 + hover 拉伸动画）
+ *   - 命名从 H2 改为 B2 是为了避免与 HTML 标签冲突
+ *************************************************************************************/
 export function B2({children}) {
   return (
-    <span
-      className={BStyles.B2}>
+    <span className={BStyles.B2}>
       {children}
     </span>
   )
@@ -113,20 +112,17 @@ export function B2({children}) {
 *************************************************************************************/
 export function B3({children}) {
   return (
-    <span
-      className={BStyles.B3}>
-      <span style={{marginRight: '1.2rem'}}/>{children}
-    </span>
-    
-  )
+    <span className={BStyles.B3}>{children}</span>
+  );
 }
 
 export function BH3({children}) {
   return (
-    <span className={BStyles.BH3}
+    <span 
+      className={BStyles.BH3}
       style={{        
         padding: '0.2rem',
-        color: 'white',
+        marginRight: '0.5rem', // 添加右边距
       }}>
       {children}
     </span>

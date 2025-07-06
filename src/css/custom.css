@@ -78,6 +78,18 @@
   background-color: #F2BBE0;  /* 背景色变浅粉 */
   text-decoration: none;      /* 仍然不显示下划线 */
 }
+/* 默认亮色模式 */
+[data-theme="light"] {
+  --card-img-border-color: #87CEFA; /* 蓝色边框 */
+  --card-img-bg: #f9fbfc;
+  --card-img-hover-border-color: #F2BBE0;
+}
 
+/* 暗色模式 */
+[data-theme="dark"] {
+  --card-img-border-color: #F2BBE0; /* 粉色边框 */
+  --card-img-bg: #1a1a1a;
+  --card-img-hover-border-color: #87CEFA;
+}
 
 
