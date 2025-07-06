@@ -53,6 +53,8 @@ const config = {
           // Remove this to remove the "edit this page" links.
           editUrl:
             'https://github.com/EurekaShadow/EurekaShadow.github.io/tree/master',
+          showLastUpdateTime: true,
+		  showLastUpdateAuthor: true // 不显示作者
         },
         blog: {
           showReadingTime: true,
@@ -68,6 +70,7 @@ const config = {
           onInlineTags: 'warn',
           onInlineAuthors: 'warn',
           onUntruncatedBlogPosts: 'warn',
+          showLastUpdateTime: true
         },
         theme: {
           customCss: './src/css/custom.css',
