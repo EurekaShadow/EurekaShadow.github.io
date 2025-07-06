@@ -1,0 +1,23 @@
+---
+slug: /Issues
+title: 遇到的问题
+sidebar_position: 99
+description: 这个页面主要记录在部署文件站中遇到的问题以及解决方法。
+---
+
+import { Highlight, Keyword, Light, B1, B2, B3, BH3, B3W, MyColor} from '@site/src/components/ForMDX';
+import CardImg from '@site/src/components/CardImg';
+
+## <B2>部署延迟</B2>
+
+这是本地经过 `yarn deploy` 后显示的情况，可见 `Done in ...`。但是真的部署成功了吗？
+
+<p><CardImg src="/img/Deploy_Fake_Done.jpg" alt="实际尚未部署成功" isCenter={true} isBoxed={true} /></p>
+
+之后点击 `https://eurekashadow.github.io/` 或者域名 `https://www.eurekashadow.xin/`,会出现下面这个页面：
+
+<p><CardImg src="/img/After_Dploy.jpg" alt="There isn't a Git Pages site here." isCenter={true} isBoxed={true} /></p>
+
+这是可能是因为：GitHub Actions 使用的免费 CI/CD 资源（Runner）是共享的，在全球用户<Highlight> 高峰期 </Highlight>时出现了<Highlight> 排队现象 </Highlight>。
+打开`Github` 中的 `Actions` 可以看到正在排队状态，所以慢慢等吧。过一段时间，就会部署成功了：
+<p><CardImg src="/img/Real_Deploy_Done.jpg" alt="实际尚未部署成功" isCenter={true} isBoxed={true} /></p>

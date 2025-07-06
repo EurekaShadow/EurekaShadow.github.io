@@ -36,7 +36,6 @@ export function Highlight({children, bgColor = MyColor.yellow, fontColor = MyCol
         borderRadius: '4px',
         color: fontColor,
         padding: '0.2rem',
-        marginRight: '0.5rem', // 添加右边距
         display: 'inline-block', // 确保 margin 生效
       }}>
       {children}

@@ -31,4 +31,9 @@ recording:
 数组:
   label: 数组
   permalink: /数组
-  description: 关于数组的题目  
+  description: 关于数组的题目 
+
+Git:
+  label: Git
+  permalink: /Git
+  description: 记录学习Git的历程 
