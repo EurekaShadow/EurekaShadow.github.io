@@ -4,10 +4,128 @@
         <title>我的网站 Blog</title>
         <link>https://www.eurekashadow.xin/blog</link>
         <description>我的网站 Blog</description>
-        <lastBuildDate>Fri, 04 Jul 2025 00:00:00 GMT</lastBuildDate>
+        <lastBuildDate>Sun, 06 Jul 2025 00:00:00 GMT</lastBuildDate>
         <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
         <generator>https://github.com/jpmonette/feed</generator>
         <language>zh-Hans</language>
+        <item>
+            <title><![CDATA[Git学习]]></title>
+            <link>https://www.eurekashadow.xin/blog/LearnGit</link>
+            <guid>https://www.eurekashadow.xin/blog/LearnGit</guid>
+            <pubDate>Sun, 06 Jul 2025 00:00:00 GMT</pubDate>
+            <description><![CDATA[Git 使用技巧汇总]]></description>
+            <content:encoded><![CDATA[<h2 class="anchor anchorWithStickyNavbar_LWe7" id="git-使用技巧汇总">Git 使用技巧汇总<a href="https://www.eurekashadow.xin/blog/LearnGit#git-%E4%BD%BF%E7%94%A8%E6%8A%80%E5%B7%A7%E6%B1%87%E6%80%BB" class="hash-link" aria-label="Git 使用技巧汇总的直接链接" title="Git 使用技巧汇总的直接链接">​</a></h2>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="测试-git-diff-功能">测试 git diff 功能<a href="https://www.eurekashadow.xin/blog/LearnGit#%E6%B5%8B%E8%AF%95-git-diff-%E5%8A%9F%E8%83%BD" class="hash-link" aria-label="测试 git diff 功能的直接链接" title="测试 git diff 功能的直接链接">​</a></h3>
+<ul>
+<li><code>git diff</code>：查看<strong>未暂存文件</strong>与上次提交之间的差异。</li>
+<li><code>git diff --staged</code>：查看<strong>已暂存文件</strong>与上次提交之间的差异。</li>
+</ul>
+<p>✅ <strong>一句话总结</strong>：如果文件在<strong>未暂存区</strong>，使用 <code>git diff</code>；如果文件<strong>已暂存</strong>，使用 <code>git diff --staged</code>。</p>
+<hr>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="提交操作">提交操作<a href="https://www.eurekashadow.xin/blog/LearnGit#%E6%8F%90%E4%BA%A4%E6%93%8D%E4%BD%9C" class="hash-link" aria-label="提交操作的直接链接" title="提交操作的直接链接">​</a></h3>
+<ul>
+<li><code>git commit -a</code>：跳过 <code>git add</code> 阶段，一键暂存并提交所有修改。</li>
+<li><code>git commit --amend</code>：撤销最近一次提交，并允许：<!-- -->
+<ul>
+<li>使用 <code>git add</code> 补充遗漏的文件；</li>
+<li>编辑或保留原有的提交信息后重新提交。</li>
+</ul>
+</li>
+</ul>
+<p>🔁 适用于刚提交完发现还有文件没添加，或者需要修改提交信息的情况。</p>
+<hr>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="文件重命名操作">文件重命名操作<a href="https://www.eurekashadow.xin/blog/LearnGit#%E6%96%87%E4%BB%B6%E9%87%8D%E5%91%BD%E5%90%8D%E6%93%8D%E4%BD%9C" class="hash-link" aria-label="文件重命名操作的直接链接" title="文件重命名操作的直接链接">​</a></h3>
+<ul>
+<li><code>git mv &lt;原文件名&gt; &lt;新文件名&gt;</code>：用于重命名 Git 跟踪的文件。</li>
+</ul>
+<p>示例：</p>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">git mv test1.txt test.txt</span><br></span></code></pre></div></div>
+<hr>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="撤销暂存操作">撤销暂存操作<a href="https://www.eurekashadow.xin/blog/LearnGit#%E6%92%A4%E9%94%80%E6%9A%82%E5%AD%98%E6%93%8D%E4%BD%9C" class="hash-link" aria-label="撤销暂存操作的直接链接" title="撤销暂存操作的直接链接">​</a></h3>
+<ul>
+<li><code>git reset HEAD &lt;文件名&gt;</code>：取消某个文件的暂存状态。</li>
+</ul>
+<p>示例：</p>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">git reset HEAD README.md</span><br></span></code></pre></div></div>
+<p>📌 常用于误将某些文件加入暂存区后想将其移出的情况。</p>
+<hr>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="放弃本地修改">放弃本地修改<a href="https://www.eurekashadow.xin/blog/LearnGit#%E6%94%BE%E5%BC%83%E6%9C%AC%E5%9C%B0%E4%BF%AE%E6%94%B9" class="hash-link" aria-label="放弃本地修改的直接链接" title="放弃本地修改的直接链接">​</a></h3>
+<ul>
+<li><code>git restore &lt;文件名&gt;</code>：放弃对该文件的所有本地修改。</li>
+</ul>
+<p>⚠️ <strong>注意</strong>：该操作不可逆，请确保确实不需要这些修改后再执行。</p>
+<hr>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="分支切换与紧急修复流程">分支切换与紧急修复流程<a href="https://www.eurekashadow.xin/blog/LearnGit#%E5%88%86%E6%94%AF%E5%88%87%E6%8D%A2%E4%B8%8E%E7%B4%A7%E6%80%A5%E4%BF%AE%E5%A4%8D%E6%B5%81%E7%A8%8B" class="hash-link" aria-label="分支切换与紧急修复流程的直接链接" title="分支切换与紧急修复流程的直接链接">​</a></h2>
+<p>假设你现在正在解决问题53，当前处于 <code>iss53</code> 分支上，而 <code>main</code> 分支突然出现了问题，需要马上修复。</p>
+<p>✅ <strong>处理步骤如下</strong>：</p>
+<ol>
+<li>
+<p>切换回 <code>main</code> 分支：</p>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">git switch main</span><br></span></code></pre></div></div>
+</li>
+<li>
+<p>创建一个临时分支 <code>hotfix</code> 来修复问题：</p>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">git checkout -b hotfix</span><br></span></code></pre></div></div>
+</li>
+<li>
+<p>修复完成后，提交更改。</p>
+</li>
+<li>
+<p>切换回 <code>main</code> 分支并合并修复内容：</p>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">git checkout main</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">git merge hotfix</span><br></span></code></pre></div></div>
+</li>
+<li>
+<p>删除临时分支（问题已修复）：</p>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">git branch -d hotfix</span><br></span></code></pre></div></div>
+</li>
+<li>
+<p>回到 <code>iss53</code> 分支继续开发：</p>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">git switch iss53</span><br></span></code></pre></div></div>
+</li>
+</ol>
+<hr>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="合并冲突说明及解决方法">合并冲突说明及解决方法<a href="https://www.eurekashadow.xin/blog/LearnGit#%E5%90%88%E5%B9%B6%E5%86%B2%E7%AA%81%E8%AF%B4%E6%98%8E%E5%8F%8A%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95" class="hash-link" aria-label="合并冲突说明及解决方法的直接链接" title="合并冲突说明及解决方法的直接链接">​</a></h2>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="️-冲突原因">⚠️ 冲突原因<a href="https://www.eurekashadow.xin/blog/LearnGit#%EF%B8%8F-%E5%86%B2%E7%AA%81%E5%8E%9F%E5%9B%A0" class="hash-link" aria-label="⚠️ 冲突原因的直接链接" title="⚠️ 冲突原因的直接链接">​</a></h3>
+<p>当 <code>main</code> 和 <code>iss53</code> 分支<strong>同时修改了同一个文件的相同部分</strong>（例如 <code>README.md</code>），Git 无法判断应该保留哪边的内容，就会提示冲突。</p>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="示例场景">示例场景<a href="https://www.eurekashadow.xin/blog/LearnGit#%E7%A4%BA%E4%BE%8B%E5%9C%BA%E6%99%AF" class="hash-link" aria-label="示例场景的直接链接" title="示例场景的直接链接">​</a></h3>
+<ul>
+<li>在 <code>main</code> 分支下修改了 <code>README.md</code> 并提交；</li>
+<li>然后切换到 <code>iss53</code> 分支，在此分支下也修改了 <code>README.md</code> 并提交；</li>
+<li>最后切换回 <code>main</code> 分支，尝试合并 <code>iss53</code>，出现冲突。</li>
+</ul>
+<hr>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="-解决步骤">🔧 解决步骤<a href="https://www.eurekashadow.xin/blog/LearnGit#-%E8%A7%A3%E5%86%B3%E6%AD%A5%E9%AA%A4" class="hash-link" aria-label="🔧 解决步骤的直接链接" title="🔧 解决步骤的直接链接">​</a></h3>
+<ol>
+<li>
+<p>打开冲突文件（如 <code>README.md</code>），你会看到类似如下内容：</p>
+<div class="language-html codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-html codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">This is the content from main.</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">=======</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">This is the content from iss53.</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">&gt;&gt;&gt;&gt;&gt;&gt;&gt; iss53</span><br></span></code></pre></div></div>
+</li>
+<li>
+<p>手动编辑文件，选择你想要保留的内容，删除冲突标记。</p>
+</li>
+<li>
+<p>添加修改后的文件到暂存区：</p>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">git add README.md</span><br></span></code></pre></div></div>
+</li>
+<li>
+<p>提交合并结果：</p>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">git commit -m "Fixed conflict"</span><br></span></code></pre></div></div>
+</li>
+</ol>
+<hr>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="-如何避免冲突">💡 如何避免冲突？<a href="https://www.eurekashadow.xin/blog/LearnGit#-%E5%A6%82%E4%BD%95%E9%81%BF%E5%85%8D%E5%86%B2%E7%AA%81" class="hash-link" aria-label="💡 如何避免冲突？的直接链接" title="💡 如何避免冲突？的直接链接">​</a></h3>
+<ul>
+<li><strong>保持分支同步</strong>：在修改前先拉取最新代码；</li>
+<li><strong>及时合并分支</strong>：避免两个分支长时间不合并；</li>
+<li><strong>明确分工</strong>：团队协作时尽量避免多人修改同一文件的关键区域；</li>
+<li><strong>使用 Pull Request 审查机制</strong>：提前发现潜在冲突。</li>
+</ul>
+<hr>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="-实际测试说明">✅ 实际测试说明<a href="https://www.eurekashadow.xin/blog/LearnGit#-%E5%AE%9E%E9%99%85%E6%B5%8B%E8%AF%95%E8%AF%B4%E6%98%8E" class="hash-link" aria-label="✅ 实际测试说明的直接链接" title="✅ 实际测试说明的直接链接">​</a></h2>
+<p>这是一个测试内容，当前文本是在 <code>iss53</code> 分支下编写完成的。之前已经与 <code>main</code> 分支合并。</p>
+<p>按照预期，切换回 <code>main</code> 分支后，再合并 <code>iss53</code> 分支不会产生冲突，也就是说，在 <code>main</code> 分支下也能看到这段新增内容。</p>]]></content:encoded>
+            <category>Git</category>
+        </item>
         <item>
             <title><![CDATA[合并两个有序数组]]></title>
             <link>https://www.eurekashadow.xin/blog/LeetCode88</link>
@@ -78,8 +196,7 @@
 slug	页面的自定义 URL 路径
 title	页面显示的标题
 authors	作者名
-tags	文章标签，用于分类</p>
-<p>一个用于生成ICON图标的<a href="https://favicon.io/favicon-converter/" target="_blank" rel="noopener noreferrer" title="图片生成ICON">网站</a></p>]]></content:encoded>
+tags	文章标签，用于分类</p>]]></content:encoded>
             <category>Recording</category>
         </item>
         <item>
