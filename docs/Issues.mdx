@@ -21,3 +21,57 @@ import CardImg from '@site/src/components/CardImg';
 这是可能是因为：GitHub Actions 使用的免费 CI/CD 资源（Runner）是共享的，在全球用户<Highlight> 高峰期 </Highlight>时出现了<Highlight> 排队现象 </Highlight>。
 打开`Github` 中的 `Actions` 可以看到正在排队状态，所以慢慢等吧。过一段时间，就会部署成功了：
 <p><CardImg src="/img/Real_Deploy_Done.jpg" alt="实际尚未部署成功" isCenter={true} isBoxed={true} /></p>
+
+## <B2>关于CNAME</B2>
+
+我看这篇[文章](https://xxx.zhangyuqi.top/docs/MyWebsite/StudyBuildWebsite#6-%E8%87%AA%E5%AE%9A%E4%B9%89%E5%9F%9F%E5%90%8D)的时候，ta说要在static目录下创建一个
+CNAME.txt的空白文件。
+
+现在我遇到的问题是，每次本地显示部署完成后Github端总是 **自定义域名丢失** 像这样：（之前我已经填过域名了）
+<p><CardImg src="/img/domain_issue1.jpg" alt="域名被吞" isCenter={true} isBoxed={true} /></p>
+
+<details>
+<summary>问题分析</summary>
+
+重新填写域名：
+<p><CardImg src="/img/domain_issue2.jpg" alt="重新填写域名" isCenter={true} isBoxed={true} /></p>
+
+填写域名后会再次触发Github Actions：
+<p><CardImg src="/img/deploy_done_in26s.jpg" alt="真正部署成功" isCenter={true} isBoxed={true} /></p>
+
+这时候我打开Github仓库，查看 `git-pages` 分支，发现它又构建了一个 `CNAME` 文件（如下图，无文件格式），里面的内容是我的域名 `www.eurekashadow.xin` 
+我推测是在Github上重新添加 `Custom domain` 时自动构建了这个CNAME文件。那么之前提到的 `CNAME.txt` 是不是多余的呢？或者说实际上应该构建的是 `CNAME` 然后在里面加上域名 `www.eurekashadow.xin` 呢？
+<p><CardImg src="/img/About_CNAME1.jpg" alt="CNAME是多余的？" isCenter={true} isBoxed={true} /></p>
+
+`CANME` 文件中内容：
+<p><CardImg src="/img/About_CNAME2.jpg" alt="CNAME是多余的？" isCenter={true} isBoxed={true} /></p>
+
+</details>
+
+### <B3>CNAME问题结论</B3>
+
+经测试发现，`CNAME.txt` 确实是 **多余的** ！正确的做法：
+
+<details>
+<summary>创建**无文件格式的**CNAME</summary>
+
+<p><CardImg src="/img/Creat_CNAME1.jpg" alt="步骤1" isCenter={true} isBoxed={true} /></p>
+<p><CardImg src="/img/Creat_CNAME2.jpg" alt="步骤2" isCenter={true} isBoxed={true} /></p>
+<p><CardImg src="/img/Creat_CNAME3.jpg" alt="步骤3" isCenter={true} isBoxed={true} /></p>
+
+</details>
+
+在新建的 `CNAME` 里面加入自己的域名：
+<p><CardImg src="/img/Modified_CNAME.jpg" alt="加入域名" isCenter={true} isBoxed={true} /></p>
+
+之后就可以正常部署了：
+
+
+
+``` bash
+yarn deploy
+```
+
+
+Github上的域名不会丢失：
+<p><CardImg src="/img/CNAME_Issue_Fixed.jpg" alt="CNAME问题已解决" isCenter={true} isBoxed={true} /></p>

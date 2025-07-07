@@ -296,3 +296,80 @@
   transform: translateY(-1px); /* 微上浮，增强交互感 */
 }
 
+.Card {
+  border: 0px solid #ddd;
+  border-radius: 8px;
+  padding: 1rem;
+  box-shadow: 0 3px 6px 2px rgba(0, 0, 0, 0.1);
+  background: white;
+
+  /* Flex 布局：垂直居中、水平靠左 */
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+
+  /* 添加过渡动画 */
+  transition: all 0.3s ease;
+}
+
+/* 悬停效果 */
+.Card:hover {
+  transform: translateY(-4px); /* 向上移动一点 */
+  box-shadow: 0 6px 12px 4px rgba(0, 0, 0, 0.15); /* 阴影变大 */
+  background-color: #f9f9f9; /* 背景色变浅 */
+}
+
+/* MyCss.module.css */
+
+/* 基础按钮样式 */
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border: none;
+  border-radius: 20px;
+  font-weight: bold;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.15s ease-in-out;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  user-select: none;
+  white-space: nowrap;
+
+  /* 新增：防止压缩 */
+  flex-shrink: 0;
+}
+
+/* 按钮悬停效果（可选） */
+.button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* 禁用状态样式 */
+.button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  pointer-events: auto; /* 兼容性处理 */
+}
+
+/* 图标容器 */
+.icon {
+  display: flex;
+  align-items: center;
+  font-size: 1.2em;
+}
+
+/* 加载动画图标 */
+.spinner {
+  display: inline-block;
+  animation: spin 1s linear infinite;
+}
+
+/* 加载旋转动画 */
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
