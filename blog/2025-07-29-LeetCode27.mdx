@@ -1,0 +1,166 @@
+---
+slug: LeetCode27
+title: 移除元素
+authors: eurekaX
+tags: [数组]
+---
+import { Highlight, Keyword, Light, B1, B2, B3, BH3, B3W, MyColor} from '@site/src/components/ForMDX';
+
+
+### <B2>[力扣面试经典——27题](https://leetcode.cn/problems/remove-element/?envType=study-plan-v2&envId=top-interview-150 "力扣")</B2>
+
+<!-- truncate -->
+
+
+### 💡 参考代码：
+
+```c
+/**
+ * 原地移除数组中等于 val 的元素
+ * 
+ * @param nums 输入数组
+ * @param numsSize 数组长度
+ * @param val  要移除的值
+ * @return 返回不等于 val 的元素数量
+ */
+int removeElement(int* nums, int numsSize, int val) {
+    int slow = 0;  // 慢指针，指向下一个要放置非val元素的位置
+    
+    // 快指针遍历整个数组
+    for (int fast = 0; fast < numsSize; fast++) {
+        // 如果当前元素不等于val，则将其放到slow位置
+        if (nums[fast] != val) {
+            nums[slow++] = nums[fast];
+        }
+    }
+    
+    return slow;  // slow即为新数组的长度
+}
+```
+
+### 📖 总结：
+
+<details>
+<summary>点击展开题目总结</summary>
+# 🤔 移除元素
+
+---
+
+## 1️⃣ 题目核心信息
+
+🎯 **功能描述**：原地移除数组中所有等于指定值的元素，返回剩余元素数量
+
+📥 **输入输出**：
+- **输入**：数组 `nums`、数组长度 `numsSize`、要移除的值 `val`
+- **输出**：不等于 `val` 的元素数量，且这些元素位于数组前部
+
+---
+
+## 2️⃣ 实现原理
+
+💡 **核心思路**：使用快慢双指针技术，快指针遍历数组，慢指针记录有效元素位置
+
+📋 **实现步骤**：
+1. 初始化慢指针指向数组开头（下一个有效元素存放位置）
+2. 快指针遍历整个数组
+3. 遇到不等于 `val` 的元素就放到慢指针位置，并移动慢指针
+4. 返回慢指针的位置即为新数组长度
+
+---
+
+## 3️⃣ 关键点解析
+
+### 🧠 初始思路 vs 最优解
+
+#### 💭 我的初始想法
+使用额外数组存储不等于 `val` 的元素，遍历完成后复制回原数组。即：
+```c
+int removeElement(int* nums, int numsSize, int val) {
+    int tempArray[100];  // 额外数组
+    int count = 0;
+    
+    // 第一遍遍历：复制到临时数组
+    for (int i = 0; i < numsSize; i++) {
+        if (nums[i] != val) {
+            tempArray[count++] = nums[i];
+        }
+    }
+    
+    // 第二遍遍历：复制回原数组
+    for (int i = 0; i < count; i++) {
+        nums[i] = tempArray[i];
+    }
+    
+    return count;
+}
+```
+
+#### ⚡ 最优解法（双指针）
+
+```c
+int removeElement(int* nums, int numsSize, int val) {
+    int slow = 0;  // 慢指针，指向下一个要放置非val元素的位置
+	
+    // 快指针遍历整个数组
+    for (int fast = 0; fast < numsSize; fast++) {
+        // 如果当前元素不等于val，则将其放到slow位置
+        if (nums[fast] != val) {
+            nums[slow++] = nums[fast];
+        }
+    }
+    
+    return slow;  // slow即为新数组的长度
+}
+```
+### 🆚 对比分析
+
+| 方面 | 初始思路 | 最优解(双指针) |
+|------|----------|----------------|
+| 空间复杂度 | O(n) - 需要额外数组 | O(1) - 原地操作 |
+| 时间复杂度 | O(n) - 两次遍历 | O(n) - 一次遍历 |
+| 代码简洁性 | 需要两个循环 | 只需一个循环 |
+| 是否原地 | 否 | 是 |
+
+### 🎯 代码技巧
+- 快慢指针的经典应用
+- 利用数组随机访问特性，直接覆盖无效元素
+- `slow` 指针既作为索引又作为计数器
+
+---
+
+## 4️⃣ 使用场景
+
+✅ **适用情况**：
+- 需要原地删除数组中满足条件的元素
+- 数组元素过滤操作
+- 类似问题：删除重复元素、移动零等
+
+⚠️ **前提条件**：
+- 元素顺序可以改变
+- 只关心前k个元素，其余位置内容无关紧要
+
+---
+
+## 5️⃣ 复杂度分析
+
+⏱️ **时间复杂度**：O(n)，只需要遍历数组一次
+
+💾 **空间复杂度**：O(1)，只使用了常数个额外变量
+
+---
+
+## 6️⃣ 注意事项
+
+🚩 **边界情况**：
+- 空数组：`numsSize = 0`
+- 所有元素都等于 `val`
+- 所有元素都不等于 `val`
+
+💥 **易错点**：
+- 忘记返回新数组长度
+- 指针边界条件处理错误
+- 没有正确理解"原地"的含义
+
+
+
+</details>
