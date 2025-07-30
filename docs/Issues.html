@@ -5,8 +5,8 @@
 <meta name="generator" content="Docusaurus v3.8.1">
 <title data-rh="true">遇到的问题 | 我的网站</title><meta data-rh="true" name="viewport" content="width=device-width,initial-scale=1"><meta data-rh="true" name="twitter:card" content="summary_large_image"><meta data-rh="true" property="og:image" content="https://www.eurekashadow.xin/img/docusaurus-social-card.jpg"><meta data-rh="true" name="twitter:image" content="https://www.eurekashadow.xin/img/docusaurus-social-card.jpg"><meta data-rh="true" property="og:url" content="https://www.eurekashadow.xin/docs/Issues"><meta data-rh="true" property="og:locale" content="zh_Hans"><meta data-rh="true" name="docusaurus_locale" content="zh-Hans"><meta data-rh="true" name="docsearch:language" content="zh-Hans"><meta data-rh="true" name="docusaurus_version" content="current"><meta data-rh="true" name="docusaurus_tag" content="docs-default-current"><meta data-rh="true" name="docsearch:version" content="current"><meta data-rh="true" name="docsearch:docusaurus_tag" content="docs-default-current"><meta data-rh="true" property="og:title" content="遇到的问题 | 我的网站"><meta data-rh="true" name="description" content="这个页面主要记录在部署文件站中遇到的问题以及解决方法。"><meta data-rh="true" property="og:description" content="这个页面主要记录在部署文件站中遇到的问题以及解决方法。"><link data-rh="true" rel="icon" href="/img/Eureka.ico"><link data-rh="true" rel="canonical" href="https://www.eurekashadow.xin/docs/Issues"><link data-rh="true" rel="alternate" href="https://www.eurekashadow.xin/docs/Issues" hreflang="zh-Hans"><link data-rh="true" rel="alternate" href="https://www.eurekashadow.xin/docs/Issues" hreflang="x-default"><script data-rh="true" type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"遇到的问题","item":"https://www.eurekashadow.xin/docs/Issues"}]}</script><link rel="alternate" type="application/rss+xml" href="/blog/rss.xml" title="我的网站 RSS Feed">
 <link rel="alternate" type="application/atom+xml" href="/blog/atom.xml" title="我的网站 Atom Feed"><link rel="stylesheet" href="/assets/css/styles.131ec079.css">
-<script src="/assets/js/runtime~main.a3f1bb50.js" defer="defer"></script>
-<script src="/assets/js/main.b9ba79d5.js" defer="defer"></script>
+<script src="/assets/js/runtime~main.92590e1f.js" defer="defer"></script>
+<script src="/assets/js/main.bf5b782c.js" defer="defer"></script>
 </head>
 <body class="navigation-with-keyboard">
 <svg xmlns="http://www.w3.org/2000/svg" style="display: none;"><defs>
@@ -20,6 +20,8 @@
 <p>这是可能是因为：GitHub Actions 使用的免费 CI/CD 资源（Runner）是共享的，在全球用户<span style="background-color:#ffff50;border-radius:4px;color:black;padding:0.2rem;display:inline-block"> 高峰期 </span>时出现了<span style="background-color:#ffff50;border-radius:4px;color:black;padding:0.2rem;display:inline-block"> 排队现象 </span>。
 打开<code>Github</code> 中的 <code>Actions</code> 可以看到正在排队状态，所以慢慢等吧。过一段时间，就会部署成功了：</p>
 <p></p>
+<p>经过后续使用发现，<strong>修复CNAME问题后</strong>，再也没有出现这种所谓的部署延时的问题，也许根本不是什么<span style="background-color:#ffff50;border-radius:4px;color:black;padding:0.2rem;display:inline-block"> 高峰期 </span>导致的，罪魁祸首可能是原来<strong>错误的
+CNAME.txt</strong>！</p>
 <h2 class="anchor anchorWithStickyNavbar_LWe7" id="关于cname"><span class="B2_JnYG">关于CNAME</span><a href="#关于cname" class="hash-link" aria-label="关于cname的直接链接" title="关于cname的直接链接">​</a></h2>
 <p>我看这篇<a href="https://xxx.zhangyuqi.top/docs/MyWebsite/StudyBuildWebsite#6-%E8%87%AA%E5%AE%9A%E4%B9%89%E5%9F%9F%E5%90%8D" target="_blank" rel="noopener noreferrer">文章</a>的时候，ta说要在static目录下创建一个
 CNAME.txt的空白文件。</p>
