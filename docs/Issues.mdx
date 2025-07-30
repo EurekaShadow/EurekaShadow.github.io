@@ -22,6 +22,9 @@ import CardImg from '@site/src/components/CardImg';
 打开`Github` 中的 `Actions` 可以看到正在排队状态，所以慢慢等吧。过一段时间，就会部署成功了：
 <p><CardImg src="/img/Real_Deploy_Done.jpg" alt="实际尚未部署成功" isCenter={true} isBoxed={true} /></p>
 
+经过后续使用发现，**修复CNAME问题后**，再也没有出现这种所谓的部署延时的问题，也许根本不是什么<Highlight> 高峰期 </Highlight>导致的，罪魁祸首可能是原来**错误的
+CNAME.txt**！
+
 ## <B2>关于CNAME</B2>
 
 我看这篇[文章](https://xxx.zhangyuqi.top/docs/MyWebsite/StudyBuildWebsite#6-%E8%87%AA%E5%AE%9A%E4%B9%89%E5%9F%9F%E5%90%8D)的时候，ta说要在static目录下创建一个
