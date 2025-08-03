@@ -37,3 +37,8 @@ Git:
   label: Git
   permalink: /Git
   description: 记录学习Git的历程 
+  
+English:
+  label: English
+  permalink: /English
+  description: 记录学习English的过程中遇到的让人迷惑的表达方式  

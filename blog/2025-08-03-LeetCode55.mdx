@@ -1,0 +1,123 @@
+---
+slug: LeetCode55
+title: 跳跃游戏
+authors: eurekaX
+tags: [数组]
+---
+import { Highlight, Keyword, Light, B1, B2, B3, BH3, B3W, MyColor} from '@site/src/components/ForMDX';
+
+
+### <B2>[力扣面试经典——55题](https://leetcode.cn/problems/jump-game/description/?envType=study-plan-v2&envId=top-interview-150 "力扣")</B2>
+
+<!-- truncate -->
+
+
+### 💡 参考代码：
+
+```c
+/**
+ * 判断是否能跳到最后一个下标
+ * @param nums 非负整数数组，每个元素代表在该位置可以跳跃的最大长度
+ * @param numsSize 数组长度
+ * @return 如果能到达最后一个下标返回true，否则返回false
+ */
+bool canJump(int* nums, int numsSize) {
+    int maxReach = 0; // 记录当前能到达的最远位置下标
+    
+    // 遍历数组中的每个位置
+    for (int i = 0; i < numsSize; i++) {
+        // 如果当前位置i超出了当前能到达的最远位置，说明无法到达位置i
+        if (i > maxReach) {
+            return false;
+        }
+        
+        // 计算从当前位置i能到达的最远位置
+        int currentReach = i + nums[i];
+        
+        // 更新全局能到达的最远位置
+        if (currentReach > maxReach) {
+            maxReach = currentReach;
+        }
+        
+        // 如果已经能到达或超过最后一个位置(numsSize-1)，直接返回true
+        if (maxReach >= numsSize - 1) {
+            return true;
+        }
+    }
+    
+    // 遍历完成后，检查最远位置是否能到达最后一个下标
+    return maxReach >= numsSize - 1;
+}
+```
+
+### 📖 总结：
+
+<details>
+<summary>点击展开题目总结</summary>
+# 🤔 跳跃游戏
+
+---
+
+## 1️⃣ 题目核心信息
+
+🎯 **功能描述**：判断是否能从数组的第一个位置跳跃到最后一个位置，数组中每个元素表示在该位置可以跳跃的最大长度
+
+📥 **输入输出**：
+- **输入**：int* nums（非负整数数组），int numsSize（数组长度）
+- **输出**：bool类型，如果能到达最后一个下标返回true，否则返回false
+
+---
+
+## 2️⃣ 实现原理
+
+💡 **核心思路**：使用贪心算法，维护一个变量记录当前能到达的最远位置，遍历数组不断更新最远可达位置
+
+📋 **实现步骤**：
+1. 初始化maxReach为0，表示当前能到达的最远位置下标
+2. 遍历数组中的每个位置i
+3. 如果当前位置i超出maxReach，说明无法到达，返回false
+4. 计算从位置i能到达的最远位置(i + nums[i])，并更新maxReach
+5. 如果maxReach已经能到达或超过最后一个位置，直接返回true
+6. 遍历结束后检查maxReach是否能到达最后一个下标
+
+---
+
+## 3️⃣ 关键点解析
+
+原始思路是通过BFS方式探索所有可能路径，逐层扩展可能的跳跃路径，但这种方法时间复杂度较高。最优解使用贪心算法，通过维护全局最远可达位置来判断，避免了路径探索和重复计算。
+
+### 🎯 代码技巧
+- 使用maxReach变量记录全局最远可达位置，避免重复计算
+- 提前终止优化：一旦能到达终点就立即返回，无需继续遍历
+- 边界检查：在遍历过程中实时检查是否能到达当前位置
+
+## 4️⃣ 使用场景
+
+### ✅ 适用情况：
+- 判断能否通过跳跃到达目标位置
+- 游戏中角色移动范围判断
+- 资源分配问题中判断能否覆盖所有节点
+
+### ⚠️ 前提条件：
+- 数组元素为非负整数
+- 数组长度至少为1
+- 从第一个位置开始跳跃
+
+## 5️⃣ 复杂度分析
+
+- ⏱️ 时间复杂度：O(n)，其中n是数组长度，只需遍历一次数组
+
+- 💾 空间复杂度：O(1)，只使用了常数级别的额外空间
+
+## 6️⃣ 注意事项
+
+### 🚩 边界情况：
+- 数组只有一个元素的情况
+- 第一个元素为0的情况
+- 中间存在0元素的情况
+
+### 💥 易错点：
+- 忘记检查当前位置是否可达
+- 没有及时更新最远可达位置
+- 忽略提前终止条件导致效率降低
+</details>
