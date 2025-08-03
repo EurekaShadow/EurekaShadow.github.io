@@ -4,10 +4,497 @@
         <title>我的网站 Blog</title>
         <link>https://www.eurekashadow.xin/blog</link>
         <description>我的网站 Blog</description>
-        <lastBuildDate>Sat, 02 Aug 2025 00:00:00 GMT</lastBuildDate>
+        <lastBuildDate>Sun, 03 Aug 2025 00:00:00 GMT</lastBuildDate>
         <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
         <generator>https://github.com/jpmonette/feed</generator>
         <language>zh-Hans</language>
+        <item>
+            <title><![CDATA[算法总结]]></title>
+            <link>https://www.eurekashadow.xin/blog/Algorithm</link>
+            <guid>https://www.eurekashadow.xin/blog/Algorithm</guid>
+            <pubDate>Sun, 03 Aug 2025 00:00:00 GMT</pubDate>
+            <description><![CDATA[记录做力扣面试经典150过程中遇到的算法🤔]]></description>
+            <content:encoded><![CDATA[<h3 class="anchor anchorWithStickyNavbar_LWe7" id="记录做力扣面试经典150过程中遇到的算法"><span class="B2_JnYG">记录做力扣面试经典150过程中遇到的算法🤔</span><a href="https://www.eurekashadow.xin/blog/Algorithm#%E8%AE%B0%E5%BD%95%E5%81%9A%E5%8A%9B%E6%89%A3%E9%9D%A2%E8%AF%95%E7%BB%8F%E5%85%B8150%E8%BF%87%E7%A8%8B%E4%B8%AD%E9%81%87%E5%88%B0%E7%9A%84%E7%AE%97%E6%B3%95" class="hash-link" aria-label="记录做力扣面试经典150过程中遇到的算法的直接链接" title="记录做力扣面试经典150过程中遇到的算法的直接链接">​</a></h3>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="贪心算法">贪心算法<a href="https://www.eurekashadow.xin/blog/Algorithm#%E8%B4%AA%E5%BF%83%E7%AE%97%E6%B3%95" class="hash-link" aria-label="贪心算法的直接链接" title="贪心算法的直接链接">​</a></h2>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="-识别贪心算法适用场景的技巧">🎯 识别贪心算法适用场景的技巧<a href="https://www.eurekashadow.xin/blog/Algorithm#-%E8%AF%86%E5%88%AB%E8%B4%AA%E5%BF%83%E7%AE%97%E6%B3%95%E9%80%82%E7%94%A8%E5%9C%BA%E6%99%AF%E7%9A%84%E6%8A%80%E5%B7%A7" class="hash-link" aria-label="🎯 识别贪心算法适用场景的技巧的直接链接" title="🎯 识别贪心算法适用场景的技巧的直接链接">​</a></h3>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="1-问题特征识别">1. 问题特征识别<a href="https://www.eurekashadow.xin/blog/Algorithm#1-%E9%97%AE%E9%A2%98%E7%89%B9%E5%BE%81%E8%AF%86%E5%88%AB" class="hash-link" aria-label="1. 问题特征识别的直接链接" title="1. 问题特征识别的直接链接">​</a></h4>
+<p>以下特征通常表明可以使用贪心算法：</p>
+<p>✅ <strong>最优子结构</strong>：问题的最优解包含子问题的最优解
+✅ <strong>贪心选择性质</strong>：局部最优选择能导致全局最优
+✅ <strong>无后效性</strong>：当前选择不会影响之前的状态
+✅ <strong>求极值问题</strong>：最大值、最小值、最优解等</p>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="2-常见问题类型">2. 常见问题类型<a href="https://www.eurekashadow.xin/blog/Algorithm#2-%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98%E7%B1%BB%E5%9E%8B" class="hash-link" aria-label="2. 常见问题类型的直接链接" title="2. 常见问题类型的直接链接">​</a></h4>
+<p>以下类型问题经常使用贪心策略：</p>
+<p>🔢 <strong>选择问题</strong>：活动选择、区间调度
+💰 <strong>优化问题</strong>：背包问题变种、股票买卖
+🗺️ <strong>图论问题</strong>：最小生成树、最短路径
+📊 <strong>数据处理</strong>：哈夫曼编码、任务调度
+🎯 <strong>游戏策略</strong>：跳跃游戏、分配问题</p>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="-如何快速判断的技巧">🎯 如何快速判断的技巧<a href="https://www.eurekashadow.xin/blog/Algorithm#-%E5%A6%82%E4%BD%95%E5%BF%AB%E9%80%9F%E5%88%A4%E6%96%AD%E7%9A%84%E6%8A%80%E5%B7%A7" class="hash-link" aria-label="🎯 如何快速判断的技巧的直接链接" title="🎯 如何快速判断的技巧的直接链接">​</a></h3>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="技巧1问自己几个关键问题">技巧1：问自己几个关键问题<a href="https://www.eurekashadow.xin/blog/Algorithm#%E6%8A%80%E5%B7%A71%E9%97%AE%E8%87%AA%E5%B7%B1%E5%87%A0%E4%B8%AA%E5%85%B3%E9%94%AE%E9%97%AE%E9%A2%98" class="hash-link" aria-label="技巧1：问自己几个关键问题的直接链接" title="技巧1：问自己几个关键问题的直接链接">​</a></h4>
+<ol>
+<li>是否可以通过一系列局部选择得到全局最优解？</li>
+<li>当前的最优选择是否会影响后续的决策空间？</li>
+<li>如果每步都选当前最好的，最终结果是否最优？</li>
+<li>是否存在反例能证明贪心不成立？</li>
+</ol>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="技巧2看问题的关键词">技巧2：看问题的关键词<a href="https://www.eurekashadow.xin/blog/Algorithm#%E6%8A%80%E5%B7%A72%E7%9C%8B%E9%97%AE%E9%A2%98%E7%9A%84%E5%85%B3%E9%94%AE%E8%AF%8D" class="hash-link" aria-label="技巧2：看问题的关键词的直接链接" title="技巧2：看问题的关键词的直接链接">​</a></h4>
+<p>出现这些关键词时考虑贪心：</p>
+<ul>
+<li>"最大"、"最小"、"最优"</li>
+<li>"尽可能"、"最多"、"最少"</li>
+<li>"安排"、"调度"、"分配"</li>
+<li>"使得总...最大/最小"</li>
+</ul>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="-如何设计贪心策略">🎯 如何设计贪心策略<a href="https://www.eurekashadow.xin/blog/Algorithm#-%E5%A6%82%E4%BD%95%E8%AE%BE%E8%AE%A1%E8%B4%AA%E5%BF%83%E7%AD%96%E7%95%A5" class="hash-link" aria-label="🎯 如何设计贪心策略的直接链接" title="🎯 如何设计贪心策略的直接链接">​</a></h3>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="1-确定贪心选择标准">1. 确定贪心选择标准<a href="https://www.eurekashadow.xin/blog/Algorithm#1-%E7%A1%AE%E5%AE%9A%E8%B4%AA%E5%BF%83%E9%80%89%E6%8B%A9%E6%A0%87%E5%87%86" class="hash-link" aria-label="1. 确定贪心选择标准的直接链接" title="1. 确定贪心选择标准的直接链接">​</a></h4>
+<p>关键步骤：</p>
+<ol>
+<li>明确每一步要做出什么选择</li>
+<li>确定衡量"好"选择的标准</li>
+<li>证明这个选择标准的正确性</li>
+</ol>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="2-举例分析">2. 举例分析<a href="https://www.eurekashadow.xin/blog/Algorithm#2-%E4%B8%BE%E4%BE%8B%E5%88%86%E6%9E%90" class="hash-link" aria-label="2. 举例分析的直接链接" title="2. 举例分析的直接链接">​</a></h4>
+<p><strong>股票买卖问题分析：</strong></p>
+<ul>
+<li>问题：如何获得最大利润？</li>
+<li>贪心选择：只要明天比今天贵，今天就买入明天卖出</li>
+<li>选择标准：价格正增长就交易</li>
+<li>正确性：所有正收益都 captured，负收益都避免</li>
+</ul>
+<p><strong>跳跃游戏问题分析：</strong></p>
+<ul>
+<li>问题：能否到达终点？</li>
+<li>贪心选择：每到一个位置，尽可能扩展可达范围</li>
+<li>选择标准：选择能让maxReach最大的策略</li>
+<li>正确性：最大可达范围决定了能否到达终点</li>
+</ul>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="-实战判断流程">🎯 实战判断流程<a href="https://www.eurekashadow.xin/blog/Algorithm#-%E5%AE%9E%E6%88%98%E5%88%A4%E6%96%AD%E6%B5%81%E7%A8%8B" class="hash-link" aria-label="🎯 实战判断流程的直接链接" title="🎯 实战判断流程的直接链接">​</a></h3>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="三步判断法">三步判断法：<a href="https://www.eurekashadow.xin/blog/Algorithm#%E4%B8%89%E6%AD%A5%E5%88%A4%E6%96%AD%E6%B3%95" class="hash-link" aria-label="三步判断法：的直接链接" title="三步判断法：的直接链接">​</a></h4>
+<p>Step 1: 问题分析</p>
+<ul>
+<li>这是一个优化问题吗？(求最大/最小值)</li>
+<li>是否可以分解为一系列选择？</li>
+</ul>
+<p>Step 2: 贪心假设</p>
+<ul>
+<li>能否通过局部最优选择得到全局最优？</li>
+<li>假设贪心策略，能否构造反例？</li>
+</ul>
+<p>Step 3: 策略设计</p>
+<ul>
+<li>明确每步的贪心选择是什么</li>
+<li>确定如何衡量选择的好坏</li>
+<li>验证算法正确性</li>
+</ul>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="-常见贪心策略模板">🎯 常见贪心策略模板<a href="https://www.eurekashadow.xin/blog/Algorithm#-%E5%B8%B8%E8%A7%81%E8%B4%AA%E5%BF%83%E7%AD%96%E7%95%A5%E6%A8%A1%E6%9D%BF" class="hash-link" aria-label="🎯 常见贪心策略模板的直接链接" title="🎯 常见贪心策略模板的直接链接">​</a></h3>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="1-选择类问题">1. 选择类问题<a href="https://www.eurekashadow.xin/blog/Algorithm#1-%E9%80%89%E6%8B%A9%E7%B1%BB%E9%97%AE%E9%A2%98" class="hash-link" aria-label="1. 选择类问题的直接链接" title="1. 选择类问题的直接链接">​</a></h4>
+<div class="language-c codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-c codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token comment" style="color:#999988;font-style:italic">// 模板：按某种标准排序后贪心选择</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token function" style="color:#d73a49">sort</span><span class="token punctuation" style="color:#393A34">(</span><span class="token plain">elements</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> compare_function</span><span class="token punctuation" style="color:#393A34">)</span><span class="token punctuation" style="color:#393A34">;</span><span class="token plain">  </span><span class="token comment" style="color:#999988;font-style:italic">// 首先按某种标准排序</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token keyword" style="color:#00009f">for</span><span class="token plain"> </span><span class="token punctuation" style="color:#393A34">(</span><span class="token plain">each element</span><span class="token punctuation" style="color:#393A34">)</span><span class="token plain"> </span><span class="token punctuation" style="color:#393A34">{</span><span class="token plain">               </span><span class="token comment" style="color:#999988;font-style:italic">// 遍历每个元素</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token keyword" style="color:#00009f">if</span><span class="token plain"> </span><span class="token punctuation" style="color:#393A34">(</span><span class="token function" style="color:#d73a49">can_select</span><span class="token punctuation" style="color:#393A34">(</span><span class="token plain">element</span><span class="token punctuation" style="color:#393A34">)</span><span class="token punctuation" style="color:#393A34">)</span><span class="token plain"> </span><span class="token punctuation" style="color:#393A34">{</span><span class="token plain">     </span><span class="token comment" style="color:#999988;font-style:italic">// 如果可以选择当前元素</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">        </span><span class="token function" style="color:#d73a49">select</span><span class="token punctuation" style="color:#393A34">(</span><span class="token plain">element</span><span class="token punctuation" style="color:#393A34">)</span><span class="token punctuation" style="color:#393A34">;</span><span class="token plain">           </span><span class="token comment" style="color:#999988;font-style:italic">// 就选择它</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token punctuation" style="color:#393A34">}</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token punctuation" style="color:#393A34">}</span><br></span></code></pre></div></div>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="2-扩展类问题">2. 扩展类问题<a href="https://www.eurekashadow.xin/blog/Algorithm#2-%E6%89%A9%E5%B1%95%E7%B1%BB%E9%97%AE%E9%A2%98" class="hash-link" aria-label="2. 扩展类问题的直接链接" title="2. 扩展类问题的直接链接">​</a></h4>
+<div class="language-c codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-c codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token comment" style="color:#999988;font-style:italic">// 模板：逐步扩展最优解</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token keyword" style="color:#00009f">for</span><span class="token plain"> </span><span class="token punctuation" style="color:#393A34">(</span><span class="token plain">each step</span><span class="token punctuation" style="color:#393A34">)</span><span class="token plain"> </span><span class="token punctuation" style="color:#393A34">{</span><span class="token plain">                           </span><span class="token comment" style="color:#999988;font-style:italic">// 遍历每个决策步骤</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    best_choice </span><span class="token operator" style="color:#393A34">=</span><span class="token plain"> </span><span class="token function" style="color:#d73a49">find_best_local_choice</span><span class="token punctuation" style="color:#393A34">(</span><span class="token punctuation" style="color:#393A34">)</span><span class="token punctuation" style="color:#393A34">;</span><span class="token plain"> </span><span class="token comment" style="color:#999988;font-style:italic">// 在当前步骤中找到局部最优选择</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token keyword" style="color:#00009f">if</span><span class="token plain"> </span><span class="token punctuation" style="color:#393A34">(</span><span class="token function" style="color:#d73a49">is_better</span><span class="token punctuation" style="color:#393A34">(</span><span class="token plain">best_choice</span><span class="token punctuation" style="color:#393A34">)</span><span class="token punctuation" style="color:#393A34">)</span><span class="token plain"> </span><span class="token punctuation" style="color:#393A34">{</span><span class="token plain">           </span><span class="token comment" style="color:#999988;font-style:italic">// 如果这个选择比当前解更好</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">        </span><span class="token function" style="color:#d73a49">update_solution</span><span class="token punctuation" style="color:#393A34">(</span><span class="token plain">best_choice</span><span class="token punctuation" style="color:#393A34">)</span><span class="token punctuation" style="color:#393A34">;</span><span class="token plain">       </span><span class="token comment" style="color:#999988;font-style:italic">// 就用这个选择更新当前最优解</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token punctuation" style="color:#393A34">}</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token punctuation" style="color:#393A34">}</span><br></span></code></pre></div></div>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="3-累积类问题">3. 累积类问题<a href="https://www.eurekashadow.xin/blog/Algorithm#3-%E7%B4%AF%E7%A7%AF%E7%B1%BB%E9%97%AE%E9%A2%98" class="hash-link" aria-label="3. 累积类问题的直接链接" title="3. 累积类问题的直接链接">​</a></h4>
+<div class="language-c codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-c codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token comment" style="color:#999988;font-style:italic">// 模板：累积局部最优解</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">total_result </span><span class="token operator" style="color:#393A34">=</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">0</span><span class="token punctuation" style="color:#393A34">;</span><span class="token plain">                    </span><span class="token comment" style="color:#999988;font-style:italic">// 初始化总结果为0</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token keyword" style="color:#00009f">for</span><span class="token plain"> </span><span class="token punctuation" style="color:#393A34">(</span><span class="token plain">each sub_problem</span><span class="token punctuation" style="color:#393A34">)</span><span class="token plain"> </span><span class="token punctuation" style="color:#393A34">{</span><span class="token plain">             </span><span class="token comment" style="color:#999988;font-style:italic">// 遍历每个子问题</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    local_optimal </span><span class="token operator" style="color:#393A34">=</span><span class="token plain"> </span><span class="token function" style="color:#d73a49">solve_locally</span><span class="token punctuation" style="color:#393A34">(</span><span class="token punctuation" style="color:#393A34">)</span><span class="token punctuation" style="color:#393A34">;</span><span class="token plain"> </span><span class="token comment" style="color:#999988;font-style:italic">// 求解当前子问题的局部最优解</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    total_result </span><span class="token operator" style="color:#393A34">+=</span><span class="token plain"> local_optimal</span><span class="token punctuation" style="color:#393A34">;</span><span class="token plain">   </span><span class="token comment" style="color:#999988;font-style:italic">// 将局部最优解累加到总结果中</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token punctuation" style="color:#393A34">}</span><br></span></code></pre></div></div>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="-实用建议">💡 实用建议<a href="https://www.eurekashadow.xin/blog/Algorithm#-%E5%AE%9E%E7%94%A8%E5%BB%BA%E8%AE%AE" class="hash-link" aria-label="💡 实用建议的直接链接" title="💡 实用建议的直接链接">​</a></h3>
+<ul>
+<li>多练习经典贪心问题：活动选择、背包问题、霍夫曼编码等</li>
+<li>学会构造反例：如果想不出反例证明贪心成立</li>
+<li>关注边界条件：贪心算法常在边界处出错</li>
+<li>证明贪心选择性质：虽然面试不要求严格证明，但思路要清晰</li>
+</ul>
+<p>记住：贪心算法的关键在于识别问题的贪心性质和设计正确的贪心策略，这需要大量的练习和经验积累。</p>
+<hr>]]></content:encoded>
+            <category>算法</category>
+        </item>
+        <item>
+            <title><![CDATA[英语小结]]></title>
+            <link>https://www.eurekashadow.xin/blog/LearnEng</link>
+            <guid>https://www.eurekashadow.xin/blog/LearnEng</guid>
+            <pubDate>Sun, 03 Aug 2025 00:00:00 GMT</pubDate>
+            <description><![CDATA[记录学习英语中遇到的令人感到疑惑的表达方法🤔]]></description>
+            <content:encoded><![CDATA[<h3 class="anchor anchorWithStickyNavbar_LWe7" id="记录学习英语中遇到的令人感到疑惑的表达方法"><span class="B2_JnYG">记录学习英语中遇到的令人感到疑惑的表达方法🤔</span><a href="https://www.eurekashadow.xin/blog/LearnEng#%E8%AE%B0%E5%BD%95%E5%AD%A6%E4%B9%A0%E8%8B%B1%E8%AF%AD%E4%B8%AD%E9%81%87%E5%88%B0%E7%9A%84%E4%BB%A4%E4%BA%BA%E6%84%9F%E5%88%B0%E7%96%91%E6%83%91%E7%9A%84%E8%A1%A8%E8%BE%BE%E6%96%B9%E6%B3%95" class="hash-link" aria-label="记录学习英语中遇到的令人感到疑惑的表达方法的直接链接" title="记录学习英语中遇到的令人感到疑惑的表达方法的直接链接">​</a></h3>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="put-ones-foot-down"><strong>"Put one's foot down"</strong><a href="https://www.eurekashadow.xin/blog/LearnEng#put-ones-foot-down" class="hash-link" aria-label="put-ones-foot-down的直接链接" title="put-ones-foot-down的直接链接">​</a></h2>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="含义"><strong>含义</strong><a href="https://www.eurekashadow.xin/blog/LearnEng#%E5%90%AB%E4%B9%89" class="hash-link" aria-label="含义的直接链接" title="含义的直接链接">​</a></h3>
+<ul>
+<li><strong>核心意义</strong>：坚决反对某事或制止某种行为，态度强硬不容妥协。</li>
+<li><strong>隐含权威</strong>：通常由家长、上司、负责人等具有决策权的人使用。</li>
+<li><strong>情感色彩</strong>：可能带有“后悔未早制止”（过去时）或“现在必须阻止”（现在时）的意味。</li>
+</ul>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="使用实例"><strong>使用实例</strong><a href="https://www.eurekashadow.xin/blog/LearnEng#%E4%BD%BF%E7%94%A8%E5%AE%9E%E4%BE%8B" class="hash-link" aria-label="使用实例的直接链接" title="使用实例的直接链接">​</a></h3>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="1-制止不当行为">1. <strong>制止不当行为</strong><a href="https://www.eurekashadow.xin/blog/LearnEng#1-%E5%88%B6%E6%AD%A2%E4%B8%8D%E5%BD%93%E8%A1%8C%E4%B8%BA" class="hash-link" aria-label="1-制止不当行为的直接链接" title="1-制止不当行为的直接链接">​</a></h3>
+<ul>
+<li><em>The teacher <strong>put her foot down</strong> when students tried to cheat on the exam.</em><br>
+<!-- -->（学生试图作弊时，老师坚决制止。）</li>
+<li><em>I had to <strong>put my foot down</strong> when my roommate kept borrowing my clothes without asking.</em><br>
+<!-- -->（室友未经允许一直借我衣服，我不得不明确拒绝。）</li>
+</ul>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="2-维护规则或底线">2. <strong>维护规则或底线</strong><a href="https://www.eurekashadow.xin/blog/LearnEng#2-%E7%BB%B4%E6%8A%A4%E8%A7%84%E5%88%99%E6%88%96%E5%BA%95%E7%BA%BF" class="hash-link" aria-label="2-维护规则或底线的直接链接" title="2-维护规则或底线的直接链接">​</a></h3>
+<ul>
+<li><em>The CEO <strong>put his foot down</strong> and banned all overtime work.</em><br>
+<!-- -->（CEO 强硬禁止所有加班。）</li>
+<li><em>Mom <strong>put her foot down</strong>: no video games until homework is done.</em><br>
+<!-- -->（妈妈立下规矩：作业做完前不准打游戏。）</li>
+</ul>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="3-表达后悔">3. <strong>表达后悔</strong><a href="https://www.eurekashadow.xin/blog/LearnEng#3-%E8%A1%A8%E8%BE%BE%E5%90%8E%E6%82%94" class="hash-link" aria-label="3-表达后悔的直接链接" title="3-表达后悔的直接链接">​</a></h3>
+<ul>
+<li><em>I <strong>should have put my foot down</strong> when they suggested cutting corners.</em><br>
+<!-- -->（他们提议偷工减料时，我本该坚决反对的。）</li>
+</ul>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="常见场景"><strong>常见场景</strong><a href="https://www.eurekashadow.xin/blog/LearnEng#%E5%B8%B8%E8%A7%81%E5%9C%BA%E6%99%AF" class="hash-link" aria-label="常见场景的直接链接" title="常见场景的直接链接">​</a></h3>
+<ul>
+<li><strong>家庭场景</strong>：父母管教孩子。</li>
+<li><strong>职场场景</strong>：上司制止违规行为。</li>
+<li><strong>人际关系</strong>：拒绝他人越界请求。</li>
+</ul>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="助记技巧"><strong>助记技巧</strong><a href="https://www.eurekashadow.xin/blog/LearnEng#%E5%8A%A9%E8%AE%B0%E6%8A%80%E5%B7%A7" class="hash-link" aria-label="助记技巧的直接链接" title="助记技巧的直接链接">​</a></h3>
+<ol>
+<li><strong>动作联想</strong>：想象用力踩下刹车（"put foot down"）→ <strong>强行停止</strong>某事。</li>
+<li><strong>对比习语</strong>：<!-- -->
+<ul>
+<li>✅ <strong>"Put one's foot down"</strong> = 制止（反对）。</li>
+<li>❌ <strong>"Stand one's ground"</strong> = 坚持立场（不一定是制止）。</li>
+</ul>
+</li>
+<li><strong>中文对应</strong>：类似“拍板叫停”或“亮明底线”。</li>
+</ol>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="️-注意事项"><strong>⚠️ 注意事项</strong><a href="https://www.eurekashadow.xin/blog/LearnEng#%EF%B8%8F-%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9" class="hash-link" aria-label="️-注意事项的直接链接" title="️-注意事项的直接链接">​</a></h3>
+<ul>
+<li><strong>不用于支持</strong>：仅表示“反对/制止”，不可替换为支持性语境。</li>
+<li><strong>语气强硬</strong>：需根据关系谨慎使用，避免显得专横。</li>
+</ul>
+<hr>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="throw-someone-under-the-bus"><strong>"Throw someone under the bus"</strong><a href="https://www.eurekashadow.xin/blog/LearnEng#throw-someone-under-the-bus" class="hash-link" aria-label="throw-someone-under-the-bus的直接链接" title="throw-someone-under-the-bus的直接链接">​</a></h2>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="含义-1"><strong>含义</strong><a href="https://www.eurekashadow.xin/blog/LearnEng#%E5%90%AB%E4%B9%89-1" class="hash-link" aria-label="含义-1的直接链接" title="含义-1的直接链接">​</a></h3>
+<ul>
+<li><strong>核心意义</strong>：为了自身利益牺牲或背叛他人，通常是在关键时刻推卸责任或出卖同伴</li>
+<li><strong>隐含意味</strong>：带有背叛、不忠诚、自私自利的负面含义</li>
+<li><strong>使用场景</strong>：多用于政治、职场或团队合作中描述背叛行为</li>
+</ul>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="使用实例-1"><strong>使用实例</strong><a href="https://www.eurekashadow.xin/blog/LearnEng#%E4%BD%BF%E7%94%A8%E5%AE%9E%E4%BE%8B-1" class="hash-link" aria-label="使用实例-1的直接链接" title="使用实例-1的直接链接">​</a></h3>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="1-职场背叛">1. <strong>职场背叛</strong><a href="https://www.eurekashadow.xin/blog/LearnEng#1-%E8%81%8C%E5%9C%BA%E8%83%8C%E5%8F%9B" class="hash-link" aria-label="1-职场背叛的直接链接" title="1-职场背叛的直接链接">​</a></h3>
+<ul>
+<li><em>The manager threw his assistant under the bus when the project failed.</em>
+（项目失败时，经理把责任都推给了助理）</li>
+<li><em>Don't trust him - he'll throw you under the bus to save his own job.</em>
+（别相信他，他会为了保住自己的工作而出卖你）</li>
+</ul>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="2-政治场合">2. <strong>政治场合</strong><a href="https://www.eurekashadow.xin/blog/LearnEng#2-%E6%94%BF%E6%B2%BB%E5%9C%BA%E5%90%88" class="hash-link" aria-label="2-政治场合的直接链接" title="2-政治场合的直接链接">​</a></h3>
+<ul>
+<li><em>The senator threw his colleague under the bus to distance himself from the scandal.</em>
+（参议员为了与丑闻撇清关系而出卖了他的同事）</li>
+<li><em>In the debate, the candidate kept trying to throw her opponent under the bus.</em>
+（辩论中，候选人不断试图把责任推给对手）</li>
+</ul>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="3-日常人际关系">3. <strong>日常人际关系</strong><a href="https://www.eurekashadow.xin/blog/LearnEng#3-%E6%97%A5%E5%B8%B8%E4%BA%BA%E9%99%85%E5%85%B3%E7%B3%BB" class="hash-link" aria-label="3-日常人际关系的直接链接" title="3-日常人际关系的直接链接">​</a></h3>
+<ul>
+<li><em>I thought we were friends, but she threw me under the bus when the teacher asked who broke the window.</em>
+（我以为我们是朋友，但老师问谁打破窗户时她出卖了我）</li>
+<li><em>Real friends don't throw each other under the bus when things go wrong.</em>
+（真正的朋友不会在出问题时互相出卖）</li>
+</ul>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="常见场景-1"><strong>常见场景</strong><a href="https://www.eurekashadow.xin/blog/LearnEng#%E5%B8%B8%E8%A7%81%E5%9C%BA%E6%99%AF-1" class="hash-link" aria-label="常见场景-1的直接链接" title="常见场景-1的直接链接">​</a></h3>
+<ul>
+<li><strong>职场竞争</strong>：推卸责任，嫁祸同事</li>
+<li><strong>政治斗争</strong>：牺牲盟友保全自己</li>
+<li><strong>团队合作</strong>：关键时刻背叛队友</li>
+<li><strong>朋友关系</strong>：为自保而出卖朋友</li>
+</ul>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="助记技巧-1"><strong>助记技巧</strong><a href="https://www.eurekashadow.xin/blog/LearnEng#%E5%8A%A9%E8%AE%B0%E6%8A%80%E5%B7%A7-1" class="hash-link" aria-label="助记技巧-1的直接链接" title="助记技巧-1的直接链接">​</a></h3>
+<ol>
+<li><strong>形象联想</strong>：想象把别人推到行驶的公交车下→极端自私的背叛行为</li>
+<li><strong>对比习语</strong>：<!-- -->
+<ul>
+<li>✅ "Throw someone under the bus" = 为自保而背叛</li>
+<li>❌ "Pass the buck" = 推卸责任（不一定涉及背叛）</li>
+</ul>
+</li>
+<li><strong>中文对应</strong>：类似"过河拆桥"、"出卖"、"甩锅"</li>
+</ol>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="️-注意事项-1"><strong>⚠️ 注意事项</strong><a href="https://www.eurekashadow.xin/blog/LearnEng#%EF%B8%8F-%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9-1" class="hash-link" aria-label="️-注意事项-1的直接链接" title="️-注意事项-1的直接链接">​</a></h3>
+<ul>
+<li><strong>强烈贬义</strong>：使用时通常带有强烈谴责意味</li>
+<li><strong>程度严重</strong>：比一般的推卸责任更恶劣，涉及主动背叛</li>
+<li><strong>常见变体</strong>：<!-- -->
+<ul>
+<li>"Throw [某人] under the bus"（具体对象）</li>
+<li>"Get thrown under the bus"（被背叛的被动形式）</li>
+</ul>
+</li>
+</ul>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="延伸学习"><strong>延伸学习</strong><a href="https://www.eurekashadow.xin/blog/LearnEng#%E5%BB%B6%E4%BC%B8%E5%AD%A6%E4%B9%A0" class="hash-link" aria-label="延伸学习的直接链接" title="延伸学习的直接链接">​</a></h3>
+<ul>
+<li><strong>同义表达</strong>：<!-- -->
+<ul>
+<li>"Stab someone in the back"（背后捅刀）</li>
+<li>"Sell someone out"（出卖）</li>
+</ul>
+</li>
+<li><strong>反义表达</strong>：<!-- -->
+<ul>
+<li>"Have someone's back"（支持某人）</li>
+<li>"Stand by someone"（力挺某人）</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="gaslight-someone"><strong>"Gaslight someone"</strong><a href="https://www.eurekashadow.xin/blog/LearnEng#gaslight-someone" class="hash-link" aria-label="gaslight-someone的直接链接" title="gaslight-someone的直接链接">​</a></h2>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="含义-2"><strong>含义</strong><a href="https://www.eurekashadow.xin/blog/LearnEng#%E5%90%AB%E4%B9%89-2" class="hash-link" aria-label="含义-2的直接链接" title="含义-2的直接链接">​</a></h3>
+<ul>
+<li><strong>核心意义</strong>：通过心理操纵使某人质疑自己的记忆、感知或理智</li>
+<li><strong>词源背景</strong>：源自1944年电影《煤气灯下》(Gaslight)，片中丈夫通过操纵煤气灯光使妻子怀疑自己</li>
+<li><strong>心理影响</strong>：属于情感虐待的一种形式，会导致受害者产生自我怀疑</li>
+</ul>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="使用实例-2"><strong>使用实例</strong><a href="https://www.eurekashadow.xin/blog/LearnEng#%E4%BD%BF%E7%94%A8%E5%AE%9E%E4%BE%8B-2" class="hash-link" aria-label="使用实例-2的直接链接" title="使用实例-2的直接链接">​</a></h3>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="1-情感操控">1. <strong>情感操控</strong><a href="https://www.eurekashadow.xin/blog/LearnEng#1-%E6%83%85%E6%84%9F%E6%93%8D%E6%8E%A7" class="hash-link" aria-label="1-情感操控的直接链接" title="1-情感操控的直接链接">​</a></h3>
+<ul>
+<li><em>He kept gaslighting me by denying things he had clearly said before.</em>
+（他通过否认自己说过的话来操控我）</li>
+<li><em>Don't let him gaslight you into thinking you're overreacting.</em>
+（别让他操控你觉得是你反应过度）</li>
+</ul>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="2-职场pua">2. <strong>职场PUA</strong><a href="https://www.eurekashadow.xin/blog/LearnEng#2-%E8%81%8C%E5%9C%BApua" class="hash-link" aria-label="2-职场pua的直接链接" title="2-职场pua的直接链接">​</a></h3>
+<ul>
+<li><em>My boss gaslights the team by constantly changing deadlines and then claiming we misunderstood.</em>
+（老板通过不断改变截止日期然后说是我们理解错误来操控团队）</li>
+<li><em>That's classic gaslighting - first she gives unclear instructions, then blames us for not following them.</em>
+（典型的心理操控 - 她先给出模糊指示，然后责怪我们没有遵守）</li>
+</ul>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="3-家庭关系">3. <strong>家庭关系</strong><a href="https://www.eurekashadow.xin/blog/LearnEng#3-%E5%AE%B6%E5%BA%AD%E5%85%B3%E7%B3%BB" class="hash-link" aria-label="3-家庭关系的直接链接" title="3-家庭关系的直接链接">​</a></h3>
+<ul>
+<li><em>Growing up with a gaslighting parent made me doubt my own judgment.</em>
+（在有操控欲的父母身边长大让我怀疑自己的判断力）</li>
+<li><em>She realized her partner had been gaslighting her when she started keeping records of their conversations.</em>
+（当她开始记录他们的对话时，才意识到伴侣一直在操控她）</li>
+</ul>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="常见场景-2"><strong>常见场景</strong><a href="https://www.eurekashadow.xin/blog/LearnEng#%E5%B8%B8%E8%A7%81%E5%9C%BA%E6%99%AF-2" class="hash-link" aria-label="常见场景-2的直接链接" title="常见场景-2的直接链接">​</a></h3>
+<ul>
+<li><strong>亲密关系</strong>：伴侣间的心理操控</li>
+<li><strong>职场环境</strong>：上司对下属的精神控制</li>
+<li><strong>家庭关系</strong>：父母对子女的情感虐待</li>
+<li><strong>政治宣传</strong>：通过虚假信息操控公众认知</li>
+</ul>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="助记技巧-2"><strong>助记技巧</strong><a href="https://www.eurekashadow.xin/blog/LearnEng#%E5%8A%A9%E8%AE%B0%E6%8A%80%E5%B7%A7-2" class="hash-link" aria-label="助记技巧-2的直接链接" title="助记技巧-2的直接链接">​</a></h3>
+<ol>
+<li><strong>电影联想</strong>：记住源自《煤气灯下》电影情节</li>
+<li><strong>行为特征</strong>：<!-- -->
+<ul>
+<li>否认事实</li>
+<li>扭曲现实</li>
+<li>制造困惑</li>
+</ul>
+</li>
+<li><strong>中文对应</strong>：类似"心理操控"、"精神控制"、"洗脑"</li>
+</ol>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="️-注意事项-2"><strong>⚠️ 注意事项</strong><a href="https://www.eurekashadow.xin/blog/LearnEng#%EF%B8%8F-%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9-2" class="hash-link" aria-label="️-注意事项-2的直接链接" title="️-注意事项-2的直接链接">​</a></h3>
+<ul>
+<li><strong>严重性</strong>：属于心理虐待，比简单的说谎更恶劣</li>
+<li><strong>渐进过程</strong>：通常是长期、渐进的行为模式</li>
+<li><strong>受害者表现</strong>：<!-- -->
+<ul>
+<li>经常道歉</li>
+<li>过度自我怀疑</li>
+<li>需要反复确认自己的记忆</li>
+</ul>
+</li>
+</ul>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="延伸学习-1"><strong>延伸学习</strong><a href="https://www.eurekashadow.xin/blog/LearnEng#%E5%BB%B6%E4%BC%B8%E5%AD%A6%E4%B9%A0-1" class="hash-link" aria-label="延伸学习-1的直接链接" title="延伸学习-1的直接链接">​</a></h3>
+<ul>
+<li><strong>相关概念</strong>：<!-- -->
+<ul>
+<li>"Emotional abuse"（情感虐待）</li>
+<li>"Psychological manipulation"（心理操纵）</li>
+</ul>
+</li>
+<li><strong>应对方式</strong>：<!-- -->
+<ul>
+<li>"Keep a paper trail"（保留书面记录）</li>
+<li>"Trust your gut"（相信自己的直觉）</li>
+<li>"Seek external validation"（寻求外部确认）</li>
+</ul>
+</li>
+</ul>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="辨别特征"><strong>辨别特征</strong><a href="https://www.eurekashadow.xin/blog/LearnEng#%E8%BE%A8%E5%88%AB%E7%89%B9%E5%BE%81" class="hash-link" aria-label="辨别特征的直接链接" title="辨别特征的直接链接">​</a></h3>
+<ol>
+<li>否认明明发生过的事情</li>
+<li>将问题归咎于你的"错误记忆"</li>
+<li>让你觉得自己总是反应过度</li>
+<li>通过小事逐渐瓦解你的自信</li>
+</ol>
+<hr>]]></content:encoded>
+            <category>English</category>
+        </item>
+        <item>
+            <title><![CDATA[力扣做题总结模板]]></title>
+            <link>https://www.eurekashadow.xin/blog/LeetCodeExample</link>
+            <guid>https://www.eurekashadow.xin/blog/LeetCodeExample</guid>
+            <pubDate>Sun, 03 Aug 2025 00:00:00 GMT</pubDate>
+            <description><![CDATA[力扣面试经典——X题]]></description>
+            <content:encoded><![CDATA[<h3 class="anchor anchorWithStickyNavbar_LWe7" id="力扣面试经典x题"><span class="B2_JnYG"><a href="https://leetcode.cn/studyplan/top-interview-150/" target="_blank" rel="noopener noreferrer" title="力扣">力扣面试经典——X题</a></span><a href="https://www.eurekashadow.xin/blog/LeetCodeExample#%E5%8A%9B%E6%89%A3%E9%9D%A2%E8%AF%95%E7%BB%8F%E5%85%B8x%E9%A2%98" class="hash-link" aria-label="力扣面试经典x题的直接链接" title="力扣面试经典x题的直接链接">​</a></h3>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="-参考代码">💡 参考代码：<a href="https://www.eurekashadow.xin/blog/LeetCodeExample#-%E5%8F%82%E8%80%83%E4%BB%A3%E7%A0%81" class="hash-link" aria-label="💡 参考代码：的直接链接" title="💡 参考代码：的直接链接">​</a></h3>
+<div class="language-c codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-c codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">code</span><br></span></code></pre></div></div>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="-总结">📖 总结：<a href="https://www.eurekashadow.xin/blog/LeetCodeExample#-%E6%80%BB%E7%BB%93" class="hash-link" aria-label="📖 总结：的直接链接" title="📖 总结：的直接链接">​</a></h3>
+<details class="details_lb9f alert alert--info details_b_Ee" data-collapsed="true"><summary>点击展开题目总结</summary><div><div class="collapsibleContent_i85q"><h1>🤔 [题目名称]</h1><hr><h2 class="anchor anchorWithStickyNavbar_LWe7" id="1️⃣-题目核心信息">1️⃣ 题目核心信息<a href="https://www.eurekashadow.xin/blog/LeetCodeExample#1%EF%B8%8F%E2%83%A3-%E9%A2%98%E7%9B%AE%E6%A0%B8%E5%BF%83%E4%BF%A1%E6%81%AF" class="hash-link" aria-label="1️⃣ 题目核心信息的直接链接" title="1️⃣ 题目核心信息的直接链接">​</a></h2><p>🎯 <strong>功能描述</strong>：[简要描述题目要解决的核心问题]</p><p>📥 <strong>输入输出</strong>：</p><ul>
+<li><strong>输入</strong>：[列出主要输入参数及其含义]</li>
+<li><strong>输出</strong>：[描述函数返回值及副作用]</li>
+</ul><hr><h2 class="anchor anchorWithStickyNavbar_LWe7" id="2️⃣-实现原理">2️⃣ 实现原理<a href="https://www.eurekashadow.xin/blog/LeetCodeExample#2%EF%B8%8F%E2%83%A3-%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86" class="hash-link" aria-label="2️⃣ 实现原理的直接链接" title="2️⃣ 实现原理的直接链接">​</a></h2><p>💡 <strong>核心思路</strong>：[概括解决该问题的主要算法思想]</p><p>📋 <strong>实现步骤</strong>：</p><ol>
+<li>[步骤1]</li>
+<li>[步骤2]</li>
+<li>[步骤3]</li>
+<li>[步骤4]</li>
+</ol><hr><h2 class="anchor anchorWithStickyNavbar_LWe7" id="3️⃣-关键点解析">3️⃣ 关键点解析<a href="https://www.eurekashadow.xin/blog/LeetCodeExample#3%EF%B8%8F%E2%83%A3-%E5%85%B3%E9%94%AE%E7%82%B9%E8%A7%A3%E6%9E%90" class="hash-link" aria-label="3️⃣ 关键点解析的直接链接" title="3️⃣ 关键点解析的直接链接">​</a></h2><p>给出原始做题思路并比较与最优解区别（可选）</p><h3 class="anchor anchorWithStickyNavbar_LWe7" id="-代码技巧">🎯 代码技巧<a href="https://www.eurekashadow.xin/blog/LeetCodeExample#-%E4%BB%A3%E7%A0%81%E6%8A%80%E5%B7%A7" class="hash-link" aria-label="🎯 代码技巧的直接链接" title="🎯 代码技巧的直接链接">​</a></h3><ul>
+<li>[技巧1]</li>
+<li>[技巧2]</li>
+<li>[技巧3]</li>
+</ul><h2 class="anchor anchorWithStickyNavbar_LWe7" id="4️⃣-使用场景">4️⃣ 使用场景<a href="https://www.eurekashadow.xin/blog/LeetCodeExample#4%EF%B8%8F%E2%83%A3-%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF" class="hash-link" aria-label="4️⃣ 使用场景的直接链接" title="4️⃣ 使用场景的直接链接">​</a></h2><h3 class="anchor anchorWithStickyNavbar_LWe7" id="-适用情况">✅ 适用情况：<a href="https://www.eurekashadow.xin/blog/LeetCodeExample#-%E9%80%82%E7%94%A8%E6%83%85%E5%86%B5" class="hash-link" aria-label="✅ 适用情况：的直接链接" title="✅ 适用情况：的直接链接">​</a></h3><ul>
+<li>[场景1]</li>
+<li>[场景2]</li>
+<li>[场景3]</li>
+</ul><h3 class="anchor anchorWithStickyNavbar_LWe7" id="️-前提条件">⚠️ 前提条件：<a href="https://www.eurekashadow.xin/blog/LeetCodeExample#%EF%B8%8F-%E5%89%8D%E6%8F%90%E6%9D%A1%E4%BB%B6" class="hash-link" aria-label="⚠️ 前提条件：的直接链接" title="⚠️ 前提条件：的直接链接">​</a></h3><ul>
+<li>[条件1]</li>
+<li>[条件2]</li>
+</ul><h2 class="anchor anchorWithStickyNavbar_LWe7" id="5️⃣-复杂度分析">5️⃣ 复杂度分析<a href="https://www.eurekashadow.xin/blog/LeetCodeExample#5%EF%B8%8F%E2%83%A3-%E5%A4%8D%E6%9D%82%E5%BA%A6%E5%88%86%E6%9E%90" class="hash-link" aria-label="5️⃣ 复杂度分析的直接链接" title="5️⃣ 复杂度分析的直接链接">​</a></h2><ul>
+<li>
+<p>⏱️ 时间复杂度：[时间复杂度分析]</p>
+</li>
+<li>
+<p>💾 空间复杂度：[空间复杂度分析]</p>
+</li>
+</ul><h2 class="anchor anchorWithStickyNavbar_LWe7" id="6️⃣-注意事项">6️⃣ 注意事项<a href="https://www.eurekashadow.xin/blog/LeetCodeExample#6%EF%B8%8F%E2%83%A3-%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9" class="hash-link" aria-label="6️⃣ 注意事项的直接链接" title="6️⃣ 注意事项的直接链接">​</a></h2><h3 class="anchor anchorWithStickyNavbar_LWe7" id="-边界情况">🚩 边界情况：<a href="https://www.eurekashadow.xin/blog/LeetCodeExample#-%E8%BE%B9%E7%95%8C%E6%83%85%E5%86%B5" class="hash-link" aria-label="🚩 边界情况：的直接链接" title="🚩 边界情况：的直接链接">​</a></h3><ul>
+<li>[边界情况1]</li>
+<li>[边界情况2]</li>
+<li>[边界情况3]</li>
+</ul><h3 class="anchor anchorWithStickyNavbar_LWe7" id="-易错点">💥 易错点：<a href="https://www.eurekashadow.xin/blog/LeetCodeExample#-%E6%98%93%E9%94%99%E7%82%B9" class="hash-link" aria-label="💥 易错点：的直接链接" title="💥 易错点：的直接链接">​</a></h3><ul>
+<li>[易错点1]</li>
+<li>[易错点2]</li>
+<li>[易错点3]</li>
+</ul></div></div></details>]]></content:encoded>
+            <category>数组</category>
+        </item>
+        <item>
+            <title><![CDATA[跳跃游戏II]]></title>
+            <link>https://www.eurekashadow.xin/blog/LeetCode45</link>
+            <guid>https://www.eurekashadow.xin/blog/LeetCode45</guid>
+            <pubDate>Sun, 03 Aug 2025 00:00:00 GMT</pubDate>
+            <description><![CDATA[力扣面试经典——45题]]></description>
+            <content:encoded><![CDATA[<h3 class="anchor anchorWithStickyNavbar_LWe7" id="力扣面试经典45题"><span class="B2_JnYG"><a href="https://leetcode.cn/problems/jump-game-ii/description/?envType=study-plan-v2&amp;envId=top-interview-150" target="_blank" rel="noopener noreferrer" title="力扣">力扣面试经典——45题</a></span><a href="https://www.eurekashadow.xin/blog/LeetCode45#%E5%8A%9B%E6%89%A3%E9%9D%A2%E8%AF%95%E7%BB%8F%E5%85%B845%E9%A2%98" class="hash-link" aria-label="力扣面试经典45题的直接链接" title="力扣面试经典45题的直接链接">​</a></h3>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="-参考代码">💡 参考代码：<a href="https://www.eurekashadow.xin/blog/LeetCode45#-%E5%8F%82%E8%80%83%E4%BB%A3%E7%A0%81" class="hash-link" aria-label="💡 参考代码：的直接链接" title="💡 参考代码：的直接链接">​</a></h3>
+<div class="language-c codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-c codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token comment" style="color:#999988;font-style:italic">/**</span><br></span><span class="token-line" style="color:#393A34"><span class="token comment" style="color:#999988;font-style:italic"> * 计算跳跃游戏的最小跳跃次数</span><br></span><span class="token-line" style="color:#393A34"><span class="token comment" style="color:#999988;font-style:italic"> * 此函数只关心最小跳跃次数，而不关心真实的跳跃路径</span><br></span><span class="token-line" style="color:#393A34"><span class="token comment" style="color:#999988;font-style:italic"> * @param nums 非负整数数组，每个元素代表在该位置可以跳跃的最大长度</span><br></span><span class="token-line" style="color:#393A34"><span class="token comment" style="color:#999988;font-style:italic"> * @param numsSize 数组长度</span><br></span><span class="token-line" style="color:#393A34"><span class="token comment" style="color:#999988;font-style:italic"> * @return 到达最后一个下标的最小跳跃次数</span><br></span><span class="token-line" style="color:#393A34"><span class="token comment" style="color:#999988;font-style:italic"> */</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token keyword" style="color:#00009f">int</span><span class="token plain"> </span><span class="token function" style="color:#d73a49">jump</span><span class="token punctuation" style="color:#393A34">(</span><span class="token keyword" style="color:#00009f">int</span><span class="token operator" style="color:#393A34">*</span><span class="token plain"> nums</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> </span><span class="token keyword" style="color:#00009f">int</span><span class="token plain"> numsSize</span><span class="token punctuation" style="color:#393A34">)</span><span class="token plain"> </span><span class="token punctuation" style="color:#393A34">{</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token comment" style="color:#999988;font-style:italic">// 边界情况：数组长度小于等于1，不需要跳跃</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token keyword" style="color:#00009f">if</span><span class="token plain"> </span><span class="token punctuation" style="color:#393A34">(</span><span class="token plain">numsSize </span><span class="token operator" style="color:#393A34">&lt;=</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">1</span><span class="token punctuation" style="color:#393A34">)</span><span class="token plain"> </span><span class="token keyword" style="color:#00009f">return</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">0</span><span class="token punctuation" style="color:#393A34">;</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token keyword" style="color:#00009f">int</span><span class="token plain"> jumps </span><span class="token operator" style="color:#393A34">=</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">0</span><span class="token punctuation" style="color:#393A34">;</span><span class="token plain">          </span><span class="token comment" style="color:#999988;font-style:italic">// 记录跳跃次数</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token keyword" style="color:#00009f">int</span><span class="token plain"> currentEnd </span><span class="token operator" style="color:#393A34">=</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">0</span><span class="token punctuation" style="color:#393A34">;</span><span class="token plain">     </span><span class="token comment" style="color:#999988;font-style:italic">// 当前这次跳跃能到达的最远边界，但并非真要跳到此边界</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token keyword" style="color:#00009f">int</span><span class="token plain"> farthest </span><span class="token operator" style="color:#393A34">=</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">0</span><span class="token punctuation" style="color:#393A34">;</span><span class="token plain">       </span><span class="token comment" style="color:#999988;font-style:italic">// 目前为止能到达的最远位置</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token comment" style="color:#999988;font-style:italic">// 只需要遍历到 numsSize-2，因为题目保证能到达最后位置</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token keyword" style="color:#00009f">for</span><span class="token plain"> </span><span class="token punctuation" style="color:#393A34">(</span><span class="token keyword" style="color:#00009f">int</span><span class="token plain"> i </span><span class="token operator" style="color:#393A34">=</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">0</span><span class="token punctuation" style="color:#393A34">;</span><span class="token plain"> i </span><span class="token operator" style="color:#393A34">&lt;</span><span class="token plain"> numsSize </span><span class="token operator" style="color:#393A34">-</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">1</span><span class="token punctuation" style="color:#393A34">;</span><span class="token plain"> i</span><span class="token operator" style="color:#393A34">++</span><span class="token punctuation" style="color:#393A34">)</span><span class="token plain"> </span><span class="token punctuation" style="color:#393A34">{</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">        </span><span class="token comment" style="color:#999988;font-style:italic">// 计算从位置i能跳到的最远位置，并更新全局最远位置</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">        </span><span class="token keyword" style="color:#00009f">int</span><span class="token plain"> currentFarthest </span><span class="token operator" style="color:#393A34">=</span><span class="token plain"> i </span><span class="token operator" style="color:#393A34">+</span><span class="token plain"> nums</span><span class="token punctuation" style="color:#393A34">[</span><span class="token plain">i</span><span class="token punctuation" style="color:#393A34">]</span><span class="token punctuation" style="color:#393A34">;</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">        farthest </span><span class="token operator" style="color:#393A34">=</span><span class="token plain"> </span><span class="token punctuation" style="color:#393A34">(</span><span class="token plain">farthest </span><span class="token operator" style="color:#393A34">&gt;</span><span class="token plain"> currentFarthest</span><span class="token punctuation" style="color:#393A34">)</span><span class="token plain"> </span><span class="token operator" style="color:#393A34">?</span><span class="token plain"> farthest </span><span class="token operator" style="color:#393A34">:</span><span class="token plain"> currentFarthest</span><span class="token punctuation" style="color:#393A34">;</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">        </span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">        </span><span class="token comment" style="color:#999988;font-style:italic">// 如果到达当前跳跃的边界，必须进行下一次跳跃</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">        </span><span class="token keyword" style="color:#00009f">if</span><span class="token plain"> </span><span class="token punctuation" style="color:#393A34">(</span><span class="token plain">i </span><span class="token operator" style="color:#393A34">==</span><span class="token plain"> currentEnd</span><span class="token punctuation" style="color:#393A34">)</span><span class="token plain"> </span><span class="token punctuation" style="color:#393A34">{</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">            jumps</span><span class="token operator" style="color:#393A34">++</span><span class="token punctuation" style="color:#393A34">;</span><span class="token plain">                </span><span class="token comment" style="color:#999988;font-style:italic">// 增加跳跃次数</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">            currentEnd </span><span class="token operator" style="color:#393A34">=</span><span class="token plain"> farthest</span><span class="token punctuation" style="color:#393A34">;</span><span class="token plain">  </span><span class="token comment" style="color:#999988;font-style:italic">// 更新下一次跳跃的边界</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">        </span><span class="token punctuation" style="color:#393A34">}</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token punctuation" style="color:#393A34">}</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token keyword" style="color:#00009f">return</span><span class="token plain"> jumps</span><span class="token punctuation" style="color:#393A34">;</span><span class="token plain">  </span><span class="token comment" style="color:#999988;font-style:italic">// 返回最小跳跃次数</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token punctuation" style="color:#393A34">}</span><br></span></code></pre></div></div>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="-总结">📖 总结：<a href="https://www.eurekashadow.xin/blog/LeetCode45#-%E6%80%BB%E7%BB%93" class="hash-link" aria-label="📖 总结：的直接链接" title="📖 总结：的直接链接">​</a></h3>
+<details class="details_lb9f alert alert--info details_b_Ee" data-collapsed="true"><summary>点击展开题目总结</summary><div><div class="collapsibleContent_i85q"><h1>🤔 跳跃游戏 II</h1><hr><h2 class="anchor anchorWithStickyNavbar_LWe7" id="1️⃣-题目核心信息">1️⃣ 题目核心信息<a href="https://www.eurekashadow.xin/blog/LeetCode45#1%EF%B8%8F%E2%83%A3-%E9%A2%98%E7%9B%AE%E6%A0%B8%E5%BF%83%E4%BF%A1%E6%81%AF" class="hash-link" aria-label="1️⃣ 题目核心信息的直接链接" title="1️⃣ 题目核心信息的直接链接">​</a></h2><p>🎯 <strong>功能描述</strong>：给定一个数组，数组中每个元素表示在该位置可以跳跃的最大长度，求到达最后一个位置的最小跳跃次数。</p><p>📥 <strong>输入输出</strong>：</p><ul>
+<li><strong>输入</strong>：int* nums（非负整数数组），int numsSize（数组长度）</li>
+<li><strong>输出</strong>：到达最后一个下标的最小跳跃次数</li>
+</ul><hr><h2 class="anchor anchorWithStickyNavbar_LWe7" id="2️⃣-实现原理">2️⃣ 实现原理<a href="https://www.eurekashadow.xin/blog/LeetCode45#2%EF%B8%8F%E2%83%A3-%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86" class="hash-link" aria-label="2️⃣ 实现原理的直接链接" title="2️⃣ 实现原理的直接链接">​</a></h2><p>💡 <strong>核心思路</strong>：使用贪心算法，在每次必须跳跃时选择能跳得最远的位置，从而最小化跳跃次数。</p><p>📋 <strong>实现步骤</strong>：</p><ol>
+<li>维护三个变量：跳跃次数、当前跳跃边界、全局最远位置</li>
+<li>遍历数组（除最后一个元素），不断更新能到达的最远位置</li>
+<li>当到达当前跳跃边界时，必须进行下一次跳跃</li>
+<li>更新跳跃次数和下一次跳跃的边界</li>
+</ol><hr><h2 class="anchor anchorWithStickyNavbar_LWe7" id="3️⃣-关键点解析">3️⃣ 关键点解析<a href="https://www.eurekashadow.xin/blog/LeetCode45#3%EF%B8%8F%E2%83%A3-%E5%85%B3%E9%94%AE%E7%82%B9%E8%A7%A3%E6%9E%90" class="hash-link" aria-label="3️⃣ 关键点解析的直接链接" title="3️⃣ 关键点解析的直接链接">​</a></h2><h3 class="anchor anchorWithStickyNavbar_LWe7" id="-代码技巧">🎯 代码技巧<a href="https://www.eurekashadow.xin/blog/LeetCode45#-%E4%BB%A3%E7%A0%81%E6%8A%80%E5%B7%A7" class="hash-link" aria-label="🎯 代码技巧的直接链接" title="🎯 代码技巧的直接链接">​</a></h3><ul>
+<li>使用贪心策略：在必须跳跃时选择最优方案</li>
+<li>双指针思想：currentEnd标记当前跳跃边界，farthest记录最远可达位置</li>
+<li>提前终止：只需遍历到倒数第二个元素</li>
+</ul><h2 class="anchor anchorWithStickyNavbar_LWe7" id="4️⃣-使用场景">4️⃣ 使用场景<a href="https://www.eurekashadow.xin/blog/LeetCode45#4%EF%B8%8F%E2%83%A3-%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF" class="hash-link" aria-label="4️⃣ 使用场景的直接链接" title="4️⃣ 使用场景的直接链接">​</a></h2><h3 class="anchor anchorWithStickyNavbar_LWe7" id="-适用情况">✅ 适用情况：<a href="https://www.eurekashadow.xin/blog/LeetCode45#-%E9%80%82%E7%94%A8%E6%83%85%E5%86%B5" class="hash-link" aria-label="✅ 适用情况：的直接链接" title="✅ 适用情况：的直接链接">​</a></h3><ul>
+<li>求解最小跳跃次数问题</li>
+<li>数组元素表示跳跃能力的场景</li>
+<li>需要优化路径选择的问题</li>
+</ul><h3 class="anchor anchorWithStickyNavbar_LWe7" id="️-前提条件">⚠️ 前提条件：<a href="https://www.eurekashadow.xin/blog/LeetCode45#%EF%B8%8F-%E5%89%8D%E6%8F%90%E6%9D%A1%E4%BB%B6" class="hash-link" aria-label="⚠️ 前提条件：的直接链接" title="⚠️ 前提条件：的直接链接">​</a></h3><ul>
+<li>题目保证可以到达最后一个位置</li>
+<li>数组元素为非负整数</li>
+</ul><h2 class="anchor anchorWithStickyNavbar_LWe7" id="5️⃣-复杂度分析">5️⃣ 复杂度分析<a href="https://www.eurekashadow.xin/blog/LeetCode45#5%EF%B8%8F%E2%83%A3-%E5%A4%8D%E6%9D%82%E5%BA%A6%E5%88%86%E6%9E%90" class="hash-link" aria-label="5️⃣ 复杂度分析的直接链接" title="5️⃣ 复杂度分析的直接链接">​</a></h2><ul>
+<li>⏱️ 时间复杂度：O(n)，只需遍历一次数组</li>
+<li>💾 空间复杂度：O(1)，只使用常数额外空间</li>
+</ul><h2 class="anchor anchorWithStickyNavbar_LWe7" id="6️⃣-注意事项">6️⃣ 注意事项<a href="https://www.eurekashadow.xin/blog/LeetCode45#6%EF%B8%8F%E2%83%A3-%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9" class="hash-link" aria-label="6️⃣ 注意事项的直接链接" title="6️⃣ 注意事项的直接链接">​</a></h2><h3 class="anchor anchorWithStickyNavbar_LWe7" id="-边界情况">🚩 边界情况：<a href="https://www.eurekashadow.xin/blog/LeetCode45#-%E8%BE%B9%E7%95%8C%E6%83%85%E5%86%B5" class="hash-link" aria-label="🚩 边界情况：的直接链接" title="🚩 边界情况：的直接链接">​</a></h3><ul>
+<li>数组长度为1：不需要跳跃，返回0</li>
+<li>数组长度为2：最多只需1次跳跃</li>
+<li>第一个元素为0：根据题目保证，这种情况不会出现</li>
+</ul><h3 class="anchor anchorWithStickyNavbar_LWe7" id="-易错点">💥 易错点：<a href="https://www.eurekashadow.xin/blog/LeetCode45#-%E6%98%93%E9%94%99%E7%82%B9" class="hash-link" aria-label="💥 易错点：的直接链接" title="💥 易错点：的直接链接">​</a></h3><ul>
+<li>循环只需要到 numsSize-1，否则可能多计算一次跳跃</li>
+<li>必须在到达边界时才增加跳跃次数</li>
+<li>更新边界和最远位置的顺序不能颠倒</li>
+</ul><h2 class="anchor anchorWithStickyNavbar_LWe7" id="7⃣-补充说明">7⃣ 补充说明<a href="https://www.eurekashadow.xin/blog/LeetCode45#7%E2%83%A3-%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E" class="hash-link" aria-label="7⃣ 补充说明的直接链接" title="7⃣ 补充说明的直接链接">​</a></h2><h3 class="anchor anchorWithStickyNavbar_LWe7" id="-关键洞察">🎯 关键洞察<a href="https://www.eurekashadow.xin/blog/LeetCode45#-%E5%85%B3%E9%94%AE%E6%B4%9E%E5%AF%9F" class="hash-link" aria-label="🎯 关键洞察的直接链接" title="🎯 关键洞察的直接链接">​</a></h3><ul>
+<li><code>jump</code> 变量更新的位置 ≠ 实际跳跃发生的物理位置</li>
+<li><code>jump</code> 变量表示的是"必须做出跳跃决策"的次数</li>
+</ul><h3 class="anchor anchorWithStickyNavbar_LWe7" id="-算法执行逻辑">📊 算法执行逻辑<a href="https://www.eurekashadow.xin/blog/LeetCode45#-%E7%AE%97%E6%B3%95%E6%89%A7%E8%A1%8C%E9%80%BB%E8%BE%91" class="hash-link" aria-label="📊 算法执行逻辑的直接链接" title="📊 算法执行逻辑的直接链接">​</a></h3><p><strong>例：nums = [2, 3, 1, 1, 4]</strong></p><p><strong>真实跳跃路径</strong>：0 → 1 → 4</p><p><strong>算法计数逻辑</strong>：</p><ol>
+<li><strong>位置0</strong>：确定第1次跳跃覆盖范围(0-2)</li>
+<li><strong>位置1,2</strong>：探索发现能跳到位置4</li>
+<li><strong>位置2(边界)</strong>：必须决策，<code>jump++</code>，确定下次跳跃范围</li>
+</ol><h3 class="anchor anchorWithStickyNavbar_LWe7" id="-算法本质">🎯 算法本质<a href="https://www.eurekashadow.xin/blog/LeetCode45#-%E7%AE%97%E6%B3%95%E6%9C%AC%E8%B4%A8" class="hash-link" aria-label="🎯 算法本质的直接链接" title="🎯 算法本质的直接链接">​</a></h3><p>这是<strong>批量决策</strong>过程：</p><ul>
+<li><strong>第1次决策</strong>(jump=1)：站在起点，确定覆盖范围0-2</li>
+<li><strong>第2次决策</strong>(jump=2)：在范围内探索，发现能到位置4</li>
+</ul><p><strong>实际执行</strong>：位置0 → 位置1 → 位置4<br>
+<strong>算法计数</strong>：在必须决策时计数，非实际起跳时</p><h3 class="anchor anchorWithStickyNavbar_LWe7" id="-设计优势">💡 设计优势<a href="https://www.eurekashadow.xin/blog/LeetCode45#-%E8%AE%BE%E8%AE%A1%E4%BC%98%E5%8A%BF" class="hash-link" aria-label="💡 设计优势的直接链接" title="💡 设计优势的直接链接">​</a></h3><ul>
+<li><strong>提前规划</strong>：必须跳跃前已知最优选择</li>
+<li><strong>批量处理</strong>：一次决策覆盖一个区间</li>
+<li><strong>贪心最优</strong>：每次都选能跳最远的方案</li>
+</ul><p>✅ <code>jump</code> 变量容易误导人，它记录的是"决策次数"而非"起跳时刻"。</p><h2 class="anchor anchorWithStickyNavbar_LWe7" id="8⃣-惑之未解">8⃣ 惑之未解？<a href="https://www.eurekashadow.xin/blog/LeetCode45#8%E2%83%A3-%E6%83%91%E4%B9%8B%E6%9C%AA%E8%A7%A3" class="hash-link" aria-label="8⃣ 惑之未解？的直接链接" title="8⃣ 惑之未解？的直接链接">​</a></h2><h3 class="anchor anchorWithStickyNavbar_LWe7" id="-问题思考">🤔 问题思考<a href="https://www.eurekashadow.xin/blog/LeetCode45#-%E9%97%AE%E9%A2%98%E6%80%9D%E8%80%83" class="hash-link" aria-label="🤔 问题思考的直接链接" title="🤔 问题思考的直接链接">​</a></h3><p>为什么for循环的判断条件是 <code>i &lt; numsSize - 1</code> 而不是 <code>i &lt; numsSize</code>？</p><p>如果使用 <code>i &lt; numsSize</code>，在某些情况下（如 <code>[2,3,1,1,4]</code>），当能够跳转到最后位置时，<code>jump</code> 会多加1，导致结果错误。</p><h3 class="anchor anchorWithStickyNavbar_LWe7" id="-深入分析">🧐 深入分析<a href="https://www.eurekashadow.xin/blog/LeetCode45#-%E6%B7%B1%E5%85%A5%E5%88%86%E6%9E%90" class="hash-link" aria-label="🧐 深入分析的直接链接" title="🧐 深入分析的直接链接">​</a></h3><p>经过再次思考，这些变量 <code>jump</code>、<code>currentEnd</code>、<code>farthest</code>、<code>currentFarthest</code> 都是根据数组下标及其对应数值来决定是否更新的。</p><p><strong>关键理解点</strong>：</p><ul>
+<li><code>jump</code> 的含义是"需要跳跃jump次才能到达数组最后一个元素"</li>
+<li>如果循环条件设定为 <code>i &lt; numsSize</code>，for循环会遍历到数组的最后一个位置</li>
+<li>但当我们处理到倒数第二个位置时，已经收集了足够的信息来确定最少跳跃次数</li>
+<li>继续处理最后一个位置是不必要的，甚至可能导致错误结果</li>
+</ul><h2 class="anchor anchorWithStickyNavbar_LWe7" id="9⃣-举一反一">9⃣ 举一反一？😂<a href="https://www.eurekashadow.xin/blog/LeetCode45#9%E2%83%A3-%E4%B8%BE%E4%B8%80%E5%8F%8D%E4%B8%80" class="hash-link" aria-label="9⃣ 举一反一？😂的直接链接" title="9⃣ 举一反一？😂的直接链接">​</a></h2><p><strong>最小跳跃次数 + 真实跳跃路径</strong></p><div class="language-c codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-c codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token comment" style="color:#999988;font-style:italic">/**</span><br></span><span class="token-line" style="color:#393A34"><span class="token comment" style="color:#999988;font-style:italic"> * 计算跳跃游戏的最小跳跃次数和路径</span><br></span><span class="token-line" style="color:#393A34"><span class="token comment" style="color:#999988;font-style:italic"> * @param nums 非负整数数组，每个元素代表在该位置可以跳跃的最大长度</span><br></span><span class="token-line" style="color:#393A34"><span class="token comment" style="color:#999988;font-style:italic"> * @param numsSize 数组长度</span><br></span><span class="token-line" style="color:#393A34"><span class="token comment" style="color:#999988;font-style:italic"> * @param path 用于存储跳跃路径的数组</span><br></span><span class="token-line" style="color:#393A34"><span class="token comment" style="color:#999988;font-style:italic"> * @param pathSize 用于返回路径长度的指针</span><br></span><span class="token-line" style="color:#393A34"><span class="token comment" style="color:#999988;font-style:italic"> * @return 到达最后一个下标的最小跳跃次数</span><br></span><span class="token-line" style="color:#393A34"><span class="token comment" style="color:#999988;font-style:italic"> */</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token keyword" style="color:#00009f">int</span><span class="token plain"> </span><span class="token function" style="color:#d73a49">jumpWithPath</span><span class="token punctuation" style="color:#393A34">(</span><span class="token keyword" style="color:#00009f">int</span><span class="token operator" style="color:#393A34">*</span><span class="token plain"> nums</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> </span><span class="token keyword" style="color:#00009f">int</span><span class="token plain"> numsSize</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> </span><span class="token keyword" style="color:#00009f">int</span><span class="token operator" style="color:#393A34">*</span><span class="token plain"> path</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> </span><span class="token keyword" style="color:#00009f">int</span><span class="token operator" style="color:#393A34">*</span><span class="token plain"> pathSize</span><span class="token punctuation" style="color:#393A34">)</span><span class="token plain"> </span><span class="token punctuation" style="color:#393A34">{</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token comment" style="color:#999988;font-style:italic">// 边界情况：数组长度小于等于1，不需要跳跃</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token keyword" style="color:#00009f">if</span><span class="token plain"> </span><span class="token punctuation" style="color:#393A34">(</span><span class="token plain">numsSize </span><span class="token operator" style="color:#393A34">&lt;=</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">1</span><span class="token punctuation" style="color:#393A34">)</span><span class="token plain"> </span><span class="token punctuation" style="color:#393A34">{</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">        </span><span class="token operator" style="color:#393A34">*</span><span class="token plain">pathSize </span><span class="token operator" style="color:#393A34">=</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">0</span><span class="token punctuation" style="color:#393A34">;</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">        </span><span class="token keyword" style="color:#00009f">return</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">0</span><span class="token punctuation" style="color:#393A34">;</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token punctuation" style="color:#393A34">}</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token keyword" style="color:#00009f">int</span><span class="token plain"> jumps </span><span class="token operator" style="color:#393A34">=</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">0</span><span class="token punctuation" style="color:#393A34">;</span><span class="token plain">          </span><span class="token comment" style="color:#999988;font-style:italic">// 记录跳跃次数</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token keyword" style="color:#00009f">int</span><span class="token plain"> currentEnd </span><span class="token operator" style="color:#393A34">=</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">0</span><span class="token punctuation" style="color:#393A34">;</span><span class="token plain">     </span><span class="token comment" style="color:#999988;font-style:italic">// 当前这次跳跃能到达的最远边界</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token keyword" style="color:#00009f">int</span><span class="token plain"> farthest </span><span class="token operator" style="color:#393A34">=</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">0</span><span class="token punctuation" style="color:#393A34">;</span><span class="token plain">       </span><span class="token comment" style="color:#999988;font-style:italic">// 目前为止能到达的最远位置</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token keyword" style="color:#00009f">int</span><span class="token plain"> farthestIndex </span><span class="token operator" style="color:#393A34">=</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">0</span><span class="token punctuation" style="color:#393A34">;</span><span class="token plain">  </span><span class="token comment" style="color:#999988;font-style:italic">// 能到达最远位置的索引</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token comment" style="color:#999988;font-style:italic">// 记录路径</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    path</span><span class="token punctuation" style="color:#393A34">[</span><span class="token number" style="color:#36acaa">0</span><span class="token punctuation" style="color:#393A34">]</span><span class="token plain"> </span><span class="token operator" style="color:#393A34">=</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">0</span><span class="token punctuation" style="color:#393A34">;</span><span class="token plain">            </span><span class="token comment" style="color:#999988;font-style:italic">// 起点总是位置0</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token keyword" style="color:#00009f">int</span><span class="token plain"> pathIndex </span><span class="token operator" style="color:#393A34">=</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">1</span><span class="token punctuation" style="color:#393A34">;</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token comment" style="color:#999988;font-style:italic">// 只需要遍历到 numsSize-2，因为题目保证能到达最后位置</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token keyword" style="color:#00009f">for</span><span class="token plain"> </span><span class="token punctuation" style="color:#393A34">(</span><span class="token keyword" style="color:#00009f">int</span><span class="token plain"> i </span><span class="token operator" style="color:#393A34">=</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">0</span><span class="token punctuation" style="color:#393A34">;</span><span class="token plain"> i </span><span class="token operator" style="color:#393A34">&lt;</span><span class="token plain"> numsSize </span><span class="token operator" style="color:#393A34">-</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">1</span><span class="token punctuation" style="color:#393A34">;</span><span class="token plain"> i</span><span class="token operator" style="color:#393A34">++</span><span class="token punctuation" style="color:#393A34">)</span><span class="token plain"> </span><span class="token punctuation" style="color:#393A34">{</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">        </span><span class="token comment" style="color:#999988;font-style:italic">// 计算从位置i能跳到的最远位置</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">        </span><span class="token keyword" style="color:#00009f">int</span><span class="token plain"> currentFarthest </span><span class="token operator" style="color:#393A34">=</span><span class="token plain"> i </span><span class="token operator" style="color:#393A34">+</span><span class="token plain"> nums</span><span class="token punctuation" style="color:#393A34">[</span><span class="token plain">i</span><span class="token punctuation" style="color:#393A34">]</span><span class="token punctuation" style="color:#393A34">;</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">        </span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">        </span><span class="token comment" style="color:#999988;font-style:italic">// 更新全局最远位置和对应的索引</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">        </span><span class="token keyword" style="color:#00009f">if</span><span class="token plain"> </span><span class="token punctuation" style="color:#393A34">(</span><span class="token plain">currentFarthest </span><span class="token operator" style="color:#393A34">&gt;</span><span class="token plain"> farthest</span><span class="token punctuation" style="color:#393A34">)</span><span class="token plain"> </span><span class="token punctuation" style="color:#393A34">{</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">            farthest </span><span class="token operator" style="color:#393A34">=</span><span class="token plain"> currentFarthest</span><span class="token punctuation" style="color:#393A34">;</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">            farthestIndex </span><span class="token operator" style="color:#393A34">=</span><span class="token plain"> i</span><span class="token punctuation" style="color:#393A34">;</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">        </span><span class="token punctuation" style="color:#393A34">}</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">        </span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">        </span><span class="token comment" style="color:#999988;font-style:italic">// 如果到达当前跳跃的边界，必须进行下一次跳跃</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">        </span><span class="token keyword" style="color:#00009f">if</span><span class="token plain"> </span><span class="token punctuation" style="color:#393A34">(</span><span class="token plain">i </span><span class="token operator" style="color:#393A34">==</span><span class="token plain"> currentEnd</span><span class="token punctuation" style="color:#393A34">)</span><span class="token plain"> </span><span class="token punctuation" style="color:#393A34">{</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">            jumps</span><span class="token operator" style="color:#393A34">++</span><span class="token punctuation" style="color:#393A34">;</span><span class="token plain">                </span><span class="token comment" style="color:#999988;font-style:italic">// 增加跳跃次数</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">            currentEnd </span><span class="token operator" style="color:#393A34">=</span><span class="token plain"> farthest</span><span class="token punctuation" style="color:#393A34">;</span><span class="token plain">  </span><span class="token comment" style="color:#999988;font-style:italic">// 更新下一次跳跃的边界</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">            path</span><span class="token punctuation" style="color:#393A34">[</span><span class="token plain">pathIndex</span><span class="token operator" style="color:#393A34">++</span><span class="token punctuation" style="color:#393A34">]</span><span class="token plain"> </span><span class="token operator" style="color:#393A34">=</span><span class="token plain"> farthestIndex</span><span class="token punctuation" style="color:#393A34">;</span><span class="token plain">  </span><span class="token comment" style="color:#999988;font-style:italic">// 记录跳跃位置</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">        </span><span class="token punctuation" style="color:#393A34">}</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token punctuation" style="color:#393A34">}</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token comment" style="color:#999988;font-style:italic">// 添加终点</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    path</span><span class="token punctuation" style="color:#393A34">[</span><span class="token plain">pathIndex</span><span class="token operator" style="color:#393A34">++</span><span class="token punctuation" style="color:#393A34">]</span><span class="token plain"> </span><span class="token operator" style="color:#393A34">=</span><span class="token plain"> numsSize </span><span class="token operator" style="color:#393A34">-</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">1</span><span class="token punctuation" style="color:#393A34">;</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token operator" style="color:#393A34">*</span><span class="token plain">pathSize </span><span class="token operator" style="color:#393A34">=</span><span class="token plain"> pathIndex</span><span class="token punctuation" style="color:#393A34">;</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token keyword" style="color:#00009f">return</span><span class="token plain"> jumps</span><span class="token punctuation" style="color:#393A34">;</span><span class="token plain">  </span><span class="token comment" style="color:#999988;font-style:italic">// 返回最小跳跃次数</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token punctuation" style="color:#393A34">}</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token comment" style="color:#999988;font-style:italic">// 使用示例</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token comment" style="color:#999988;font-style:italic">/*</span><br></span><span class="token-line" style="color:#393A34"><span class="token comment" style="color:#999988;font-style:italic">int main() {</span><br></span><span class="token-line" style="color:#393A34"><span class="token comment" style="color:#999988;font-style:italic">    int nums[] = {2, 3, 1, 1, 4};</span><br></span><span class="token-line" style="color:#393A34"><span class="token comment" style="color:#999988;font-style:italic">    int numsSize = 5;</span><br></span><span class="token-line" style="color:#393A34"><span class="token comment" style="color:#999988;font-style:italic">    int path[100];</span><br></span><span class="token-line" style="color:#393A34"><span class="token comment" style="color:#999988;font-style:italic">    int pathSize;</span><br></span><span class="token-line" style="color:#393A34"><span class="token comment" style="color:#999988;font-style:italic">    </span><br></span><span class="token-line" style="color:#393A34"><span class="token comment" style="color:#999988;font-style:italic">    int jumps = jumpWithPath(nums, numsSize, path, &amp;pathSize);</span><br></span><span class="token-line" style="color:#393A34"><span class="token comment" style="color:#999988;font-style:italic">    </span><br></span><span class="token-line" style="color:#393A34"><span class="token comment" style="color:#999988;font-style:italic">    printf("最小跳跃次数: %d\n", jumps);</span><br></span><span class="token-line" style="color:#393A34"><span class="token comment" style="color:#999988;font-style:italic">    printf("跳跃路径: ");</span><br></span><span class="token-line" style="color:#393A34"><span class="token comment" style="color:#999988;font-style:italic">    for (int i = 0; i &lt; pathSize; i++) {</span><br></span><span class="token-line" style="color:#393A34"><span class="token comment" style="color:#999988;font-style:italic">        printf("%d ", path[i]);</span><br></span><span class="token-line" style="color:#393A34"><span class="token comment" style="color:#999988;font-style:italic">    }</span><br></span><span class="token-line" style="color:#393A34"><span class="token comment" style="color:#999988;font-style:italic">    printf("\n");</span><br></span><span class="token-line" style="color:#393A34"><span class="token comment" style="color:#999988;font-style:italic">    </span><br></span><span class="token-line" style="color:#393A34"><span class="token comment" style="color:#999988;font-style:italic">    return 0;</span><br></span><span class="token-line" style="color:#393A34"><span class="token comment" style="color:#999988;font-style:italic">}</span><br></span><span class="token-line" style="color:#393A34"><span class="token comment" style="color:#999988;font-style:italic">*/</span><br></span></code></pre></div></div></div></div></details>]]></content:encoded>
+            <category>数组</category>
+        </item>
+        <item>
+            <title><![CDATA[跳跃游戏]]></title>
+            <link>https://www.eurekashadow.xin/blog/LeetCode55</link>
+            <guid>https://www.eurekashadow.xin/blog/LeetCode55</guid>
+            <pubDate>Sun, 03 Aug 2025 00:00:00 GMT</pubDate>
+            <description><![CDATA[力扣面试经典——55题]]></description>
+            <content:encoded><![CDATA[<h3 class="anchor anchorWithStickyNavbar_LWe7" id="力扣面试经典55题"><span class="B2_JnYG"><a href="https://leetcode.cn/problems/jump-game/description/?envType=study-plan-v2&amp;envId=top-interview-150" target="_blank" rel="noopener noreferrer" title="力扣">力扣面试经典——55题</a></span><a href="https://www.eurekashadow.xin/blog/LeetCode55#%E5%8A%9B%E6%89%A3%E9%9D%A2%E8%AF%95%E7%BB%8F%E5%85%B855%E9%A2%98" class="hash-link" aria-label="力扣面试经典55题的直接链接" title="力扣面试经典55题的直接链接">​</a></h3>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="-参考代码">💡 参考代码：<a href="https://www.eurekashadow.xin/blog/LeetCode55#-%E5%8F%82%E8%80%83%E4%BB%A3%E7%A0%81" class="hash-link" aria-label="💡 参考代码：的直接链接" title="💡 参考代码：的直接链接">​</a></h3>
+<div class="language-c codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-c codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token comment" style="color:#999988;font-style:italic">/**</span><br></span><span class="token-line" style="color:#393A34"><span class="token comment" style="color:#999988;font-style:italic"> * 判断是否能跳到最后一个下标</span><br></span><span class="token-line" style="color:#393A34"><span class="token comment" style="color:#999988;font-style:italic"> * @param nums 非负整数数组，每个元素代表在该位置可以跳跃的最大长度</span><br></span><span class="token-line" style="color:#393A34"><span class="token comment" style="color:#999988;font-style:italic"> * @param numsSize 数组长度</span><br></span><span class="token-line" style="color:#393A34"><span class="token comment" style="color:#999988;font-style:italic"> * @return 如果能到达最后一个下标返回true，否则返回false</span><br></span><span class="token-line" style="color:#393A34"><span class="token comment" style="color:#999988;font-style:italic"> */</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">bool </span><span class="token function" style="color:#d73a49">canJump</span><span class="token punctuation" style="color:#393A34">(</span><span class="token keyword" style="color:#00009f">int</span><span class="token operator" style="color:#393A34">*</span><span class="token plain"> nums</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> </span><span class="token keyword" style="color:#00009f">int</span><span class="token plain"> numsSize</span><span class="token punctuation" style="color:#393A34">)</span><span class="token plain"> </span><span class="token punctuation" style="color:#393A34">{</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token keyword" style="color:#00009f">int</span><span class="token plain"> maxReach </span><span class="token operator" style="color:#393A34">=</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">0</span><span class="token punctuation" style="color:#393A34">;</span><span class="token plain"> </span><span class="token comment" style="color:#999988;font-style:italic">// 记录当前能到达的最远位置下标</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token comment" style="color:#999988;font-style:italic">// 遍历数组中的每个位置</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token keyword" style="color:#00009f">for</span><span class="token plain"> </span><span class="token punctuation" style="color:#393A34">(</span><span class="token keyword" style="color:#00009f">int</span><span class="token plain"> i </span><span class="token operator" style="color:#393A34">=</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">0</span><span class="token punctuation" style="color:#393A34">;</span><span class="token plain"> i </span><span class="token operator" style="color:#393A34">&lt;</span><span class="token plain"> numsSize</span><span class="token punctuation" style="color:#393A34">;</span><span class="token plain"> i</span><span class="token operator" style="color:#393A34">++</span><span class="token punctuation" style="color:#393A34">)</span><span class="token plain"> </span><span class="token punctuation" style="color:#393A34">{</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">        </span><span class="token comment" style="color:#999988;font-style:italic">// 如果当前位置i超出了当前能到达的最远位置，说明无法到达位置i</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">        </span><span class="token keyword" style="color:#00009f">if</span><span class="token plain"> </span><span class="token punctuation" style="color:#393A34">(</span><span class="token plain">i </span><span class="token operator" style="color:#393A34">&gt;</span><span class="token plain"> maxReach</span><span class="token punctuation" style="color:#393A34">)</span><span class="token plain"> </span><span class="token punctuation" style="color:#393A34">{</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">            </span><span class="token keyword" style="color:#00009f">return</span><span class="token plain"> false</span><span class="token punctuation" style="color:#393A34">;</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">        </span><span class="token punctuation" style="color:#393A34">}</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">        </span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">        </span><span class="token comment" style="color:#999988;font-style:italic">// 计算从当前位置i能到达的最远位置</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">        </span><span class="token keyword" style="color:#00009f">int</span><span class="token plain"> currentReach </span><span class="token operator" style="color:#393A34">=</span><span class="token plain"> i </span><span class="token operator" style="color:#393A34">+</span><span class="token plain"> nums</span><span class="token punctuation" style="color:#393A34">[</span><span class="token plain">i</span><span class="token punctuation" style="color:#393A34">]</span><span class="token punctuation" style="color:#393A34">;</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">        </span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">        </span><span class="token comment" style="color:#999988;font-style:italic">// 更新全局能到达的最远位置</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">        </span><span class="token keyword" style="color:#00009f">if</span><span class="token plain"> </span><span class="token punctuation" style="color:#393A34">(</span><span class="token plain">currentReach </span><span class="token operator" style="color:#393A34">&gt;</span><span class="token plain"> maxReach</span><span class="token punctuation" style="color:#393A34">)</span><span class="token plain"> </span><span class="token punctuation" style="color:#393A34">{</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">            maxReach </span><span class="token operator" style="color:#393A34">=</span><span class="token plain"> currentReach</span><span class="token punctuation" style="color:#393A34">;</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">        </span><span class="token punctuation" style="color:#393A34">}</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">        </span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">        </span><span class="token comment" style="color:#999988;font-style:italic">// 如果已经能到达或超过最后一个位置(numsSize-1)，直接返回true</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">        </span><span class="token keyword" style="color:#00009f">if</span><span class="token plain"> </span><span class="token punctuation" style="color:#393A34">(</span><span class="token plain">maxReach </span><span class="token operator" style="color:#393A34">&gt;=</span><span class="token plain"> numsSize </span><span class="token operator" style="color:#393A34">-</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">1</span><span class="token punctuation" style="color:#393A34">)</span><span class="token plain"> </span><span class="token punctuation" style="color:#393A34">{</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">            </span><span class="token keyword" style="color:#00009f">return</span><span class="token plain"> true</span><span class="token punctuation" style="color:#393A34">;</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">        </span><span class="token punctuation" style="color:#393A34">}</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token punctuation" style="color:#393A34">}</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token comment" style="color:#999988;font-style:italic">// 必须保留这行，即使逻辑上不会执行到</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token keyword" style="color:#00009f">return</span><span class="token plain"> maxReach </span><span class="token operator" style="color:#393A34">&gt;=</span><span class="token plain"> numsSize </span><span class="token operator" style="color:#393A34">-</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">1</span><span class="token punctuation" style="color:#393A34">;</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token punctuation" style="color:#393A34">}</span><br></span></code></pre></div></div>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="-总结">📖 总结：<a href="https://www.eurekashadow.xin/blog/LeetCode55#-%E6%80%BB%E7%BB%93" class="hash-link" aria-label="📖 总结：的直接链接" title="📖 总结：的直接链接">​</a></h3>
+<details class="details_lb9f alert alert--info details_b_Ee" data-collapsed="true"><summary>点击展开题目总结</summary><div><div class="collapsibleContent_i85q"><h1>🤔 跳跃游戏</h1><hr><h2 class="anchor anchorWithStickyNavbar_LWe7" id="1️⃣-题目核心信息">1️⃣ 题目核心信息<a href="https://www.eurekashadow.xin/blog/LeetCode55#1%EF%B8%8F%E2%83%A3-%E9%A2%98%E7%9B%AE%E6%A0%B8%E5%BF%83%E4%BF%A1%E6%81%AF" class="hash-link" aria-label="1️⃣ 题目核心信息的直接链接" title="1️⃣ 题目核心信息的直接链接">​</a></h2><p>🎯 <strong>功能描述</strong>：判断是否能从数组的第一个位置跳跃到最后一个位置，数组中每个元素表示在该位置可以跳跃的最大长度</p><p>📥 <strong>输入输出</strong>：</p><ul>
+<li><strong>输入</strong>：int* nums（非负整数数组），int numsSize（数组长度）</li>
+<li><strong>输出</strong>：bool类型，如果能到达最后一个下标返回true，否则返回false</li>
+</ul><hr><h2 class="anchor anchorWithStickyNavbar_LWe7" id="2️⃣-实现原理">2️⃣ 实现原理<a href="https://www.eurekashadow.xin/blog/LeetCode55#2%EF%B8%8F%E2%83%A3-%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86" class="hash-link" aria-label="2️⃣ 实现原理的直接链接" title="2️⃣ 实现原理的直接链接">​</a></h2><p>💡 <strong>核心思路</strong>：使用贪心算法，维护一个变量记录当前能到达的最远位置，遍历数组不断更新最远可达位置</p><p>📋 <strong>实现步骤</strong>：</p><ol>
+<li>初始化maxReach为0，表示当前能到达的最远位置下标</li>
+<li>遍历数组中的每个位置i</li>
+<li>如果当前位置i超出maxReach，说明无法到达，返回false</li>
+<li>计算从位置i能到达的最远位置(i + nums[i])，并更新maxReach</li>
+<li>如果maxReach已经能到达或超过最后一个位置，直接返回true</li>
+<li>遍历结束后检查maxReach是否能到达最后一个下标</li>
+</ol><hr><h2 class="anchor anchorWithStickyNavbar_LWe7" id="3️⃣-关键点解析">3️⃣ 关键点解析<a href="https://www.eurekashadow.xin/blog/LeetCode55#3%EF%B8%8F%E2%83%A3-%E5%85%B3%E9%94%AE%E7%82%B9%E8%A7%A3%E6%9E%90" class="hash-link" aria-label="3️⃣ 关键点解析的直接链接" title="3️⃣ 关键点解析的直接链接">​</a></h2><p>原始思路是通过BFS方式探索所有可能路径，逐层扩展可能的跳跃路径，但这种方法时间复杂度较高。最优解使用贪心算法，通过维护全局最远可达位置来判断，避免了路径探索和重复计算。</p><h3 class="anchor anchorWithStickyNavbar_LWe7" id="-代码技巧">🎯 代码技巧<a href="https://www.eurekashadow.xin/blog/LeetCode55#-%E4%BB%A3%E7%A0%81%E6%8A%80%E5%B7%A7" class="hash-link" aria-label="🎯 代码技巧的直接链接" title="🎯 代码技巧的直接链接">​</a></h3><ul>
+<li>使用maxReach变量记录全局最远可达位置，避免重复计算</li>
+<li>提前终止优化：一旦能到达终点就立即返回，无需继续遍历</li>
+<li>边界检查：在遍历过程中实时检查是否能到达当前位置</li>
+</ul><h2 class="anchor anchorWithStickyNavbar_LWe7" id="4️⃣-使用场景">4️⃣ 使用场景<a href="https://www.eurekashadow.xin/blog/LeetCode55#4%EF%B8%8F%E2%83%A3-%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF" class="hash-link" aria-label="4️⃣ 使用场景的直接链接" title="4️⃣ 使用场景的直接链接">​</a></h2><h3 class="anchor anchorWithStickyNavbar_LWe7" id="-适用情况">✅ 适用情况：<a href="https://www.eurekashadow.xin/blog/LeetCode55#-%E9%80%82%E7%94%A8%E6%83%85%E5%86%B5" class="hash-link" aria-label="✅ 适用情况：的直接链接" title="✅ 适用情况：的直接链接">​</a></h3><ul>
+<li>判断能否通过跳跃到达目标位置</li>
+<li>游戏中角色移动范围判断</li>
+<li>资源分配问题中判断能否覆盖所有节点</li>
+</ul><h3 class="anchor anchorWithStickyNavbar_LWe7" id="️-前提条件">⚠️ 前提条件：<a href="https://www.eurekashadow.xin/blog/LeetCode55#%EF%B8%8F-%E5%89%8D%E6%8F%90%E6%9D%A1%E4%BB%B6" class="hash-link" aria-label="⚠️ 前提条件：的直接链接" title="⚠️ 前提条件：的直接链接">​</a></h3><ul>
+<li>数组元素为非负整数</li>
+<li>数组长度至少为1</li>
+<li>从第一个位置开始跳跃</li>
+</ul><h2 class="anchor anchorWithStickyNavbar_LWe7" id="5️⃣-复杂度分析">5️⃣ 复杂度分析<a href="https://www.eurekashadow.xin/blog/LeetCode55#5%EF%B8%8F%E2%83%A3-%E5%A4%8D%E6%9D%82%E5%BA%A6%E5%88%86%E6%9E%90" class="hash-link" aria-label="5️⃣ 复杂度分析的直接链接" title="5️⃣ 复杂度分析的直接链接">​</a></h2><ul>
+<li>
+<p>⏱️ 时间复杂度：O(n)，其中n是数组长度，只需遍历一次数组</p>
+</li>
+<li>
+<p>💾 空间复杂度：O(1)，只使用了常数级别的额外空间</p>
+</li>
+</ul><h2 class="anchor anchorWithStickyNavbar_LWe7" id="6️⃣-注意事项">6️⃣ 注意事项<a href="https://www.eurekashadow.xin/blog/LeetCode55#6%EF%B8%8F%E2%83%A3-%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9" class="hash-link" aria-label="6️⃣ 注意事项的直接链接" title="6️⃣ 注意事项的直接链接">​</a></h2><h3 class="anchor anchorWithStickyNavbar_LWe7" id="-边界情况">🚩 边界情况：<a href="https://www.eurekashadow.xin/blog/LeetCode55#-%E8%BE%B9%E7%95%8C%E6%83%85%E5%86%B5" class="hash-link" aria-label="🚩 边界情况：的直接链接" title="🚩 边界情况：的直接链接">​</a></h3><ul>
+<li>数组只有一个元素的情况</li>
+<li>第一个元素为0的情况</li>
+<li>中间存在0元素的情况</li>
+</ul><h3 class="anchor anchorWithStickyNavbar_LWe7" id="-易错点">💥 易错点：<a href="https://www.eurekashadow.xin/blog/LeetCode55#-%E6%98%93%E9%94%99%E7%82%B9" class="hash-link" aria-label="💥 易错点：的直接链接" title="💥 易错点：的直接链接">​</a></h3><ul>
+<li>忘记检查当前位置是否可达</li>
+<li>没有及时更新最远可达位置</li>
+<li>忽略提前终止条件导致效率降低</li>
+<li>函数末尾没有添加 return 语句</li>
+</ul><h2 class="anchor anchorWithStickyNavbar_LWe7" id="7️⃣-补充说明">7️⃣ 补充说明<a href="https://www.eurekashadow.xin/blog/LeetCode55#7%EF%B8%8F%E2%83%A3-%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E" class="hash-link" aria-label="7️⃣ 补充说明的直接链接" title="7️⃣ 补充说明的直接链接">​</a></h2><p><strong>为什么 <code>i &gt; maxReach</code> 就能判断无法到达最后位置</strong></p><h3 class="anchor anchorWithStickyNavbar_LWe7" id="-核心理解">🎯 核心理解<a href="https://www.eurekashadow.xin/blog/LeetCode55#-%E6%A0%B8%E5%BF%83%E7%90%86%E8%A7%A3" class="hash-link" aria-label="🎯 核心理解的直接链接" title="🎯 核心理解的直接链接">​</a></h3><p><code>maxReach</code> 表示截至目前能到达的最远位置。如果 <code>i &gt; maxReach</code>，说明：</p><ul>
+<li>位置 <code>i</code> 不可达</li>
+<li>无法利用位置 <code>i</code> 的跳跃能力</li>
+<li>更不可能到达最后位置</li>
+</ul><h3 class="anchor anchorWithStickyNavbar_LWe7" id="-举例说明">📝 举例说明<a href="https://www.eurekashadow.xin/blog/LeetCode55#-%E4%B8%BE%E4%BE%8B%E8%AF%B4%E6%98%8E" class="hash-link" aria-label="📝 举例说明的直接链接" title="📝 举例说明的直接链接">​</a></h3><p>假设 <code>nums = [2, 0, 0, 3, 4]</code>：</p><ul>
+<li><code>i = 0</code>: <code>maxReach = 2</code>，能到达位置0,1,2</li>
+<li><code>i = 1,2</code>: 均 <code>&lt;= maxReach</code>，可达</li>
+<li><code>i = 3</code>: <code>3 &gt; maxReach(2)</code>，<strong>不可达</strong></li>
+</ul><h3 class="anchor anchorWithStickyNavbar_LWe7" id="-关键原理">🔄 关键原理<a href="https://www.eurekashadow.xin/blog/LeetCode55#-%E5%85%B3%E9%94%AE%E5%8E%9F%E7%90%86" class="hash-link" aria-label="🔄 关键原理的直接链接" title="🔄 关键原理的直接链接">​</a></h3><p>我们只能从位置0开始连续向前跳跃，不能跳过中间位置：</p><ul>
+<li>要到达位置 <code>i</code>，必须先到达 <code>0,1,2,...,i-1</code> 中某位置</li>
+<li>如果 <code>maxReach &lt; i</code>，说明前面所有位置都无法触及位置 <code>i</code></li>
+<li>因此位置 <code>i</code> 及其后面所有位置都不可达</li>
+</ul></div></div></details>]]></content:encoded>
+            <category>数组</category>
+        </item>
         <item>
             <title><![CDATA[买卖股票的最佳时机Ⅱ]]></title>
             <link>https://www.eurekashadow.xin/blog/LeetCode122</link>
@@ -310,53 +797,6 @@
 <li>慢指针起始位置应该是2而不是0</li>
 <li>返回值应该是 <code>slow</code> 而不是 <code>slow + 1</code></li>
 <li>比较条件应该是 <code>nums[fast] != nums[slow - 2]</code> 而不是其他位置</li>
-</ul></div></div></details>]]></content:encoded>
-            <category>数组</category>
-        </item>
-        <item>
-            <title><![CDATA[力扣做题总结模板]]></title>
-            <link>https://www.eurekashadow.xin/blog/LeetCodeExample</link>
-            <guid>https://www.eurekashadow.xin/blog/LeetCodeExample</guid>
-            <pubDate>Wed, 30 Jul 2025 00:00:00 GMT</pubDate>
-            <description><![CDATA[力扣面试经典——X题]]></description>
-            <content:encoded><![CDATA[<h3 class="anchor anchorWithStickyNavbar_LWe7" id="力扣面试经典x题"><span class="B2_JnYG"><a href="https://leetcode.cn/studyplan/top-interview-150/" target="_blank" rel="noopener noreferrer" title="力扣">力扣面试经典——X题</a></span><a href="https://www.eurekashadow.xin/blog/LeetCodeExample#%E5%8A%9B%E6%89%A3%E9%9D%A2%E8%AF%95%E7%BB%8F%E5%85%B8x%E9%A2%98" class="hash-link" aria-label="力扣面试经典x题的直接链接" title="力扣面试经典x题的直接链接">​</a></h3>
-<h3 class="anchor anchorWithStickyNavbar_LWe7" id="-参考代码">💡 参考代码：<a href="https://www.eurekashadow.xin/blog/LeetCodeExample#-%E5%8F%82%E8%80%83%E4%BB%A3%E7%A0%81" class="hash-link" aria-label="💡 参考代码：的直接链接" title="💡 参考代码：的直接链接">​</a></h3>
-<div class="language-c codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-c codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">code</span><br></span></code></pre></div></div>
-<h3 class="anchor anchorWithStickyNavbar_LWe7" id="-总结">📖 总结：<a href="https://www.eurekashadow.xin/blog/LeetCodeExample#-%E6%80%BB%E7%BB%93" class="hash-link" aria-label="📖 总结：的直接链接" title="📖 总结：的直接链接">​</a></h3>
-<details class="details_lb9f alert alert--info details_b_Ee" data-collapsed="true"><summary>点击展开题目总结</summary><div><div class="collapsibleContent_i85q"><h1>🤔 [题目名称]</h1><hr><h2 class="anchor anchorWithStickyNavbar_LWe7" id="1️⃣-题目核心信息">1️⃣ 题目核心信息<a href="https://www.eurekashadow.xin/blog/LeetCodeExample#1%EF%B8%8F%E2%83%A3-%E9%A2%98%E7%9B%AE%E6%A0%B8%E5%BF%83%E4%BF%A1%E6%81%AF" class="hash-link" aria-label="1️⃣ 题目核心信息的直接链接" title="1️⃣ 题目核心信息的直接链接">​</a></h2><p>🎯 <strong>功能描述</strong>：[简要描述题目要解决的核心问题]</p><p>📥 <strong>输入输出</strong>：</p><ul>
-<li><strong>输入</strong>：[列出主要输入参数及其含义]</li>
-<li><strong>输出</strong>：[描述函数返回值及副作用]</li>
-</ul><hr><h2 class="anchor anchorWithStickyNavbar_LWe7" id="2️⃣-实现原理">2️⃣ 实现原理<a href="https://www.eurekashadow.xin/blog/LeetCodeExample#2%EF%B8%8F%E2%83%A3-%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86" class="hash-link" aria-label="2️⃣ 实现原理的直接链接" title="2️⃣ 实现原理的直接链接">​</a></h2><p>💡 <strong>核心思路</strong>：[概括解决该问题的主要算法思想]</p><p>📋 <strong>实现步骤</strong>：</p><ol>
-<li>[步骤1]</li>
-<li>[步骤2]</li>
-<li>[步骤3]</li>
-<li>[步骤4]</li>
-</ol><hr><h2 class="anchor anchorWithStickyNavbar_LWe7" id="3️⃣-关键点解析">3️⃣ 关键点解析<a href="https://www.eurekashadow.xin/blog/LeetCodeExample#3%EF%B8%8F%E2%83%A3-%E5%85%B3%E9%94%AE%E7%82%B9%E8%A7%A3%E6%9E%90" class="hash-link" aria-label="3️⃣ 关键点解析的直接链接" title="3️⃣ 关键点解析的直接链接">​</a></h2><p>给出原始做题思路并比较与最优解区别（可选）</p><h3 class="anchor anchorWithStickyNavbar_LWe7" id="-代码技巧">🎯 代码技巧<a href="https://www.eurekashadow.xin/blog/LeetCodeExample#-%E4%BB%A3%E7%A0%81%E6%8A%80%E5%B7%A7" class="hash-link" aria-label="🎯 代码技巧的直接链接" title="🎯 代码技巧的直接链接">​</a></h3><ul>
-<li>[技巧1]</li>
-<li>[技巧2]</li>
-<li>[技巧3]</li>
-</ul><h2 class="anchor anchorWithStickyNavbar_LWe7" id="4️⃣-使用场景">4️⃣ 使用场景<a href="https://www.eurekashadow.xin/blog/LeetCodeExample#4%EF%B8%8F%E2%83%A3-%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF" class="hash-link" aria-label="4️⃣ 使用场景的直接链接" title="4️⃣ 使用场景的直接链接">​</a></h2><h3 class="anchor anchorWithStickyNavbar_LWe7" id="-适用情况">✅ 适用情况：<a href="https://www.eurekashadow.xin/blog/LeetCodeExample#-%E9%80%82%E7%94%A8%E6%83%85%E5%86%B5" class="hash-link" aria-label="✅ 适用情况：的直接链接" title="✅ 适用情况：的直接链接">​</a></h3><ul>
-<li>[场景1]</li>
-<li>[场景2]</li>
-<li>[场景3]</li>
-</ul><h3 class="anchor anchorWithStickyNavbar_LWe7" id="️-前提条件">⚠️ 前提条件：<a href="https://www.eurekashadow.xin/blog/LeetCodeExample#%EF%B8%8F-%E5%89%8D%E6%8F%90%E6%9D%A1%E4%BB%B6" class="hash-link" aria-label="⚠️ 前提条件：的直接链接" title="⚠️ 前提条件：的直接链接">​</a></h3><ul>
-<li>[条件1]</li>
-<li>[条件2]</li>
-</ul><h2 class="anchor anchorWithStickyNavbar_LWe7" id="5️⃣-复杂度分析">5️⃣ 复杂度分析<a href="https://www.eurekashadow.xin/blog/LeetCodeExample#5%EF%B8%8F%E2%83%A3-%E5%A4%8D%E6%9D%82%E5%BA%A6%E5%88%86%E6%9E%90" class="hash-link" aria-label="5️⃣ 复杂度分析的直接链接" title="5️⃣ 复杂度分析的直接链接">​</a></h2><ul>
-<li>
-<p>⏱️ 时间复杂度：[时间复杂度分析]</p>
-</li>
-<li>
-<p>💾 空间复杂度：[空间复杂度分析]</p>
-</li>
-</ul><h2 class="anchor anchorWithStickyNavbar_LWe7" id="6️⃣-注意事项">6️⃣ 注意事项<a href="https://www.eurekashadow.xin/blog/LeetCodeExample#6%EF%B8%8F%E2%83%A3-%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9" class="hash-link" aria-label="6️⃣ 注意事项的直接链接" title="6️⃣ 注意事项的直接链接">​</a></h2><h3 class="anchor anchorWithStickyNavbar_LWe7" id="-边界情况">🚩 边界情况：<a href="https://www.eurekashadow.xin/blog/LeetCodeExample#-%E8%BE%B9%E7%95%8C%E6%83%85%E5%86%B5" class="hash-link" aria-label="🚩 边界情况：的直接链接" title="🚩 边界情况：的直接链接">​</a></h3><ul>
-<li>[边界情况1]</li>
-<li>[边界情况2]</li>
-<li>[边界情况3]</li>
-</ul><h3 class="anchor anchorWithStickyNavbar_LWe7" id="-易错点">💥 易错点：<a href="https://www.eurekashadow.xin/blog/LeetCodeExample#-%E6%98%93%E9%94%99%E7%82%B9" class="hash-link" aria-label="💥 易错点：的直接链接" title="💥 易错点：的直接链接">​</a></h3><ul>
-<li>[易错点1]</li>
-<li>[易错点2]</li>
-<li>[易错点3]</li>
 </ul></div></div></details>]]></content:encoded>
             <category>数组</category>
         </item>
