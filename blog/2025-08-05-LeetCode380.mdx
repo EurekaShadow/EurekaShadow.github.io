@@ -745,11 +745,12 @@ bool randomizedSetInsert(RandomizedSet *rand_set, int val) {
         rand_set->alloc = new_alloc;
     }
 
-    // 将新元素添加到数组末尾
-    rand_set->nums[rand_set->nr] = val;
+	// 把新元素放在数组当前元素个数对应的索引位置
+	obj->nums[obj->numsSize] = val;
     // 在哈希表中记录元素值和其在数组中的索引
     int_hashmap_add(&rand_set->map, val, rand_set->nr);
-    rand_set->nr++;
+    //数组中当前元素数量+1
+	rand_set->nr++;
     return true;
 }
 
@@ -817,3 +818,5 @@ void randomizedSetFree(RandomizedSet *rand_set) {
 */
 ```
 </details>
+
+## <B2>[补充解释](/blog/LeetCode380plus)</B2>

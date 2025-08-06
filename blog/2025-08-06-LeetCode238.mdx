@@ -1,0 +1,115 @@
+---
+slug: LeetCode238
+title: 除自身以外数组的乘积
+authors: eurekaX
+tags: [数组]
+---
+import { Highlight, Keyword, Light, B1, B2, B3, BH3, B3W, MyColor} from '@site/src/components/ForMDX';
+
+
+### <B2>[力扣面试经典——238题](https://leetcode.cn/problems/product-of-array-except-self/description/?envType=study-plan-v2&envId=top-interview-150 "力扣")</B2>
+
+<!-- truncate -->
+
+
+### 💡 参考代码：
+
+```c
+/**
+ * 计算数组中除当前元素外其余各元素的乘积
+ * @param nums       输入的整数数组
+ * @param numsSize   输入数组的大小
+ * @param returnSize 输出数组的大小，由函数设置
+ * @return           返回结果数组，其中每个元素是除对应位置外其余元素的乘积
+ * Note: The returned array must be malloced, assume caller calls free().
+ */
+int* productExceptSelf(int* nums, int numsSize, int* returnSize){
+    // 分配结果数组空间
+    int* answer = (int*)malloc(numsSize * sizeof(int));
+    *returnSize = numsSize;
+    
+    // 第一次遍历：计算每个元素左侧所有元素的乘积
+    // answer[i] 存储 nums[0] 到 nums[i-1] 的乘积
+    answer[0] = 1;
+    for (int i = 1; i < numsSize; i++) {
+        answer[i] = answer[i - 1] * nums[i - 1];
+    }
+    
+    // 第二次遍历：从右向左遍历，将右侧元素乘积与左侧乘积相乘
+    // rightProduct 记录当前元素右侧所有元素的乘积
+    int rightProduct = 1;
+    for (int i = numsSize - 1; i >= 0; i--) {
+        answer[i] = answer[i] * rightProduct;
+        rightProduct *= nums[i];
+    }
+    
+    return answer;
+}
+```
+
+### 📖 总结：
+
+<details>
+<summary>点击展开题目总结</summary>
+# 🤔 除自身以外数组的乘积
+
+---
+
+## 1️⃣ 题目核心信息
+
+🎯 **功能描述**：计算数组中除当前元素外其余各元素的乘积，不使用除法并在O(n)时间复杂度内完成
+
+📥 **输入输出**：
+- **输入**：`nums`整数数组，`numsSize`数组长度
+- **输出**：返回新数组，其中每个元素是除对应位置外其余元素的乘积
+
+---
+
+## 2️⃣ 实现原理
+
+💡 **核心思路**：利用前缀乘积和后缀乘积的思想，将每个位置的结果分解为左侧元素乘积与右侧元素乘积的乘积
+
+📋 **实现步骤**：
+1. 第一次遍历从左到右，计算每个位置左侧所有元素的乘积并存储
+2. 初始化右侧乘积变量为1
+3. 第二次遍历从右到左，将每个位置的左侧乘积与右侧乘积相乘
+4. 在遍历过程中动态更新右侧乘积值
+
+---
+
+## 3️⃣ 关键点解析
+
+### 🎯 代码技巧
+- 利用输出数组存储左侧乘积，节省额外空间
+- 使用单变量跟踪右侧乘积，避免额外数组存储
+- 两次单层循环实现O(n)时间复杂度
+
+## 4️⃣ 使用场景
+
+### ✅ 适用情况：
+- 需要计算数组元素间乘积关系的场景
+- 不能使用除法运算的情况
+- 对空间复杂度有严格要求的场景
+
+### ⚠️ 前提条件：
+- 输入数组至少包含两个元素
+- 数组中元素的前缀和后缀乘积在32位整数范围内
+
+## 5️⃣ 复杂度分析
+
+- ⏱️ 时间复杂度：O(n)，需要遍历数组两次
+
+- 💾 空间复杂度：O(1)，不考虑输出数组的情况下只使用常数额外空间
+
+## 6️⃣ 注意事项
+
+### 🚩 边界情况：
+- 数组中包含0元素的情况
+- 数组长度为2的最小情况
+- 正负数混合的情况
+
+### 💥 易错点：
+- 忘记设置returnSize参数
+- 混淆左侧乘积和右侧乘积的计算方向
+- 内存分配后忘记检查是否成功
+</details>
