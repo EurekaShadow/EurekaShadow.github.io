@@ -1,0 +1,142 @@
+---
+slug: LeetCode134
+title: 加油站
+authors: eurekaX
+tags: [数组]
+---
+import { Highlight, Keyword, Light, B1, B2, B3, BH3, B3W, MyColor} from '@site/src/components/ForMDX';
+import CardImg from '@site/src/components/CardImg';
+
+### <B2>[力扣面试经典——134题](https://leetcode.cn/problems/gas-station/description/?envType=study-plan-v2&envId=top-interview-150 "力扣")</B2>
+
+<!-- truncate -->
+
+
+### 💡 参考代码：
+
+```c
+/**
+ * 解决加油站环路问题
+ * @param gas 每个加油站的汽油量数组
+ * @param gasSize gas数组的长度
+ * @param cost 从每个加油站到下一加油站的消耗数组
+ * @param costSize cost数组的长度
+ * @return 能够完成环路的起始加油站索引，如果不存在则返回-1
+ */
+int canCompleteCircuit(int* gas, int gasSize, int* cost, int costSize) {
+    int totalGas = 0;      // 总汽油量
+    int totalCost = 0;     // 总消耗量
+    int currentGas = 0;    // 当前油量
+    int start = 0;         // 起始加油站索引
+    
+    // 遍历所有加油站
+    for (int i = 0; i < gasSize; i++) {
+        totalGas += gas[i];
+        totalCost += cost[i];
+        currentGas += gas[i] - cost[i];
+        
+        // 如果当前油量为负，说明无法从当前起点到达加油站i+1
+        // 因此需要将起点设为i+1，并重新开始计算
+        if (currentGas < 0) {
+         //这两句看起来简单，但其实很巧妙，也不是那么好理解的
+            start = i + 1;
+            currentGas = 0;
+        }
+    }
+    /*
+	 * 如果循环结束后一个起始位置没找到，即 currentGas 始终小于 0
+	 * 那表明 totalGas < totalCost，通过下面的 if 判断能够返回正确结果；
+	 * 如果找出一个起始位置，但是后面的 if 判断过不去，也能返回正确结果
+	 * 所以如果能够形成环路，那么必须是 (有起始位置) && (totalGas >= totalCost) 
+	 * 至于为什么 totalGas >= totalCost 见后文 “补充说明”
+	 */
+    // 如果总汽油量小于总消耗量，无法完成环路
+    if (totalGas < totalCost) {
+        return -1;
+    }
+    
+    return start;
+}
+```
+
+### 📖 总结：
+
+<details>
+<summary>点击展开题目总结</summary>
+# 🤔 加油站
+
+---
+
+## 1️⃣ 题目核心信息
+
+🎯 **功能描述**：在一条环路上有n个加油站，每个加油站有一定量的汽油，从一个加油站到下一个需要消耗一定汽油。找出能够完成一圈的起始加油站索引。
+
+📥 **输入输出**：
+- **输入**：int* gas（每个加油站的汽油量数组）, int gasSize（gas数组长度）, int* cost（每段路程的消耗量数组）, int costSize（cost数组长度）
+- **输出**：能够完成环路的起始加油站索引，如果不存在则返回-1
+
+---
+
+## 2️⃣ 实现原理
+
+💡 **核心思路**：使用贪心算法，通过一次遍历找出起始点。如果从某个起点无法到达某一站点，则起点到终点之间的任何点都不能作为有效起点。
+
+📋 **实现步骤**：
+1. 遍历所有加油站，累计总汽油量和总消耗量
+2. 同时模拟从当前起点出发的行驶过程
+3. 如果在某点油量为负，更新起点为该点的下一个位置
+4. 最后比较总汽油量和总消耗量，判断是否能完成环路
+
+---
+
+## 3️⃣ 关键点解析
+
+### 🎯 代码技巧
+- 贪心策略：一旦发现无法从当前起点到达某点，直接跳过中间所有点
+- 一趟遍历：同时计算总量和寻找起点，提高效率
+- 局部最优推全局最优：通过局部无法通行的路段排除多个候选起点
+
+## 4️⃣ 使用场景
+
+### ✅ 适用情况：
+- 环路路径规划问题
+- 资源分配与消耗平衡问题
+- 寻找循环数组中的起始位置问题
+
+### ⚠️ 前提条件：
+- 加油站数量与路程数量相等
+- 输入数组不为空
+- 汽油量和消耗量非负
+
+## 5️⃣ 复杂度分析
+
+- ⏱️ 时间复杂度：O(n)，只需要遍历一次数组
+
+- 💾 空间复杂度：O(1)，只使用了常数个额外变量
+
+## 6️⃣ 注意事项
+
+### 🚩 边界情况：
+- 只有一个加油站的情况
+- 所有加油站汽油量都小于消耗量
+- 起点在数组最后一个位置的情况
+
+### 💥 易错点：
+- 忘记检查总汽油量是否大于等于总消耗量
+- 起点更新后未重置当前油量
+- 数组索引越界问题
+
+## 7⃣ 补充说明
+
+<p><CardImg src="/img/Leetcode134_1.jpg" alt="例子" isCenter={true} isBoxed={true} /></p>
+
+<p><CardImg src="/img/Leetcode134_2.jpg" alt="解释" isCenter={true} isBoxed={true} /></p>
+
+</details>
+
+这个题目说实话仍然不太理解，有点**迷迷糊糊的**。
+
+现在让我想不通的还是 `currentGas += gas[i] - cost[i];` 这句
+ 
+或许 `currentGas = currentGas + gas[i] - cost[i]` 这样好理解一点？ `currentGas + gas[i]` 相当于 `前面剩余的汽油 + 到达编号 i 加油站获得的汽油`
+而 `cost[i]` 表示为了到达编号 i 加油站 `所消耗的汽油`
