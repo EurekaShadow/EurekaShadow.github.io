@@ -112,4 +112,87 @@ int* productExceptSelf(int* nums, int numsSize, int* returnSize){
 - 忘记设置returnSize参数
 - 混淆左侧乘积和右侧乘积的计算方向
 - 内存分配后忘记检查是否成功
+
+## 7️⃣ 补充说明
+
+**算法原理解析**
+
+```c
+int* productExceptSelf(int* nums, int numsSize, int* returnSize){
+    // 分配结果数组空间
+    int* answer = (int*)malloc(numsSize * sizeof(int));
+    *returnSize = numsSize;
+    
+    // 第一次遍历：计算每个元素左侧所有元素的乘积
+    // answer[i] 存储 nums[0] 到 nums[i-1] 的乘积
+    answer[0] = 1;
+    for (int i = 1; i < numsSize; i++) {
+        answer[i] = answer[i - 1] * nums[i - 1];
+    }
+    
+    // 第二次遍历：从右向左遍历，将右侧元素乘积与左侧乘积相乘
+    // rightProduct 记录当前元素右侧所有元素的乘积
+    int rightProduct = 1;
+    for (int i = numsSize - 1; i >= 0; i--) {
+        answer[i] = answer[i] * rightProduct;
+        rightProduct *= nums[i];
+    }
+    
+    return answer;
+}
+```
+
+这个算法的巧妙之处在于分而治之的思想，让我用更直观的方式来解释：
+
+**核心思想**
+
+对于数组中任意位置 i，我们要求的结果是：
+```
+result[i] = (nums[0] × nums[1] × ... × nums[i-1]) × (nums[i+1] × ... × nums[n-1])
+```
+也就是：**左侧所有元素的乘积** × **右侧所有元素的乘积**
+
+**为什么这样做是正确的？**
+
+**第一次遍历：计算左侧乘积**
+
+```c
+answer[i] = nums[0] × nums[1] × ... × nums[i-1]
+```
+对于 `nums = [1, 2, 3, 4]`：
+
+- `answer[0] = 1` (左侧无元素)
+- `answer[1] = 1` (左侧: nums[0] = 1)
+- `answer[2] = 1×2 = 2` (左侧: nums[0]×nums[1] = 1×2)
+- `answer[3] = 1×2×3 = 6` (左侧: nums[0]×nums[1]×nums[2] = 1×2×3)
+
+**第二次遍历：乘以右侧乘积**
+
+使用 `rightProduct` 变量从右往左累积右侧元素乘积：
+
+- 当处理 `answer[3]` 时：右侧无元素，`rightProduct = 1`
+  - `answer[3] = 6 × 1 = 6`
+- 当处理 `answer[2]` 时：右侧只有 nums[3] = 4，`rightProduct = 4`
+  - `answer[2] = 2 × 4 = 8`
+- 当处理 `answer[1]` 时：右侧是 nums[2]×nums[3] = 3×4 = 12，`rightProduct = 12`
+  - `answer[1] = 1 × 12 = 12`
+- 当处理 `answer[0]` 时：右侧是 nums[1]×nums[2]×nums[3] = 2×3×4 = 24，`rightProduct = 24`
+  - `answer[0] = 1 × 24 = 24`
+
+**关键洞察**
+
+这个算法的精妙在于：
+
+1. **空间复用**：用结果数组 `answer` 先存储左侧乘积，避免额外空间
+2. **累积计算**：`rightProduct` 在遍历过程中逐步累积右侧乘积
+3. **时机把握**：在更新 `rightProduct` 之前先完成当前元素的计算
+
+**数学验证**
+
+对于任意位置 i：
+
+- 第一次遍历后：`answer[i] = 左侧乘积`
+- 第二次遍历时：`answer[i] = answer[i] × rightProduct = 左侧乘积 × 右侧乘积`
+
+这就是所求的结果！
 </details>
