@@ -47,3 +47,13 @@ English:
   label: 算法
   permalink: /算法
   description: 算法总结
+  
+双指针:
+  label: 双指针
+  permalink: /双指针
+  description: 双指针题目  
+  
+字符串:
+  label: 字符串
+  permalink: /字符串
+  description: 字符串题目   
