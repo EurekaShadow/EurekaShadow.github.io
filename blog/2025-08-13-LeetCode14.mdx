@@ -1,0 +1,268 @@
+---
+slug: LeetCode14
+title: 最长公共前缀
+authors: eurekaX
+tags: [字符串]
+---
+import { Highlight, Keyword, Light, B1, B2, B3, BH3, B3W, MyColor} from '@site/src/components/ForMDX';
+
+
+### <B2>[力扣面试经典——14题](https://leetcode.cn/problems/longest-common-prefix/description/?envType=study-plan-v2&envId=top-interview-150 "力扣")</B2>
+
+<!-- truncate -->
+
+
+### 💡 参考代码：
+
+```c
+/**
+ * 查找字符串数组中的最长公共前缀
+ * @param strs 字符串数组
+ * @param strsSize 数组长度
+ * @return 返回最长公共前缀字符串
+ */
+char * longestCommonPrefix(char ** strs, int strsSize){
+    // 边界条件：如果数组为空，返回空字符串
+    if (strsSize == 0) {
+        char* result = malloc(1);
+        result[0] = '\0';
+        return result;
+    }
+    
+    // 边界条件：如果只有一个字符串，返回该字符串
+    if (strsSize == 1) {
+        char* result = malloc(strlen(strs[0]) + 1);
+        strcpy(result, strs[0]);
+        return result;
+    }
+    
+    // 获取第一个字符串的长度作为比较基准
+    int firstStrLen = strlen(strs[0]);
+    
+    // 逐个字符比较
+    for (int i = 0; i < firstStrLen; i++) {
+        char currentChar = strs[0][i];  // 当前比较的字符
+        
+        // 检查其他所有字符串在位置i处是否都有相同的字符
+        for (int j = 1; j < strsSize; j++) {
+            // 如果当前字符串在位置i处没有字符或者字符不匹配
+            if (i >= strlen(strs[j]) || strs[j][i] != currentChar) {
+                // 找到公共前缀的结束位置，分配内存并复制前缀
+                char* result = malloc(i + 1);
+                strncpy(result, strs[0], i);
+                result[i] = '\0';  // 添加字符串结束符
+                return result;
+            }
+        }
+    }
+    
+    // 如果第一个字符串的所有字符都是公共前缀
+    char* result = malloc(firstStrLen + 1);
+    strcpy(result, strs[0]);
+    return result;
+}
+
+```
+
+### 📖 总结：
+
+<details>
+<summary>点击展开题目总结</summary>
+# 🤔 最长公共前缀
+
+---
+
+## 1️⃣ 题目核心信息
+
+🎯 **功能描述**：查找字符串数组中所有字符串的最长公共前缀，如果不存在公共前缀则返回空字符串
+
+📥 **输入输出**：
+- **输入**：`strs` - 字符串数组，`strsSize` - 数组长度
+- **输出**：返回最长公共前缀字符串（需要手动释放内存）
+
+---
+
+## 2️⃣ 实现原理
+
+💡 **核心思路**：采用垂直扫描法，从左到右逐个字符比较所有字符串在相同位置的字符是否一致
+
+📋 **实现步骤**：
+1. 处理边界情况：空数组和单字符串数组
+2. 以第一个字符串为基准，从第0个字符开始逐个检查
+3. 对每个字符位置，遍历所有字符串验证该位置字符是否相同
+4. 一旦发现不匹配或某个字符串长度不足，立即返回当前找到的公共前缀
+
+---
+
+## 3️⃣ 关键点解析
+
+### 🎯 代码技巧
+- 垂直扫描：按列比较而非按行比较，提高比较效率
+- 提前终止：发现不匹配时立即停止，避免无效计算
+- 动态内存分配：根据实际需要的前缀长度分配内存空间
+
+## 4️⃣ 使用场景
+
+### ✅ 适用情况：
+- 查找多个字符串的公共前缀
+- 文件路径匹配
+- 自动补全功能中的前缀匹配
+
+### ⚠️ 前提条件：
+- 输入字符串数组不为NULL
+- 所有字符串只包含小写英文字母
+
+## 5️⃣ 复杂度分析
+
+- ⏱️ 时间复杂度：O(S)，其中S是所有字符串的字符总数，最坏情况下需要遍历所有字符
+
+- 💾 空间复杂度：O(1)，不考虑返回值的情况下只使用常数额外空间
+
+## 6️⃣ 注意事项
+
+### 🚩 边界情况：
+- 空数组（strsSize = 0）
+- 单个字符串数组（strsSize = 1）
+- 包含空字符串的数组
+
+### 💥 易错点：
+- 忘记手动释放返回的字符串内存导致内存泄漏
+- 没有正确处理字符串长度不足的情况导致数组越界
+- 字符串结束符'\0'处理不当
+
+## 7️⃣ 补充说明
+```
+/**
+ * 查找字符串数组中的最长公共前缀
+ * @param strs 字符串数组
+ * @param strsSize 数组长度
+ * @return 返回最长公共前缀字符串
+ */
+char * longestCommonPrefix(char ** strs, int strsSize){
+```
+这个函数接收一个字符串数组 `strs` 和数组长度 `strsSize`，返回一个新分配内存的字符串，包含最长公共前缀。
+
+### 第一步：处理边界条件
+```
+    // 边界条件：如果数组为空，返回空字符串
+    if (strsSize == 0) {
+        char* result = malloc(1);
+        result[0] = '\0';
+        return result;
+    }
+```
+如果数组为空，直接返回一个空字符串。这里 `malloc(1)` 分配一个字节用于存储字符串结束符 `'\0'`。
+
+例子：`strs = []`，`strsSize = 0`
+
+- 直接返回 `""	`
+```
+    // 边界条件：如果只有一个字符串，返回该字符串
+    if (strsSize == 1) {
+        char* result = malloc(strlen(strs[0]) + 1);
+        strcpy(result, strs[0]);
+        return result;
+    }
+```
+如果只有一个字符串，那么它本身就是公共前缀，复制该字符串并返回。
+
+例子：`strs = ["hello"]`，`strsSize = 1`
+
+- 直接返回 `"hello"`
+
+### 第二步：获取比较基准	
+```
+    // 获取第一个字符串的长度作为比较基准
+    int firstStrLen = strlen(strs[0]);
+```
+以第一个字符串的长度作为比较的上限，因为公共前缀不可能比任何一个字符串更长。
+
+例子：`strs = ["flower", "flow", "flight"]`
+
+- `firstStrLen = 6`（"flower"的长度）
+
+### 第三步：逐字符垂直比较
+```
+    // 逐个字符比较
+    for (int i = 0; i < firstStrLen; i++) {
+        char currentChar = strs[0][i];  // 当前比较的字符
+        
+        // 检查其他所有字符串在位置i处是否都有相同的字符
+        for (int j = 1; j < strsSize; j++) {
+            // 如果当前字符串在位置i处没有字符或者字符不匹配
+            if (i >= strlen(strs[j]) || strs[j][i] != currentChar) {
+                // 找到公共前缀的结束位置，分配内存并复制前缀
+                char* result = malloc(i + 1);
+                strncpy(result, strs[0], i);
+                result[i] = '\0';  // 添加字符串结束符
+                return result;
+            }
+        }
+    }
+```
+**算法核心：垂直扫描法**
+
+这是算法的核心部分，采用垂直扫描的方式：
+
+1. 外层循环遍历第一个字符串的每个字符位置（索引 `i`）
+2. 内层循环检查其他所有字符串在相同位置 `i` 的字符是否与第一个字符串相同
+3. 如果发现不匹配或某个字符串在位置 `i` 没有字符，则找到了公共前缀的结束位置
+
+**详细例子分析**
+
+**示例 1:** `strs = ["flower", "flow", "flight"]`
+
+| 字符位置 | 比较内容 | 结果 |
+|---------|---------|------|
+| i=0 | 'f' vs 'f' vs 'f' | ✓ 匹配 |
+| i=1 | 'l' vs 'l' vs 'l' | ✓ 匹配 |
+| i=2 | 'o' vs 'o' vs 'i' | ✗ 不匹配，返回 "fl" |
+
+**示例 2:** `strs = ["dog", "racecar", "car"]`
+
+| 字符位置 | 比较内容 | 结果 |
+|---------|---------|------|
+| i=0 | 'd' vs 'r' vs 'c' | ✗ 不匹配，返回 "" |
+
+### 第四步：处理完全匹配的情况
+```
+    // 如果第一个字符串的所有字符都是公共前缀
+    char* result = malloc(firstStrLen + 1);
+    strcpy(result, strs[0]);
+    return result;
+```
+### 特殊情况处理与完整执行示例
+
+**全匹配情况处理**
+
+如果第一个字符串的所有字符都是公共前缀（即所有字符串完全相同或都是第一个字符串的前缀），则返回第一个字符串的完整拷贝。
+
+**例子分析：**
+
+**示例 1**: `strs = ["flow", "flow", "flow"]`
+- 所有字符都匹配，返回 `"flow"`
+
+**示例 2**: `strs = ["flow", "flower", "flight"]`
+- 在比较过程中就会发现不匹配，不会执行到全匹配处理部分
+
+**完整执行示例**
+
+以 `strs = ["flower", "flow", "flight"]` 为例完整执行过程：
+
+1. `strsSize = 3`，不满足边界条件
+2. `firstStrLen = 6`
+3. 开始循环：
+   - `i=0`: `currentChar = 'f'`
+     - `j=1`: `strs[1][0] = 'f'` ✓ 匹配
+     - `j=2`: `strs[2][0] = 'f'` ✓ 匹配
+   - `i=1`: `currentChar = 'l'`
+     - `j=1`: `strs[1][1] = 'l'` ✓ 匹配
+     - `j=2`: `strs[2][1] = 'l'` ✓ 匹配
+   - `i=2`: `currentChar = 'o'`
+     - `j=1`: `strs[1][2] = 'o'` ✓ 匹配
+     - `j=2`: `strs[2][2] = 'i'` ✗ 不匹配！
+
+4. 分配内存，复制前2个字符 `"fl"` 并返回
+
+
+</details>
