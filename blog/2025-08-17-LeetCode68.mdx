@@ -1,0 +1,277 @@
+---
+slug: LeetCode68
+title: 文本左右对齐
+authors: eurekaX
+tags: [字符串]
+---
+import { Highlight, Keyword, Light, B1, B2, B3, BH3, B3W, MyColor} from '@site/src/components/ForMDX';
+
+
+### <B2>[力扣面试经典——68题](https://leetcode.cn/problems/text-justification/description/?envType=study-plan-v2&envId=top-interview-150 "力扣")</B2>
+
+<!-- truncate -->
+
+
+### 💡 参考代码：
+
+```c
+/**
+ * 根据给定的单词数组和最大宽度，生成左右对齐的文本行
+ * @param words 单词数组
+ * @param wordsSize 单词数量
+ * @param maxWidth 每行的最大字符数
+ * @param returnSize 返回结果数组的大小
+ * @return 对齐后的文本行数组
+ */
+char ** fullJustify(char ** words, int wordsSize, int maxWidth, int* returnSize){
+    // 分配结果数组内存
+    char **result = (char **)malloc(sizeof(char *) * wordsSize);
+    *returnSize = 0;
+    
+    int i = 0;
+    // 遍历所有单词
+    while (i < wordsSize) {
+        // 确定当前行可以容纳的单词范围 [i, j)
+        int j = i;
+        int lineLength = 0;  // 当前行单词总长度（不包括空格）
+        
+        // 贪心算法：尽可能多地放置单词
+        // 条件：还有单词未处理 且 当前行还能放下下一个单词（包括必要的空格）
+        while (j < wordsSize && lineLength + strlen(words[j]) + (j - i) <= maxWidth) {
+            lineLength += strlen(words[j]);
+            j++;
+        }
+        
+        // 分配当前行内存
+        result[*returnSize] = (char *)malloc(sizeof(char) * (maxWidth + 1));
+        result[*returnSize][maxWidth] = '\0';  // 字符串结束符
+        
+        // 计算空格分配
+        int wordCount = j - i;  // 当前行的单词数
+        int spaces = maxWidth - lineLength;  // 需要填充的空格总数
+        
+        // 处理不同情况
+        if (j == wordsSize) {
+            // 最后一行：左对齐
+            int pos = 0;
+            for (int k = i; k < j; k++) {
+                // 复制单词
+                for (int l = 0; l < strlen(words[k]); l++) {
+                    result[*returnSize][pos++] = words[k][l];
+                }
+                // 单词间添加一个空格（除了最后一个单词）
+                if (k < j - 1) {
+                    result[*returnSize][pos++] = ' ';
+                }
+            }
+            // 在行尾填充剩余空格
+            while (pos < maxWidth) {
+                result[*returnSize][pos++] = ' ';
+            }
+        } else if (wordCount == 1) {
+            // 只有一个单词：左对齐，右侧填充空格
+            int pos = 0;
+            // 复制单词
+            for (int k = 0; k < strlen(words[i]); k++) {
+                result[*returnSize][pos++] = words[i][k];
+            }
+            // 右侧填充空格
+            for (int k = 0; k < spaces; k++) {
+                result[*returnSize][pos++] = ' ';
+            }
+        } else {
+            // 多个单词且非最后一行：左右对齐
+            int avgSpaces = spaces / (wordCount - 1);  // 平均每个间隔的空格数
+            int extraSpaces = spaces % (wordCount - 1);  // 需要额外分配的空格数
+            
+            int pos = 0;
+            for (int k = i; k < j; k++) {
+                // 复制单词
+                for (int l = 0; l < strlen(words[k]); l++) {
+                    result[*returnSize][pos++] = words[k][l];
+                }
+                // 添加空格（除了最后一个单词）
+                if (k < j - 1) {
+                    // 先添加平均分配的空格
+                    for (int l = 0; l < avgSpaces; l++) {
+                        result[*returnSize][pos++] = ' ';
+                    }
+                    // 再分配额外的空格（左侧优先）
+                    if (k - i < extraSpaces) {
+                        result[*returnSize][pos++] = ' ';
+                    }
+                }
+            }
+        }
+        
+        (*returnSize)++;
+        i = j;  // 移动到下一行的第一个单词
+    }
+    
+    return result;
+}
+```
+
+### 📖 总结：
+
+<details>
+<summary>点击展开题目总结</summary>
+# 🤔 字符串左右对齐
+
+---
+
+## 1️⃣ 题目核心信息
+
+🎯 **功能描述**：给定一个单词数组和最大行宽，将单词重新排版成每行恰好有 maxWidth 个字符且左右两端对齐的文本，最后一行左对齐。
+
+📥 **输入输出**：
+- **输入**：
+  - `words`: 单词数组，每个元素是一个非空字符串
+  - `wordsSize`: 单词数组长度
+  - `maxWidth`: 每行最大字符数
+- **输出**：
+  - 返回重新排版后的字符串数组
+  - `returnSize`: 返回数组的实际大小
+
+---
+
+## 2️⃣ 实现原理
+
+💡 **核心思路**：使用贪心算法，每行尽可能多地放置单词，然后根据对齐规则分配空格。
+
+📋 **实现步骤**：
+1. 遍历单词数组，确定每一行可以放置的单词范围
+2. 根据行的类型（最后一行、单个单词行、普通行）采用不同的空格分配策略
+3. 对于普通行，计算平均空格数和额外空格数，左侧优先分配额外空格
+4. 构造每行字符串并添加到结果数组中
+
+---
+
+## 3️⃣ 关键点解析
+
+### 🎯 代码技巧
+- **贪心策略**：每行尽可能多地放置单词，通过 `lineLength + strlen(words[j]) + (j - i) <= maxWidth` 判断
+- **空格均匀分配**：使用除法和取模运算分别计算平均空格数和额外空格数
+- **边界处理**：针对最后一行、单个单词行等特殊情况采用不同的对齐策略
+
+## 4️⃣ 使用场景
+
+### ✅ 适用情况：
+- 文本排版和格式化
+- 打印预览和文档处理
+- 控制台输出格式化
+
+### ⚠️ 前提条件：
+- 每个单词长度不超过 maxWidth
+- 单词数组至少包含一个单词
+- maxWidth 大于等于1
+
+## 5️⃣ 复杂度分析
+
+- ⏱️ 时间复杂度：O(N × M)，其中 N 是单词总数，M 是最大宽度，需要遍历每个单词并构造每行字符串
+
+- 💾 空间复杂度：O(M)，用于存储每行结果字符串
+
+## 6️⃣ 注意事项
+
+### 🚩 边界情况：
+- 最后一行需要特殊处理为左对齐
+- 只包含一个单词的行需要左对齐
+- 空格不能均匀分配时需要左侧优先
+
+### 💥 易错点：
+- 忘记处理最后一行的左对齐特殊情况
+- 空格分配不均匀，右侧空格多于左侧
+- 单词间空格计算错误，没有考虑单词数量与间隔数的关系
+
+## 7⃣ 补充说明
+
+以示例1为例：
+
+- `words = ["This", "is", "an", "example", "of", "text", "justification."]`
+- `maxWidth = 16`
+
+## 执行步骤详解
+
+### 第一行处理
+
+#### 确定单词范围：
+- 从索引0开始（"This"）
+- 尝试添加单词："This"(4字符) + "is"(2字符) + "an"(2字符) + "example"(7字符)
+- 计算总长度：4 + 2 + 2 + 7 = 15字符
+- 计算空格：3个间隔（4个单词间需要3个空格）
+- 总计：15 + 3 = 18 > 16，超出限制
+- 回退到："This"(4) + "is"(2) + "an"(2) = 8字符，2个间隔
+- 总计：8 + 2 = 10 ≤ 16，符合要求
+- 所以第一行单词为：["This", "is", "an"]
+
+#### 空格分配：
+- 单词总长度：4 + 2 + 2 = 8
+- 需要空格数：16 - 8 = 8个空格
+- 单词间隔数：3 - 1 = 2个间隔
+- 平均每个间隔：8 / 2 = 4个空格
+- 额外空格：8 % 2 = 0个
+- 每个间隔都放4个空格
+
+#### 构造结果：
+```
+"This" + "    " + "is" + "    " + "an" = "This    is    an"
+```
+
+### 第二行处理
+
+#### 确定单词范围：
+- 从索引3开始（"example"）
+- 尝试添加："example"(7) + "of"(2) + "text"(4) = 13字符
+- 空格间隔：2个
+- 总计：13 + 2 = 15 ≤ 16，符合要求
+- 所以第二行单词为：["example", "of", "text"]
+
+#### 空格分配：
+- 单词总长度：7 + 2 + 4 = 13
+- 需要空格数：16 - 13 = 3个空格
+- 单词间隔数：3 - 1 = 2个间隔
+- 平均每个间隔：3 / 2 = 1个空格
+- 额外空格：3 % 2 = 1个
+- 第一个间隔放：1 + 1 = 2个空格
+- 第二个间隔放：1个空格
+
+#### 构造结果：
+```
+"example" + "  " + "of" + " " + "text" = "example  of text"
+```
+
+### 第三行处理（最后一行）
+
+#### 确定单词范围：
+- 从索引6开始（"justification."）
+- 只剩这一个单词，长度为15 ≤ 16
+- 所以第三行为：["justification."]
+
+#### 特殊处理：
+- 由于是最后一行，采用左对齐
+- 单词后不添加额外空格（只有一个单词）
+- 行尾填充剩余空格：16 - 15 = 1个空格
+
+#### 构造结果：
+```
+"justification." + " " = "justification.  "
+```
+
+## 最终输出
+```
+[
+   "This    is    an",
+   "example  of text",
+   "justification.  "
+]
+```
+
+通过这个例子可以看出，算法的核心在于：
+
+1.贪心地确定每行单词数量
+
+2.根据行的类型采用不同的空格分配策略
+
+3.特别处理最后一行的左对齐要求
+</details>
