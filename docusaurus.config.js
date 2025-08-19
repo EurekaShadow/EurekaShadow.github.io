@@ -154,10 +154,49 @@ const config = {
         ],
         copyright: `Copyright © ${new Date().getFullYear()} My Project, Inc. Built with Docusaurus.`,
       },
-      prism: {
-        theme: prismThemes.github,
-        darkTheme: prismThemes.dracula,
-      },
+	  
+		prism: {
+		  // 代码高亮主题 - 浅色主题使用 GitHub 风格
+		  theme: prismThemes.github,
+		  // 代码高亮主题 - 深色主题使用 Dracula 风格
+		  darkTheme: prismThemes.dracula,
+		  
+		  // 自定义代码高亮标记配置
+		  magicComments: [
+			// 高亮标记 - 用于突出显示重要代码行
+			{
+			  className: 'code-block-highlighted-line',  // CSS 类名
+			  line: 'highlight-next-line',               // 行内标记
+			  block: { start: 'highlight-start', end: 'highlight-end' }  // 块标记
+			},
+			// 新增代码标记 - 用于标识新增的代码行
+			{
+			  className: 'code-block-add-line',
+			  line: 'highlight-add-line',
+			  block: { start: 'highlight-add-start', end: 'highlight-add-end' }
+			},
+			// 更新代码标记 - 用于标识修改的代码行
+			{
+			  className: 'code-block-update-line',
+			  line: 'highlight-update-line',
+			  block: { start: 'highlight-update-start', end: 'highlight-update-end' }
+			},
+			// 错误代码标记 - 用于标识有问题的代码行
+			{
+			  className: 'code-block-error-line',
+			  line: 'highlight-error-line',
+			  block: { start: 'highlight-error-start', end: 'highlight-error-end' }
+			},
+		  ],
+		  
+		  // 额外支持的语言（超出默认支持的语言列表）
+		  // 默认支持的语言列表参考：https://github.com/FormidableLabs/prism-react-renderer/blob/master/packages/generate-prism-languages/index.ts#L9-L23
+		  // Prism.js 完整支持语言列表：https://prismjs.com/#supported-languages
+		  additionalLanguages: [
+			'java',   // Java 编程语言
+			'c',
+		  ],
+		},
     }),
 };
 

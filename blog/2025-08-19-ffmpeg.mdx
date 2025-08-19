@@ -1,0 +1,44 @@
+---
+slug: ffmpeg
+title: 关于ffmpeg 
+authors: eurekaX
+tags: [ffmpeg]
+---
+import { Highlight, Keyword, Light, B1, B2, B3, BH3, B3W, MyColor} from '@site/src/components/ForMDX';
+import CardImg from '@site/src/components/CardImg';
+
+
+### <B2>[ffmpeg 安装](https://blog.csdn.net/Natsuago/article/details/143231558 "安装")</B2>
+
+<!-- truncate -->
+
+## <B2>m3u8格式视频转mp4</B2>
+
+`index` 目录下有一个关于此视频的密钥文件 `0.key`：
+<p><CardImg src="/img/ffmpeg/index0key.jpg" alt="0.key" isCenter={true} isBoxed={true} /></p>
+
+在 `m3u8` 同一目录下执行命令：
+```bash
+ffmpeg -allowed_extensions ALL -i "index.m3u8" -c copy -bsf:a aac_adtstoasc -hls_key_info_file "index/0.key" "output.mp4"
+```
+
+结果：
+
+<p><CardImg src="/img/ffmpeg/success1.jpg" alt="0.key" isCenter={true} isBoxed={true} /></p>
+<p><CardImg src="/img/ffmpeg/success2.jpg" alt="0.key" isCenter={true} isBoxed={true} /></p>
+
+**转换成功！！！**
+
+```go showLineNumbers
+package main
+
+import (
+  "fmt"
+)
+
+func main() {
+  for i := 0; i < 10; i++ {
+    fmt.Println("hello world", i)
+  }
+}
+```

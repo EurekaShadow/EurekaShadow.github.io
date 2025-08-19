@@ -5,6 +5,8 @@ description: 测试页0，包含常用组件与跳转示例。
 ---
 
 import { Highlight, Keyword, Light, B1, B2, B3, BH3, B3W, MyColor, Card} from '@site/src/components/ForMDX';
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
 
 ## 📚 参考资料
 
@@ -61,4 +63,136 @@ import { Highlight, Keyword, Light, B1, B2, B3, BH3, B3W, MyColor, Card} from '@
       <a href="/docs/mydoc/testpage1" target="_blank"><strong>5️⃣ 跳转至：</strong>测试页1🔗</a>
     </Card>
 </div>
+
+## 显示代码行号
+
+```c showLineNumbers
+int main(){
+    Timer_Init();
+    OLED_Init();
+    while(1){
+        Task();
+    }
+}
+```
+
+## 显示代码文件名
+
+```c title="main.c"
+int main(){
+    Timer_Init();
+    OLED_Init();
+    while(1){
+        Task();
+    }
+}
+```
+
+## 高亮代码行
+```c
+#include <stdio.h>
+
+int main() {
+    // highlight-next-line
+    printf("Hello, World!\n");
+    
+    // highlight-start
+    int x = 10;
+    int y = 20;
+    int sum = x + y;
+    // highlight-end
+    
+    return 0;
+}
+```
+
+## 新增代码标记
+```c
+#include <stdio.h>
+
+int main() {
+    // highlight-add-line
+    printf("Hello, World!\n");
+    
+    // highlight-add-start
+    int x = 10;
+    int y = 20;
+    int sum = x + y;
+    // highlight-add-end
+    
+    return 0;
+}
+```
+
+## 更新代码标记
+```c
+#include <stdio.h>
+
+int main() {
+    // highlight-update-line
+    printf("Hello, World!\n");
+    
+    // highlight-update-start
+    int x = 10;
+    int y = 20;
+    int sum = x + y;
+    // highlight-update-end
+    
+    return 0;
+}
+```
+
+## 错误代码标记
+```c
+#include <stdio.h>
+
+int main() {
+    // highlight-error-line
+    printf("Hello, World!\n");
+    
+    // highlight-error-start
+    int x = 10;
+    int y = 20;
+    int sum = x + y;
+    // highlight-error-end
+    
+    return 0;
+}
+```
+
+## 多语言
+
+<Tabs>
+  <TabItem value="js" label="JavaScript">
+
+  ```js
+  function helloWorld() {
+    console.log('Hello, world!');
+  }
+  ```
+
+  </TabItem>
+  <TabItem value="py" label="Python">
+  
+  ```py
+  def hello_world():
+    print("Hello, world!")
+  ```
+  
+  </TabItem>
+  <TabItem value="java" label="Java">
+  
+  ```java
+  class HelloWorld {
+    public static void main(String args[]) {
+      System.out.println("Hello, World");
+    }
+  }
+  ```
+  
+  </TabItem>
+</Tabs>
+
+
+
 

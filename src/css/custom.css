@@ -92,4 +92,50 @@
   --card-img-hover-border-color: #87CEFA;
 }
 
+/* 代码高亮行的样式 */
+.code-block-highlighted-line {
+  background-color: rgba(255, 255, 0, 0.2); /* 黄色高亮 */
+  display: block;
+  margin: 0; /* 避免布局问题 */
+  padding: 0 1em; /* 使用 em 单位更灵活 */
+}
+
+.code-block-add-line {
+  background-color: rgba(0, 255, 0, 0.2); /* 绿色新增 */
+  display: block;
+  margin: 0;
+  padding: 0 1em;
+}
+
+.code-block-update-line {
+  background-color: rgba(30, 144, 255, 0.2); /* 道奇蓝(DodgerBlue) */
+  display: block;
+  margin: 0;
+  padding: 0 1em;
+}
+
+.code-block-error-line {
+  background-color: rgba(255, 0, 0, 0.2); /* 红色错误 */
+  display: block;
+  margin: 0;
+  padding: 0 1em;
+}
+
+/* 深色主题下的样式 */
+html[data-theme='dark'] .code-block-highlighted-line {
+  background-color: rgba(255, 255, 0, 0.2);
+}
+
+html[data-theme='dark'] .code-block-add-line {
+  background-color: rgba(0, 255, 0, 0.2);
+}
+
+html[data-theme='dark'] .code-block-update-line {
+  background-color: rgba(0, 0, 255, 0.2);
+}
+
+html[data-theme='dark'] .code-block-error-line {
+  background-color: rgba(255, 0, 0, 0.2);
+}
+
 

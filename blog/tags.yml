@@ -57,3 +57,8 @@ English:
   label: 字符串
   permalink: /字符串
   description: 字符串题目   
+  
+ffmpeg:
+  label: ffmpeg
+  permalink: /ffmpeg
+  description: 关于 ffmpeg 的一些记录   
