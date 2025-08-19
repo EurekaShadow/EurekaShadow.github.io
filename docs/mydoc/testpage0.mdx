@@ -8,17 +8,6 @@ import { Highlight, Keyword, Light, B1, B2, B3, BH3, B3W, MyColor, Card} from '@
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-## 📚 参考资料
-
-- [波特律动](https://github.com/BaudDance/docs/blob/main/docs/stm32/getting-started/getting-started.mdx "按键链接跳转")
-
-- [Zhang的学习笔记](https://github.com/Ratherthan17/notes/blob/main/src/components/ForMDX/forMDX.js "图片嵌入、绑定自定义域名等")
-
-- [Joseph Gan's Blog](https://bwgjoseph.com/docusaurus-how-to-enable-showlastupdate-feature-when-deployed-via-gitlab-ci "最后更新时间")
-
-- [roc的技术笔记](https://imroc.cc/note/category/docusaurus "学习")
-
----
 
 ## 🧰 学习资源导航
 
@@ -191,7 +180,61 @@ int main() {
   ```
   
   </TabItem>
+
+  <TabItem value="c" label="C">
+
+  ```c
+int main() {
+	printf("Hello, World!\n");   
+	return 0;
+}
+  ```
+
+  </TabItem>  
+  
 </Tabs>
+
+在上面的多语言中，`value` 是**唯一**且可自定义的，但最好和后面的 `label`对应。不可出现下面这种情况：
+```
+<Tabs>
+
+<TabItem value="bash" label="有密钥">
+
+\```bash
+ffmpeg -allowed_extensions ALL -i "index.m3u8" -c copy -bsf:a aac_adtstoasc -hls_key_info_file "index/0.key" "output.mp4"
+\```
+
+</TabItem>  
+  
+<TabItem value="bash" label="无密钥">
+
+\```bash
+ffmpeg -i "index.m3u8" -c copy -bsf:a aac_adtstoasc "output.mp4"
+\```
+
+</TabItem>   
+  
+</Tabs>
+```
+
+会报错：
+
+> Docusaurus error: Duplicate values "bash" found in `<Tabs>`. Every value needs to be unique.
+
+
+少量演示代码可以直接使用上面的多语言模块，但难以维护。使用这个方法[基于 CodeBlock 实现 FileBlock](https://imroc.cc/note/docusaurus/fileblock#%E5%9F%BA%E4%BA%8E-codeblock-%E5%AE%9E%E7%8E%B0-fileblock)
+可以解决这个问题，但我还没实现，因为需要用到插件，暂时就先到这儿吧，日后如有需要再研究。
+
+---
+## 📚 参考资料
+
+- [波特律动](https://github.com/BaudDance/docs/blob/main/docs/stm32/getting-started/getting-started.mdx "按键链接跳转")
+
+- [Zhang的学习笔记](https://github.com/Ratherthan17/notes/blob/main/src/components/ForMDX/forMDX.js "图片嵌入、绑定自定义域名等")
+
+- [Joseph Gan's Blog](https://bwgjoseph.com/docusaurus-how-to-enable-showlastupdate-feature-when-deployed-via-gitlab-ci "最后更新时间")
+
+- [roc的技术笔记](https://imroc.cc/note/category/docusaurus "学习")
 
 
 
