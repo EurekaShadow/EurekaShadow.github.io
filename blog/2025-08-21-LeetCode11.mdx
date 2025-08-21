@@ -1,0 +1,120 @@
+---
+slug: LeetCode11
+title: 盛最多水的容器
+authors: eurekaX
+tags: [数组,双指针,贪心]
+---
+import { Highlight, Keyword, Light, B1, B2, B3, BH3, B3W, MyColor} from '@site/src/components/ForMDX';
+
+
+### <B2>[力扣面试经典——11题](https://leetcode.cn/problems/container-with-most-water/?envType=study-plan-v2&envId=top-interview-150 "力扣")</B2>
+
+<!-- truncate -->
+
+
+### 💡 参考代码：
+
+```c
+/**
+ * 盛最多水的容器 - 双指针解法
+ * @param height 整数数组，表示每条垂线的高度
+ * @param heightSize 数组长度
+ * @return 容器可以储存的最大水量
+ */
+int maxArea(int* height, int heightSize) {
+    // 初始化左右指针
+    int left = 0;              // 左指针指向数组开始
+    int right = heightSize - 1; // 右指针指向数组末尾
+    int maxWater = 0;          // 记录最大储水量
+    
+    // 当左指针小于右指针时继续循环
+    while (left < right) {
+        // 计算当前容器的储水量
+        // 面积 = 两线中较短的高度 × 两线之间的距离
+        int currentWater = (right - left) * 
+                          (height[left] < height[right] ? height[left] : height[right]);
+        
+        // 更新最大储水量
+        if (currentWater > maxWater) {
+            maxWater = currentWater;
+        }
+        
+        // 移动较短的那根垂线的指针
+        // 因为只有这样才能可能找到更大的面积
+        if (height[left] < height[right]) {
+            left++;  // 移动左指针
+        } else {
+            right--; // 移动右指针
+        }
+    }
+    
+    return maxWater; // 返回最大储水量
+}
+```
+
+### 📖 总结：
+
+<details>
+<summary>点击展开题目总结</summary>
+# 🤔 盛最多水的容器
+
+---
+
+## 1️⃣ 题目核心信息
+
+🎯 **功能描述**：给定n条垂线的高度数组，找出其中两条线使得它们与x轴构成的容器能容纳最多的水
+
+📥 **输入输出**：
+- **输入**：`height`整数数组表示每条垂线高度，`heightSize`表示数组长度
+- **输出**：返回容器可以储存的最大水量（面积）
+
+---
+
+## 2️⃣ 实现原理
+
+💡 **核心思路**：使用双指针法从数组两端向中间移动，每次移动较短边的指针以寻找可能的最大面积
+
+📋 **实现步骤**：
+1. 初始化左右指针分别指向数组首尾
+2. 计算当前两指针构成的容器面积
+3. 更新记录的最大面积值
+4. 移动较短边的指针，重复步骤2-3直到指针相遇
+
+---
+
+## 3️⃣ 关键点解析
+
+### 🎯 代码技巧
+- 使用三元运算符简化高度比较：`height[left] < height[right] ? height[left] : height[right]`
+- 贪心策略：总是移动较短边以寻找更大面积的可能性
+- 面积计算公式：宽度×较短高度 = `(right-left) * min(height[left], height[right])`
+
+## 4️⃣ 使用场景
+
+### ✅ 适用情况：
+- 需要在一个数组中找到两个元素使某种乘积最大化
+- 可以用双指针优化暴力解法的问题
+- 求解具有对称性质的最优化问题
+
+### ⚠️ 前提条件：
+- 输入数组至少包含两个元素
+- 数组元素为非负整数
+
+## 5️⃣ 复杂度分析
+
+- ⏱️ 时间复杂度：O(n)，其中n是数组长度，每个元素最多访问一次
+
+- 💾 空间复杂度：O(1)，只使用常数额外空间
+
+## 6️⃣ 注意事项
+
+### 🚩 边界情况：
+- 数组只有两个元素的情况
+- 所有元素高度相同的情况
+- 数组为空或只有一个元素的情况（题目保证不会出现）
+
+### 💥 易错点：
+- 错误地移动较高边的指针，导致错过最优解
+- 面积计算时忘记取两线中的较小值作为高度
+- 循环条件判断错误，可能导致指针越界
+</details>

@@ -62,3 +62,8 @@ ffmpeg:
   label: ffmpeg
   permalink: /ffmpeg
   description: 关于 ffmpeg 的一些记录   
+  
+贪心:
+  label: 贪心
+  permalink: /贪心
+  description: 贪心算法题目 
