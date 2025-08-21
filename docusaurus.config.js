@@ -54,7 +54,7 @@ const config = {
           editUrl:
             'https://github.com/EurekaShadow/EurekaShadow.github.io/tree/master',
           showLastUpdateTime: true,
-		  showLastUpdateAuthor: true // 不显示作者
+		  showLastUpdateAuthor: true // 显示作者
         },
         blog: {
           showReadingTime: true,
@@ -91,7 +91,7 @@ const config = {
       },
 		
       // Replace with your project's social card
-      image: 'img/docusaurus-social-card.jpg',
+      image: 'img/My-temp-social-card.jpg',
       navbar: {
         title: '我的网站',
         logo: {
