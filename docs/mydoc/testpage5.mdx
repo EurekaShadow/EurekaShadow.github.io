@@ -15,59 +15,8 @@ This is my **first Docusaurus document**!
 
 **2025/06/23**
 
-<div class="text-blue-500 p-4">Tailwind 测试文字</div>
-<a href="https://pan.baud-dance.com/d/STM32CubeIDE/st-stm32cubeide_1.18.0_24413_20250227_1633_x86_64.exe" class="source_download_button" target="_blank">立即下载</a>
-<div style={{marginBottom: "20px"}}>
-</div>
-<div class="text-blue-500 p-4">Tailwind 测试文字</div>
-<a href="https://github.com/Eureka12138github/gitstm32/blob/main/1-1%20%E6%8E%A5%E7%BA%BF%E5%9B%BE/12-2%20%E5%AE%9E%E6%97%B6%E6%97%B6%E9%92%9F.jpg" class="source_download_button" target="_blank">图片下载</a>
-<div style={{marginBottom: "20px"}}>
-</div>
 
 
-
- <p><Highlight bgColor={MyColor.docusaurusGreen} fontColor={MyColor.white}>Docusaurus green</Highlight>and<Highlight bgColor={MyColor.Pink} fontColor={MyColor.white}>Pink</Highlight>are my favorite colors.</p>
-
-
-
-
-> I can write **Markdown** alongside my _JSX_!
-
-
-<div style={{
-  display: 'flex',
-  flexDirection: 'column',
-  rowGap: '1rem'
-}}>
-  {/* 第一行按钮 */}
-  <div style={{ display: 'flex', gap: '1rem' }}>
-    <Button icon="📘" href="https://example.com">默认按钮</Button>
-    <Button icon="📘" href="https://example.com" color="#2D8E0A">绿色按钮</Button>
-	<Button icon="📘" href="https://example.com" color="#1877F2" size="large">蓝色大按钮</Button>
-  </div>
-
-  {/* 第二行按钮 */}
-  <div style={{ display: 'flex', gap: '1rem' }}>
-    <Button icon="📘" href="https://example.com">默认按钮</Button>
-    <Button icon="📘" href="#">按钮1</Button>
-	<Button icon="📘" href="https://github.com/your-repo" color="#333"textColor="white" size="medium">GitHub 仓库</Button>
-  </div>
-
-  {/* 第三行按钮 */}
-  <div style={{ display: 'flex', gap: '1rem' }}>
-	<Button icon="⚙️" onClick={() => alert('点击了')}>打开设置</Button>
-	<Button loading>加载中...</Button>
-	<Button disabled>不可点击</Button>
-  </div> 
-  
-</div>
-
-上面 MDX 示例说明了：
-
-- **要在 MDX 中定义 React 组件，必须使用 `export` 导出**。
-- 可以在 Markdown 中混合使用 JSX 和普通文本。
-- **MDX 中的 HTML 实际上是 JSX**，写内联样式时要使用对象语法（如 `style={{color: 'red'}}`），而不是字符串（如 `style="color: red"`）。
-- 最终，React 组件和 Markdown 内容会被正确渲染成网页内容。
 
 ✅ 简单说：**MDX = Markdown + React 组件，写法要符合 JSX 规范。**
 ## 测试，尝试用EurekaShadow部署git pages

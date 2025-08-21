@@ -4,7 +4,7 @@ sidebar_position: 1.4
 description: 这是我的测试页4！
 ---
 
-### 这是我的测试页面4
+### 暂时没看出来有什么用的按钮
 export const Highlight = ({children, color}) => (
   <span
     style={{
@@ -21,6 +21,25 @@ export const Highlight = ({children, color}) => (
   </span>
 );
 
+**代码：**
+```js
+export const Highlight = ({children, color}) => (
+  <span
+    style={{
+      backgroundColor: color,
+      borderRadius: '20px',
+      color: '#fff',
+      padding: '10px',
+      cursor: 'pointer',
+    }}
+    onClick={() => {
+      alert(`You clicked the color ${color} with label ${children}`)
+    }}>
+    {children}
+  </span>
+);
+```
+
 This is <Highlight color="#25c2a0">Docusaurus green</Highlight> !
 
 This is <Highlight color="#F2BBE0">Facebook Pink</Highlight> !
@@ -30,31 +49,5 @@ This is <Highlight color="#F2BBE0">Facebook Pink</Highlight> !
 
 <div style={{ marginBottom: '20px' }}></div>
 
-<details>
-<summary>Test</summary>
 
-example:
-```c
-int main(){
-    while(1){
-        
-    }
-}
-```
 
-</details>
-
-<p>这是一个音频测试：</p>
-<audio controls>
-  <source src="/audio/王铮亮-不凡.mp3" type="audio/mpeg" />
-  您的浏览器不支持音频播放，请升级或使用其他浏览器。
-</audio>
-
-<p>这是一个视频测试：（可能较快）：</p>
-<iframe 
-  width="100%" 
-  height="500" 
-  src="https://www.bilibili.com/bangumi/play/ep733316" 
-  frameborder="0" 
-  allowfullscreen>
-</iframe>

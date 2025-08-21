@@ -23,7 +23,6 @@
     "@docusaurus/preset-classic": "3.8.1",
     "@giscus/react": "^3.1.0",
     "@mdx-js/react": "^3.0.0",
-    "@tailwindcss/postcss": "^4.1.10",
     "clsx": "^2.0.0",
     "fs": "^0.0.1-security",
     "glob": "^11.0.3",
@@ -41,10 +40,7 @@
   },
   "devDependencies": {
     "@docusaurus/module-type-aliases": "3.8.1",
-    "@docusaurus/types": "3.8.1",
-    "autoprefixer": "^10.4.21",
-    "postcss": "^8.5.6",
-    "tailwindcss": "^4.1.10"
+    "@docusaurus/types": "3.8.1"
   },
   "browserslist": {
     "production": [
