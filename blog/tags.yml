@@ -67,3 +67,13 @@ ffmpeg:
   label: 贪心
   permalink: /贪心
   description: 贪心算法题目 
+  
+博客:
+  label: 博客
+  permalink: /博客
+  description: 关于博客的内容
+  
+排序:
+  label: 排序
+  permalink: /排序
+  description: 关于排序的题目 

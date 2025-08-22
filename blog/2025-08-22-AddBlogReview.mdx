@@ -1,0 +1,257 @@
+---
+slug: AddBlogReview
+title: 添加博客评论
+authors: eurekaX
+tags: [博客]
+---
+
+import { Highlight, Keyword, Light, B1, B2, B3, BH3, B3W, MyColor} from '@site/src/components/ForMDX';
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import CardImg from '@site/src/components/CardImg';
+
+### <B2>在 Docusaurus 的博客中添加 giscus 评论🤔</B2>
+
+<!-- truncate -->
+
+
+## 安装依赖
+
+<Tabs>
+
+  <TabItem value="npm" label="npm">
+```bash
+npm install --save @giscus/react
+```
+  </TabItem>
+
+  <TabItem value="yarn" label="yarn">
+```bash
+yarn add @giscus/react
+```
+  </TabItem>
+
+  <TabItem value="pnpm" label="pnpm">
+```bash
+pnpm add @giscus/react
+```
+  </TabItem>  
+ 
+</Tabs>
+
+
+
+
+## 创建评论组件
+```tsx title="src/components/Comment.tsx"
+import React, { useEffect, useState } from 'react'
+import BrowserOnly from '@docusaurus/BrowserOnly'
+
+export default function Comment(): JSX.Element {
+  return (
+    <div style={{ marginTop: '2rem' }}>
+      <BrowserOnly fallback={<div style={{ minHeight: '200px' }}>加载评论中...</div>}>
+        {() => {
+          const { useThemeConfig } = require('@docusaurus/theme-common')
+          const { useLocation } = require('@docusaurus/router')
+          const Giscus = require('@giscus/react').default
+          
+          const themeConfig = useThemeConfig()
+          const location = useLocation()
+
+          // 修改页面类型检查，适配你的博客路径格式
+          // 检查是否为博客文章页面：/blog/文章标题
+          const isBlogPostPage = /^\/blog\/[^/]+$/.test(location.pathname) || 
+                                (/^\/blog\//.test(location.pathname) && !/^\/blog\/?$/.test(location.pathname) && location.pathname.split('/').length === 3);
+          
+          const isDocPage = location.pathname.startsWith('/docs/');
+          
+          // 调试信息，可以帮助你确认路径匹配
+          console.log('Current path:', location.pathname);
+          console.log('Is blog post page:', isBlogPostPage);
+          console.log('Is doc page:', isDocPage);
+          
+          // 如果不是博客文章页面或文档页面，不显示评论
+          if (!isBlogPostPage && !isDocPage) {
+            return <div></div>; // 返回空内容，不显示评论
+          }
+
+          const giscus: any = { ...themeConfig.giscus }
+
+          if (!giscus.repo || !giscus.repoId || !giscus.categoryId) {
+            return (
+              <div style={{ padding: '1rem', textAlign: 'center', color: 'red' }}>
+                评论系统配置缺失
+              </div>
+            )
+          }
+
+          // 处理路径
+          const path = location.pathname.replace(/^\/|\/$/g, '');
+          const subPath = path || "index";
+          giscus.term = subPath;
+
+          // 主题监听组件
+          const GiscusWithThemeListener = () => {
+            const [theme, setTheme] = useState('light');
+
+            useEffect(() => {
+              const updateTheme = () => {
+                const currentTheme = document.documentElement.getAttribute('data-theme');
+                setTheme(currentTheme === 'dark' ? 'transparent_dark' : 'light');
+              };
+
+              // 初始化
+              updateTheme();
+
+              // 监听主题变化
+              const observer = new MutationObserver(() => {
+                updateTheme();
+              });
+
+              observer.observe(document.documentElement, {
+                attributes: true,
+                attributeFilter: ['data-theme']
+              });
+
+              return () => observer.disconnect();
+            }, []);
+
+            return <Giscus {...giscus} theme={theme} />;
+          };
+
+          return <GiscusWithThemeListener />;
+        }}
+      </BrowserOnly>
+    </div>
+  )
+}
+```
+
+:::info[特别说明]
+
+上面 Comment.tsx中的正则表达式匹配的是：
+
+- ✅ `/blog/FirstBlog`
+- ✅ `/blog/任何单个路径段`
+- ❌ `/blog/`(博客列表页)
+- ❌ `/blog/category/subcategory`(多级路径)
+
+:::
+
+## 博客页面启用评论
+博客页面由 `docusaurus` 的 `BlogPostItem` 组件渲染，下面是自定义方法。
+
+1. swizzle `BlogPostItem `：
+<Tabs>
+
+  <TabItem value="npm" label="npm">
+```bash
+npm run swizzle @docusaurus/theme-classic BlogPostItem -- --wrap --typescript
+```
+  </TabItem>
+
+  <TabItem value="yarn" label="yarn">
+```bash
+yarn swizzle @docusaurus/theme-classic BlogPostItem --wrap --typescript
+```
+  </TabItem>
+
+  <TabItem value="pnpm" label="pnpm">
+```bash
+pnpm run swizzle @docusaurus/theme-classic BlogPostItem -- --wrap --typescript
+```
+  </TabItem>  
+ 
+</Tabs>
+
+出现警报说不安全什么的，直接
+
+>YES: I know what I am doing!
+
+
+2. 然后在 `BlogPostItem` 的 `index.tsx` 里面，将其**全部替换**为下列的代码：
+```tsx title="src/theme/BlogPostItem/index.tsx"
+import React from 'react';
+import BlogPostItem from '@theme-original/BlogPostItem';
+import type { WrapperProps } from '@docusaurus/types';
+import Comment from '@site/src/components/Comment';
+
+type Props = WrapperProps<typeof BlogPostItem>;
+
+export default function BlogPostItemWrapper(props: Props): JSX.Element {
+  const { children, ...otherProps } = props;
+  
+  return (
+    <BlogPostItem {...otherProps}>
+      {children}
+      <div className="blog-post-comments" style={{ 
+        marginTop: '2rem',
+        paddingTop: '1.5rem',
+        borderTop: '1px solid var(--ifm-color-emphasis-300)'
+      }}>
+        <Comment />
+      </div>
+    </BlogPostItem>
+  );
+}
+```
+
+## 配置giscus
+
+[giscus官网](https://giscus.app/zh-CN)
+
+<p><CardImg src="/img/Blog/giscuscongf1.jpg" alt="评论功能添加成功" isCenter={true} /></p>
+
+所谓的 `Discussions` 功能是指这里：`Github->Settings->General`
+
+<p><CardImg src="/img/Blog/giscuscongf5.jpg" alt="评论功能添加成功" isCenter={true} /></p>
+
+三个条件都满足时，输入：`用户名/仓库名`，giscus提示仓库满足条件时，可以正式开始配置
+
+1. 分类选 `General`；特性第一个默认选，最后两个可选可不选（即使不选后续也可以继续配置）
+
+<p><CardImg src="/img/Blog/giscuscongf2.jpg" alt="评论功能添加成功" isCenter={true} /></p>
+
+2. 这四个信息：
+
+<p><CardImg src="/img/Blog/giscuscongf3.jpg" alt="评论功能添加成功" isCenter={true} /></p>
+
+3. 依次填入到： `docusaurus.config.js` 的这个位置
+
+<p><CardImg src="/img/Blog/giscuscongf4.jpg" alt="评论功能添加成功" isCenter={true} /></p>
+
+```js title="docusaurus.config.js"
+// 添加 giscus 评论功能
+giscus: {
+	repo: 'username/username.github.io',
+	repoId: '********',
+	category: 'General',
+	categoryId: '********',
+	lang: 'zh-CN', // 中文评论模块
+	inputPosition: 'top',//表示输入框在评论区顶部
+},
+```
+
+4. 最后，`yarn start`
+
+大功告成！这时就会看到已经出现评论了：
+
+<p><CardImg src="/img/Blog/BlogReview.jpg" alt="评论功能添加成功" isCenter={true} /></p>
+
+想要给 `文档页面` 也添加这样的评论功能，可以参考这篇[文章](https://imroc.cc/note/docusaurus/giscus)。
+
+## 📚 参考资料
+
+[添加 giscus 评论功能](https://imroc.cc/note/docusaurus/giscus)
+
+
+
+
+
+
+
+
+
+
+

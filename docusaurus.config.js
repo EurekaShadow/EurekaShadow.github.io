@@ -121,7 +121,7 @@ const config = {
             items: [
               {
                 label: '模板',
-                to: '/docs/category/模板',
+                to: '/docs/mydoc/testpage0',
               },
             ],
           },

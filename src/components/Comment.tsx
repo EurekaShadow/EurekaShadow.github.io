@@ -1,50 +1,83 @@
-import React from 'react'
-import { useThemeConfig, useColorMode } from '@docusaurus/theme-common'
-import Giscus, { GiscusProps } from '@giscus/react'
-import { useLocation } from '@docusaurus/router';
-
-// 默认 Giscus 配置项
-const defaultConfig: Partial<GiscusProps> = {
-  id: 'comments',
-  mapping: 'specific',
-  reactionsEnabled: '1',
-  emitMetadata: '0',
-  inputPosition: 'top',
-  loading: 'lazy',
-  strict: '1', // 使用根据路径标题自动生成的 sha1 值，精确匹配 github discussion，避免路径重叠时评论加载错误
-  lang: 'zh-CN',
-}
+// site/src/components/Comment/Comment.tsx
+import React, { useEffect, useState } from 'react'
+import BrowserOnly from '@docusaurus/BrowserOnly'
 
 export default function Comment(): JSX.Element {
-  const themeConfig = useThemeConfig()
-  const { colorMode } = useColorMode()
-  const location = useLocation()
-
-  // 合并默认配置和用户配置
-  const giscus = { ...defaultConfig, ...themeConfig.giscus }
-
-  // 验证必要配置项是否存在
-  if (!giscus.repo || !giscus.repoId || !giscus.categoryId) {
-    throw new Error(
-      '评论系统配置缺失：请在 `themeConfig.giscus` 中提供 `repo`、`repoId` 和 `categoryId` 参数。',
-    )
-  }
-
-  // 处理路径，生成评论标识符(term)
-  // 移除首尾斜杠，并提取子路径作为评论标识符
-  const path = location.pathname.replace(/^\/|\/$/g, '');
-  const firstSlashIndex = path.indexOf('/');
-  
-  // 根据路径结构确定评论标识符
-  const subPath = firstSlashIndex !== -1 
-    ? path.substring(firstSlashIndex + 1) 
-    : "index";
-
-  // 设置评论标识符和主题
-  giscus.term = subPath;
-  giscus.theme = colorMode === 'dark' ? 'transparent_dark' : 'light';
-
   return (
-    <Giscus {...giscus} />
+    <div style={{ marginTop: '2rem' }}>
+      <BrowserOnly fallback={<div style={{ minHeight: '200px' }}>加载评论中...</div>}>
+        {() => {
+          const { useThemeConfig } = require('@docusaurus/theme-common')
+          const { useLocation } = require('@docusaurus/router')
+          const Giscus = require('@giscus/react').default
+          
+          const themeConfig = useThemeConfig()
+          const location = useLocation()
+
+          // 修改页面类型检查，适配你的博客路径格式
+          // 检查是否为博客文章页面：/blog/文章标题
+          const isBlogPostPage = /^\/blog\/[^/]+$/.test(location.pathname) || 
+                                (/^\/blog\//.test(location.pathname) && !/^\/blog\/?$/.test(location.pathname) && location.pathname.split('/').length === 3);
+          
+          const isDocPage = location.pathname.startsWith('/docs/');
+          
+          // 调试信息，可以帮助你确认路径匹配
+          console.log('Current path:', location.pathname);
+          console.log('Is blog post page:', isBlogPostPage);
+          console.log('Is doc page:', isDocPage);
+          
+          // 如果不是博客文章页面或文档页面，不显示评论
+          if (!isBlogPostPage && !isDocPage) {
+            return <div></div>; // 返回空内容，不显示评论
+          }
+
+          const giscus: any = { ...themeConfig.giscus }
+
+          if (!giscus.repo || !giscus.repoId || !giscus.categoryId) {
+            return (
+              <div style={{ padding: '1rem', textAlign: 'center', color: 'red' }}>
+                评论系统配置缺失
+              </div>
+            )
+          }
+
+          // 处理路径
+          const path = location.pathname.replace(/^\/|\/$/g, '');
+          const subPath = path || "index";
+          giscus.term = subPath;
+
+          // 主题监听组件
+          const GiscusWithThemeListener = () => {
+            const [theme, setTheme] = useState('light');
+
+            useEffect(() => {
+              const updateTheme = () => {
+                const currentTheme = document.documentElement.getAttribute('data-theme');
+                setTheme(currentTheme === 'dark' ? 'transparent_dark' : 'light');
+              };
+
+              // 初始化
+              updateTheme();
+
+              // 监听主题变化
+              const observer = new MutationObserver(() => {
+                updateTheme();
+              });
+
+              observer.observe(document.documentElement, {
+                attributes: true,
+                attributeFilter: ['data-theme']
+              });
+
+              return () => observer.disconnect();
+            }, []);
+
+            return <Giscus {...giscus} theme={theme} />;
+          };
+
+          return <GiscusWithThemeListener />;
+        }}
+      </BrowserOnly>
+    </div>
   )
 }
