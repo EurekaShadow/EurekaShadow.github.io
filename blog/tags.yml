@@ -77,3 +77,8 @@ ffmpeg:
   label: 排序
   permalink: /排序
   description: 关于排序的题目 
+  
+Vercel:
+  label: Vercel
+  permalink: /Vercel
+  description: 关于 Vercel 的一些记录 
