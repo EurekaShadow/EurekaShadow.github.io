@@ -1,10 +1,5 @@
 import React, { useMemo } from 'react';
-import { PhotoProvider, PhotoView } from 'react-photo-view';
-import 'react-photo-view/dist/react-photo-view.css';
 import Styles from '@site/src/css/MyCss.module.css';
-
-import Lazyimg from 'react-lazyimg-component';// 懒加载插件
-
 import BrowserOnly from '@docusaurus/BrowserOnly';
 
 

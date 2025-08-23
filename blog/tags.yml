@@ -81,4 +81,14 @@ ffmpeg:
 Vercel:
   label: Vercel
   permalink: /Vercel
-  description: 关于 Vercel 的一些记录 
+  description: 关于 Vercel 的一些记录 ‘
+  
+二分查找:
+  label: 二分查找
+  permalink: /二分查找
+  description: 关于 二分查找 的一些题目
+
+前缀和:
+  label: 前缀和
+  permalink: /前缀和
+  description: 关于 前缀和 的一些题目   

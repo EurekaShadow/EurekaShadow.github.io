@@ -42,7 +42,8 @@
   },
   "devDependencies": {
     "@docusaurus/module-type-aliases": "3.8.1",
-    "@docusaurus/types": "3.8.1"
+    "@docusaurus/types": "3.8.1",
+    "webpack-bundle-analyzer": "^4.10.2"
   },
   "browserslist": {
     "production": [

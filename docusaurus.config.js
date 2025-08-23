@@ -42,6 +42,77 @@ const config = {
     locales: ['zh-Hans'],
   },
 
+  // 正确的 webpack 配置方式 - 作为插件添加
+  plugins: [
+    function webpackBundleAnalyzerPlugin(context, options) {
+      return {
+        name: 'webpack-bundle-analyzer-plugin',
+        configureWebpack(config, isServer, utils) {
+          if (!isServer && process.env.ANALYZE === 'true') {
+            const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
+            return {
+              plugins: [
+                new BundleAnalyzerPlugin({
+                  analyzerMode: 'static',
+                  reportFilename: 'bundle-report.html',
+                  openAnalyzer: true,
+                })
+              ]
+            };
+          }
+          return {};
+        }
+      };
+    },
+    // 添加 webpack 优化插件
+    function webpackOptimizationPlugin(context, options) {
+      return {
+        name: 'webpack-optimization-plugin',
+        configureWebpack(config, isServer, utils) {
+          if (!isServer) {
+            // 优化代码分割，避免大型代码块导致的重复打包
+            return {
+              optimization: {
+                splitChunks: {
+                  chunks: 'all',
+                  maxInitialRequests: 20,
+                  maxAsyncRequests: 20,
+                  cacheGroups: {
+                    vendor: {
+                      test: /[\\/]node_modules[\\/]/,
+                      name: 'vendors',
+                      chunks: 'all',
+                      priority: 10,
+                      reuseExistingChunk: true
+                    },
+                    prism: {
+                      test: /[\\/]node_modules[\\/](prism-react-renderer|prismjs)/,
+                      name: 'prism',
+                      chunks: 'all',
+                      priority: 20,
+                      reuseExistingChunk: true
+                    },
+                    // 优化代码块分组
+                    codeBlocks: {
+                      test: /code-block|prism/,
+                      name: 'code-blocks',
+                      chunks: 'all',
+                      minChunks: 2,
+                      priority: 15,
+                      reuseExistingChunk: true
+                    }
+                  }
+                },
+                runtimeChunk: false
+              }
+            };
+          }
+          return {};
+        }
+      };
+    }
+  ],
+
   presets: [
     [
       'classic',
