@@ -1,12 +1,5 @@
 // @ts-check
-// `@type` JSDoc annotations allow editor autocompletion and type checking
-// (when paired with `@ts-check`).
-// There are various equivalent ways to declare your Docusaurus config.
-// See: https://docusaurus.io/docs/api/docusaurus-config
-
 import {themes as prismThemes} from 'prism-react-renderer';
-
-// This runs in Node.js - Don't use client-side code here (browser APIs, JSX...)
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
@@ -14,103 +7,28 @@ const config = {
   tagline: '这是我的个人网站',
   favicon: 'img/Eureka.ico',
 
-  // Future flags, see https://docusaurus.io/docs/api/docusaurus-config#future
   future: {
-    v4: true, // Improve compatibility with the upcoming Docusaurus v4
+    v4: true,
   },
 
-  // Set the production url of your site here
   url: 'https://www.eurekashadow.xin/',
-  // Set the /<baseUrl>/ pathname under which your site is served
-  // For GitHub pages deployment, it is often '/<projectName>/'
   baseUrl: '/',
 
-  // GitHub pages deployment config.
-  // If you aren't using GitHub pages, you don't need these.
-  organizationName: 'EurekaShadow', // Usually your GitHub org/user name.
-  projectName: 'EurekaShadow.github.io', // Usually your repo name.
+  organizationName: 'EurekaShadow',
+  projectName: 'EurekaShadow.github.io',
   deploymentBranch: 'gh-pages',
-  trailingSlash :false,
+  trailingSlash: false,
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
 
-  // Even if you don't use internationalization, you can use this field to set
-  // useful metadata like html lang. For example, if your site is Chinese, you
-  // may want to replace "en" with "zh-Hans".
   i18n: {
     defaultLocale: 'zh-Hans',
     locales: ['zh-Hans'],
   },
 
-  // 正确的 webpack 配置方式 - 作为插件添加
+  // 简化 plugins 部分
   plugins: [
-    function webpackBundleAnalyzerPlugin(context, options) {
-      return {
-        name: 'webpack-bundle-analyzer-plugin',
-        configureWebpack(config, isServer, utils) {
-          if (!isServer && process.env.ANALYZE === 'true') {
-            const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
-            return {
-              plugins: [
-                new BundleAnalyzerPlugin({
-                  analyzerMode: 'static',
-                  reportFilename: 'bundle-report.html',
-                  openAnalyzer: true,
-                })
-              ]
-            };
-          }
-          return {};
-        }
-      };
-    },
-    // 添加 webpack 优化插件
-    function webpackOptimizationPlugin(context, options) {
-      return {
-        name: 'webpack-optimization-plugin',
-        configureWebpack(config, isServer, utils) {
-          if (!isServer) {
-            // 优化代码分割，避免大型代码块导致的重复打包
-            return {
-              optimization: {
-                splitChunks: {
-                  chunks: 'all',
-                  maxInitialRequests: 20,
-                  maxAsyncRequests: 20,
-                  cacheGroups: {
-                    vendor: {
-                      test: /[\\/]node_modules[\\/]/,
-                      name: 'vendors',
-                      chunks: 'all',
-                      priority: 10,
-                      reuseExistingChunk: true
-                    },
-                    prism: {
-                      test: /[\\/]node_modules[\\/](prism-react-renderer|prismjs)/,
-                      name: 'prism',
-                      chunks: 'all',
-                      priority: 20,
-                      reuseExistingChunk: true
-                    },
-                    // 优化代码块分组
-                    codeBlocks: {
-                      test: /code-block|prism/,
-                      name: 'code-blocks',
-                      chunks: 'all',
-                      minChunks: 2,
-                      priority: 15,
-                      reuseExistingChunk: true
-                    }
-                  }
-                },
-                runtimeChunk: false
-              }
-            };
-          }
-          return {};
-        }
-      };
-    }
+    // 只保留必要的插件，删除 webpack 优化插件
   ],
 
   presets: [
@@ -120,12 +38,10 @@ const config = {
       ({
         docs: {
           sidebarPath: './sidebars.js',
-          // Please change this to your repo.
-          // Remove this to remove the "edit this page" links.
           editUrl:
             'https://github.com/EurekaShadow/EurekaShadow.github.io/tree/master',
           showLastUpdateTime: true,
-		  showLastUpdateAuthor: true // 显示作者
+          showLastUpdateAuthor: true
         },
         blog: {
           showReadingTime: true,
@@ -133,11 +49,8 @@ const config = {
             type: ['rss', 'atom'],
             xslt: true,
           },
-          // Please change this to your repo.
-          // Remove this to remove the "edit this page" links.
           editUrl:
             'https://github.com/EurekaShadow/EurekaShadow.github.io/tree/master',
-          // Useful options to enforce blogging best practices
           onInlineTags: 'warn',
           onInlineAuthors: 'warn',
           onUntruncatedBlogPosts: 'warn',
@@ -153,16 +66,14 @@ const config = {
   themeConfig:
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
-		// 添加 giscus 评论功能
-		giscus: {
+      giscus: {
         repo: 'eurekashadow/eurekashadow.github.io',
         repoId: 'R_kgDOO5sA8w',
         category: 'General',
         categoryId: 'DIC_kwDOO5sA884CuZHY',
-		lang: 'zh-CN', // 中文评论模块
+        lang: 'zh-CN',
       },
-		
-      // Replace with your project's social card
+      
       image: 'img/My-temp-social-card.jpg',
       navbar: {
         title: '我的网站',
@@ -208,10 +119,6 @@ const config = {
                 label: 'Github',
                 href: 'https://github.com/EurekaShadow',
               },
-//              {
-//                label: 'X',
-//                href: 'https://x.com/docusaurus',
-//              },
             ],
           },
           {
@@ -220,56 +127,44 @@ const config = {
               {
                 label: '博客',
                 to: '/blog',
-              },			  
+              },        
             ],
           },
         ],
         copyright: `Copyright © ${new Date().getFullYear()} My Project, Inc. Built with Docusaurus.`,
       },
-	  
-		prism: {
-		  // 代码高亮主题 - 浅色主题使用 GitHub 风格
-		  theme: prismThemes.github,
-		  // 代码高亮主题 - 深色主题使用 Dracula 风格
-		  darkTheme: prismThemes.dracula,
-		  
-		  // 自定义代码高亮标记配置
-		  magicComments: [
-			// 高亮标记 - 用于突出显示重要代码行
-			{
-			  className: 'code-block-highlighted-line',  // CSS 类名
-			  line: 'highlight-next-line',               // 行内标记
-			  block: { start: 'highlight-start', end: 'highlight-end' }  // 块标记
-			},
-			// 新增代码标记 - 用于标识新增的代码行
-			{
-			  className: 'code-block-add-line',
-			  line: 'highlight-add-line',
-			  block: { start: 'highlight-add-start', end: 'highlight-add-end' }
-			},
-			// 更新代码标记 - 用于标识修改的代码行
-			{
-			  className: 'code-block-update-line',
-			  line: 'highlight-update-line',
-			  block: { start: 'highlight-update-start', end: 'highlight-update-end' }
-			},
-			// 错误代码标记 - 用于标识有问题的代码行
-			{
-			  className: 'code-block-error-line',
-			  line: 'highlight-error-line',
-			  block: { start: 'highlight-error-start', end: 'highlight-error-end' }
-			},
-		  ],
-		  
-		  // 额外支持的语言（超出默认支持的语言列表）
-		  // 默认支持的语言列表参考：https://github.com/FormidableLabs/prism-react-renderer/blob/master/packages/generate-prism-languages/index.ts#L9-L23
-		  // Prism.js 完整支持语言列表：https://prismjs.com/#supported-languages
-		  additionalLanguages: [
-			'java',   // Java 编程语言
-			'c',
-		  ],
-		},
-    }),
+    
+    prism: {
+      theme: prismThemes.github,
+      darkTheme: prismThemes.dracula,
+      magicComments: [
+        {
+          className: 'code-block-highlighted-line',
+          line: 'highlight-next-line',
+          block: { start: 'highlight-start', end: 'highlight-end' }
+        },
+        {
+          className: 'code-block-add-line',
+          line: 'highlight-add-line',
+          block: { start: 'highlight-add-start', end: 'highlight-add-end' }
+        },
+        {
+          className: 'code-block-update-line',
+          line: 'highlight-update-line',
+          block: { start: 'highlight-update-start', end: 'highlight-update-end' }
+        },
+        {
+          className: 'code-block-error-line',
+          line: 'highlight-error-line',
+          block: { start: 'highlight-error-start', end: 'highlight-error-end' }
+        },
+      ],
+      additionalLanguages: [
+        'java',
+        'c',
+      ],
+    },
+  }),
 };
 
 export default config;
