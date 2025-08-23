@@ -88,6 +88,7 @@ const config = {
         repoId: 'R_kgDOO5sA8w',
         category: 'General',
         categoryId: 'DIC_kwDOO5sA884CuZHY',
+		lang: 'zh-CN', // 中文评论模块
       },
 		
       // Replace with your project's social card
