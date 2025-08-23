@@ -375,4 +375,27 @@ build文件夹，或者更准确的说是其中的有6个js文件巨大，每个
 
 </details>
 
+## CardImg 组件点击图片卡死问题
+
+原来关于图片组件的代码是放在，`ForMDX.js` 中的，后来迁出为 `CardImg.js`。
+
+在 `CardImg.js` 中应该引入： 
+```
+import { PhotoProvider, PhotoView } from 'react-photo-view';
+import Lazyimg from 'react-lazyimg-component';
+import 'react-photo-view/dist/react-photo-view.css';
+```
+
+实际上缺了：
+```
+import 'react-photo-view/dist/react-photo-view.css';
+```
+
+由于 `ForMDX.js` 中仍然保留那三条引入，故 `CardImg.js` 与 `ForMDX.js` 具有`隐式依赖`，此时图片组件正常工作。
+
+但是由于后续在排查 `build` 文件夹过大问题的时候，发现 `ForMDX.js` 那三条引入是**多余的**，删去。此时**隐式依赖断裂**，图片组件无法工作。
+这种问题往往是很棘手的，虽然在本次问题中，再不济我也可以通过重构图片组件复现功能。但是如果在某种情况下这种重构变得尤为困难，甚至说简直不可能的时候，
+想要排查这种 `隐式依赖` 就会变得 **极为困难！** 这次只是侥幸，记得图片组件似乎是要三个引入的，所以顺利将问题解决。日后应谨记此教训，在开发中，要尽量避免类似的错误。🥱
+
+
 

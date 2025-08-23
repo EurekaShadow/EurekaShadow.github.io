@@ -71,6 +71,7 @@ const config = {
         repoId: 'R_kgDOO5sA8w',
         category: 'General',
         categoryId: 'DIC_kwDOO5sA884CuZHY',
+		inputPosition: 'top',
         lang: 'zh-CN',
       },
       

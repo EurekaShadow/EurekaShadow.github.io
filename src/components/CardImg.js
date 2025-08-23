@@ -7,6 +7,8 @@ import { PhotoProvider, PhotoView } from 'react-photo-view';
 // 图片懒加载组件，提升页面性能（只在图片进入视口时才加载）
 import Lazyimg from 'react-lazyimg-component';
 
+import 'react-photo-view/dist/react-photo-view.css';
+
 // Docusaurus 提供的 BrowserOnly 组件，确保某些代码仅在浏览器中执行，避免 SSR 报错
 import BrowserOnly from '@docusaurus/BrowserOnly';
 

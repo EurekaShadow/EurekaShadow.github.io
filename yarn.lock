@@ -7460,10 +7460,10 @@ react-medium-image-zoom@^5.2.14:
   resolved "https://registry.npmjs.org/react-medium-image-zoom/-/react-medium-image-zoom-5.2.14.tgz"
   integrity sha512-nfTVYcAUnBzXQpPDcZL+cG/e6UceYUIG+zDcnemL7jtAqbJjVVkA85RgneGtJeni12dTyiRPZVM6Szkmwd/o8w==
 
-react-photo-view@^1.2.7:
-  version "1.2.7"
-  resolved "https://registry.npmjs.org/react-photo-view/-/react-photo-view-1.2.7.tgz"
-  integrity sha512-MfOWVPxuibncRLaycZUNxqYU8D9IA+rbGDDaq6GM8RIoGJal592hEJoRAyRSI7ZxyyJNJTLMUWWL3UIXHJJOpw==
+react-photo-view@^1.2.3:
+  version "1.2.3"
+  resolved "https://registry.npmjs.org/react-photo-view/-/react-photo-view-1.2.3.tgz"
+  integrity sha512-dtaFjU8nAB/rD8mxBaaJcvESlDOweAd1tmvXujS/d3oh1QyGew3xD4C02l46E6Dhn3Tshzl2+IM1h0MWV9nG7g==
 
 react-router-config@^5.1.1:
   version "5.1.1"
