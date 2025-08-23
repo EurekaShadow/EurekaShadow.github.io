@@ -148,14 +148,6 @@ const config = {
               {
                 label: '博客',
                 to: '/blog',
-              },
-              {
-                label: 'My first page',
-                href: '/my-first-markdown-page',
-              },
-              {
-                label: 'ChangeLog',
-                href: '/change-log-page',
               },			  
             ],
           },
