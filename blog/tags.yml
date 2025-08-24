@@ -92,3 +92,8 @@ Vercel:
   label: 前缀和
   permalink: /前缀和
   description: 关于 前缀和 的一些题目   
+  
+图片:
+  label: 图片
+  permalink: /图片
+  description: 关于 图片 格式转换，压缩，统一命名   

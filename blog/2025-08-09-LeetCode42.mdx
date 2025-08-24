@@ -197,7 +197,7 @@ int trap(int* height, int heightSize) {
 - 这是一个巧妙的优化，避免了需要预计算每个位置左右两侧最大值的步骤
 
 **有点懂了，但没完全懂⬇️**
-<p><CardImg src="/img/Leetcode42.jpg" alt="例子" isCenter={true} isBoxed={true} /></p>
+<p><CardImg src="/img/Blog/Leetcode42.jpg" alt="例子" isCenter={true} isBoxed={true} /></p>
 
 我理解的 `左侧`、`右侧` 这里的左右侧并不是指某个位置的左右侧，而是左右侧的指针（即上面定义的 left 和 right），比如刚开始时 `height[left] < height[right]` 的
 话，表明此刻应该处理左侧指针指向的位置（而并非该位置的左侧）。如果该位置的值 height[left] = 2 ,leftMax = 1 ,即此刻该位置无法接到雨水，像下面这样：

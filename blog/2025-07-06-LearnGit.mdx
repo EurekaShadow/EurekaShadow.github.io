@@ -4,6 +4,11 @@ title: Git学习
 authors: eurekaX
 tags: [Git]
 ---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+
 ## Git 使用技巧汇总
 <!-- truncate -->
 
@@ -157,6 +162,193 @@ git reset HEAD README.md
 这是一个测试内容，当前文本是在 `iss53` 分支下编写完成的。之前已经与 `main` 分支合并。
 
 按照预期，切换回 `main` 分支后，再合并 `iss53` 分支不会产生冲突，也就是说，在 `main` 分支下也能看到这段新增内容。
+
+---
+
+## 查看当前仓库的用户配置 😊
+
+<Tabs>
+
+  <TabItem value="global" label="全局">
+```bash
+git config --global user.name
+git config --global user.email
+```
+  </TabItem>
+
+  <TabItem value="local" label="本地">
+```bash
+git config user.name
+git config user.email
+```
+  </TabItem>
+ 
+</Tabs>
+
+## 配置当前仓库的用户配置 🛠️
+
+<Tabs>
+
+  <TabItem value="global" label="全局">
+```bash
+git config --global user.name "GlobalAuthor"
+git config --global user.email "global@example.com"
+```
+  </TabItem>
+
+  <TabItem value="local" label="本地">
+```bash
+# 不加 --local 参数（默认就是局部配置）
+git config user.name "LocalAuthor"
+git config user.email "local@example.com"
+```
+  </TabItem>
+ 
+</Tabs>
+
+## 移除当前仓库的用户配置 🛠
+
+<Tabs>
+
+  <TabItem value="global" label="全局">
+```bash
+# 移除全局用户配置
+git config --global --unset user.name
+git config --global --unset user.email
+```
+  </TabItem>
+
+  <TabItem value="local" label="本地">
+```bash
+# 移除本地用户配置
+git config --unset user.name
+git config --unset user.email
+```
+  </TabItem>
+ 
+</Tabs>
+
+## 切换作者推送代码 🔁
+如果想要使用全局配置的作者信息进行推送，需要先删除局部（本地仓库）的作者配置。
+
+1. 删除本地仓库的用户配置：
+```bash
+# 进入你的仓库目录
+cd your-repository
+
+# 删除本地的用户配置
+git config --unset user.name
+git config --unset user.email
+```
+2. 验证配置是否已删除：
+```bash
+# 查看当前仓库的用户配置（应该没有输出）
+git config --local --list | grep user
+
+# 查看生效的配置（应该显示全局配置）
+git config --list | grep user
+```
+3. 确认使用的是全局配置：
+```bash
+# 查看当前生效的用户信息
+git config user.name
+git config user.email
+```
+
+4. 提交时的作者信息
+删除本地配置后，新提交将使用全局配置的作者信息：
+```bash
+# 此时的提交将使用全局配置的作者
+git commit -m "message"
+```
+
+## GitHub 身份识别机制总结 📚
+
+### 核心原理 ⚡
+- **提交作者识别**：基于 Git 提交中的 `user.name` 和 `user.email`
+- **SSH 密钥作用**：仅用于认证访问权限，不决定提交作者
+
+### 场景分析 🎭
+**配置情况**：
+- 全局作者：A
+- 局部作者：B（本地仓库配置）
+- SSH 密钥：A 的密钥
+- 仓库权限：通过 A 的密钥访问 C 的仓库
+
+**识别结果**：GitHub 显示推送者为 **B**（局部配置优先）
+
+### 关键命令 🔑
+```bash
+# 查看当前身份配置
+git config user.name
+git config user.email
+
+# 查看提交身份
+git var GIT_AUTHOR_IDENT
+git log --pretty=format:"%an <%ae>" -1
+```
+### 最终效果 🎯
+- 提交作者：B（局部配置）
+- 推送权限：A（SSH 密钥认证）
+- 仓库所有者：C（实际仓库拥有者）
+
+## 解决 Key is already in use 问题 💡
+
+1. 为不同账户生成不同的密钥对
+```bash
+# 为用户A生成密钥
+ssh-keygen -t rsa -b 4096 -C "userA@example.com" -f ~/.ssh/userA_key
+
+# 为用户B生成密钥
+ssh-keygen -t rsa -b 4096 -C "userB@example.com" -f ~/.ssh/userB_key
+```
+
+2. 配置 SSH 配置文件区分不同账户
+创建/编辑 `~/.ssh/config` 文件：
+```bash
+# 用户A的配置
+Host github-userA
+    HostName github.com
+    User git
+    IdentityFile ~/.ssh/userA_key
+
+# 用户B的配置
+Host github-userB
+    HostName github.com
+    User git
+    IdentityFile ~/.ssh/userB_key
+```
+
+3. 克隆和推送时使用不同 Host
+```bash
+# 克隆用户A的仓库
+git clone git@github-userA:username/repo.git
+
+# 克隆用户B的仓库
+git clone git@github-userB:username/repo.git
+```
+
+4. 为现有仓库更改 remote URL
+```
+# 更改为用户A的配置
+git remote set-url origin git@github-userA:username/repo.git
+
+# 更改为用户B的配置
+git remote set-url origin git@github-userB:username/repo.git
+```
+
+### 验证配置 ✅
+```bash
+# 测试连接用户A
+ssh -T git@github-userA
+
+# 测试连接用户B
+ssh -T git@github-userB
+```
+这样就可以用不同的密钥管理不同账户的仓库访问权限。🎉
+
+
+
 
 
 

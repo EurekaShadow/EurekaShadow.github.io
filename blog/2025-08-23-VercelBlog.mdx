@@ -123,24 +123,24 @@ git add .
 git commit -m "commit message"
 git push
 ```
-
-此外，我还添加了 `Speed insights` 和 `Web analytics` 功能，按照 Vercel 提供的[教程](https://vercel.com/docs/speed-insights ) 进行操作即可，没啥难度。
+## 性能洞察与网站分析
+此外，我还添加了 `Speed Insights` 和 `Web Analytics` 功能，按照 Vercel 提供的[教程](https://vercel.com/docs/speed-insights ) 进行操作即可，没啥难度。
 唯一有点让人感到困惑的可能是第三步。以下是第三步的参考代码：
 ```js title="src/theme/Root.js"
 import React from 'react';
-// highlight-start
+// highlight-add-start
 import { SpeedInsights } from '@vercel/speed-insights/react';
 import { Analytics } from '@vercel/analytics/react';
-// highlight-end
+// highlight-add-end
 
 function Root({ children }) {
   return (
     <>
       {children}
-	  // highlight-start
+	  // highlight-add-start
       <SpeedInsights />
 	  <Analytics />
-	  // highlight-end
+	  // highlight-add-end
     </>
   );
 }
