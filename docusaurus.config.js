@@ -66,6 +66,15 @@ const config = {
   themeConfig:
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
+	  //添加Algolia搜索
+	  algolia: {
+		// Application ID
+		appId: 'AFEW9ZLEC6',
+		//  Search-Only API Key
+		apiKey: '2732fa24db8a85aaa29ee5c2e96be219',
+		indexName: 'test-site'
+      },
+	  //添加giscus评论
       giscus: {
         repo: 'eurekashadow/eurekashadow.github.io',
         repoId: 'R_kgDOO5sA8w',
