@@ -1,24 +1,22 @@
 {
-  "index_name": "test-site",
+  "index_name": "blog",
   "start_urls": ["https://www.eurekashadow.xin/"],
   "sitemap_urls": ["https://www.eurekashadow.xin/sitemap.xml"],
-  "sitemap_alternate_links": true,
-  "force_sitemap_urls_crawling": true,
   "selectors": {
     "lvl0": {
-      "selector": "h1, .hero h1, .header h1, title",
+      "selector": "(//ul[contains(@class,'menu__list')]//a[contains(@class, 'menu__link menu__link--sublist menu__link--active')]/text() | //nav[contains(@class, 'navbar')]//a[contains(@class, 'navbar__link--active')]/text())[last()]",
+      "type": "xpath",
       "global": true,
-      "default_value": "My Site"
+      "default_value": "Documentation"
     },
-    "lvl1": "article h1, .markdown h1, .content h1, h1",
-    "lvl2": "article h2, .markdown h2, .content h2, h2",
-    "lvl3": "article h3, .markdown h3, .content h3, h3",
-    "lvl4": "article h4, .markdown h4, .content h4, h4",
-    "lvl5": "article h5, .markdown h5, .content h5, h5",
-    "lvl6": "article h6, .markdown h6, .content h6, h6",
-    "text": "article p, article li, .markdown p, .markdown li, .content p, .content li, p, li"
+    "lvl1": "header h1, article h1",
+    "lvl2": "article h2",
+    "lvl3": "article h3",
+    "lvl4": "article h4",
+    "lvl5": "article h5, article td:first-child",
+    "lvl6": "article h6",
+    "text": "article p, article li, article td:last-child"
   },
-  "strip_chars": " .,;:#",
   "custom_settings": {
     "attributesForFaceting": ["type", "lang", "language", "version", "docusaurus_tag"],
     "attributesToRetrieve": ["hierarchy", "content", "anchor", "url", "url_without_anchor", "type"],
