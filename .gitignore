@@ -8,7 +8,7 @@
 /logs
 
 # scripts
-/scripts
+# /scripts
 
 # Generated files
 .docusaurus
