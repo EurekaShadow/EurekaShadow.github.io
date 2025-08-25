@@ -12,7 +12,7 @@ const config = {
   },
 
   url: 'https://EurekaShadow.github.io',
-  baseUrl: '/EurekaShadow.github.io/',
+  baseUrl: '/',
 
   organizationName: 'EurekaShadow',
   projectName: 'EurekaShadow.github.io',

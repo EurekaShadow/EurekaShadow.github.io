@@ -126,7 +126,7 @@ function proceedWithDeployment(site) {
     console.log(`   node ./scripts/ssh-config-manager.js switch site1  # 切换到 site1`);
     console.log(`   node ./scripts/ssh-config-manager.js switch site2  # 切换到 site2`);
     console.log(`   site1: https://eureka12138github.github.io/`);
-    console.log(`   site2: https://www.eurekashadow.xin/`);
+    console.log(`   site2: https://eurekashadow.github.io/`);
   } catch (error) {
     console.error(`\n❌ ${site} 部署失败:`, error.message);
     process.exit(1);
