@@ -1,11 +1,10 @@
 {
   "index_name": "test-site",
-  "start_urls": [
-    "https://www.eurekashadow.xin/blog/Algorithm",
-    "https://www.eurekashadow.xin/blog/LeetCode11",
-    "https://www.eurekashadow.xin/blog/LeetCode12",
-    "https://www.eurekashadow.xin/docs/example"
+  "start_urls": ["https://www.eurekashadow.xin/"],
+  "sitemap_urls": ["https://www.eurekashadow.xin/sitemap.xml"],
   "force_sitemap_urls_crawling": true,
+  "js_render": true,
+  "js_wait": 2,
   "selectors": {
     "lvl0": "title",
     "lvl1": "h1",
