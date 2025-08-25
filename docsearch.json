@@ -1,8 +1,12 @@
 {
   "index_name": "test-site",
-  "start_urls": ["https://www.eurekashadow.xin/"],
+    "start_urls": [
+    "https://www.eurekashadow.xin/",
+    "https://www.eurekashadow.xin/docs/reflection-space",
+    "https://www.eurekashadow.xin/docs/Links",
+    "https://www.eurekashadow.xin/blog/LeetCode3"
+  ],
   "sitemap_urls": ["https://www.eurekashadow.xin/sitemap.xml"],
-  "sitemap_alternate_links": true,
   "selectors": {
     "lvl0": {
       "selector": "h1, .hero h1, .header h1, title",
