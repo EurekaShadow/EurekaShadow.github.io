@@ -397,5 +397,28 @@ import 'react-photo-view/dist/react-photo-view.css';
 这种问题往往是很棘手的，虽然在本次问题中，再不济我也可以通过重构图片组件复现功能。但是如果在某种情况下这种重构变得尤为困难，甚至说简直不可能的时候，
 想要排查这种 `隐式依赖` 就会变得 **极为困难！** 这次只是侥幸，记得图片组件似乎是要三个引入的，所以顺利将问题解决。日后应谨记此教训，在开发中，要尽量避免类似的错误。🥱
 
+---
+
+## Vercel Preview 部署错误问题解决
+
+### 问题描述
+当使用 `yarn deploy` 部署到 GitHub Pages 的 `gh-pages` 分支时，Vercel 会自动检测到分支变化并尝试创建 Preview 部署，但由于 `gh-pages` 分支只包含静态文件而没有 `package.json`，导致构建失败，GitHub Deployments 中显示 ❌preview 错误。
+
+### 问题原因
+- Vercel 默认会为所有分支推送创建 Preview 部署
+- `gh-pages` 分支是构建后的静态文件，缺少源代码和构建配置
+- Vercel 尝试运行 `npm run build` 失败
+
+### 解决方案
+
+***配置生产环境构建：**
+1. 进入 Vercel 项目 Settings → Git
+2. 在 Behavior 选项中选择 **"Only build production"**
+3. 确保生产分支设置为 `main`（或主分支）
+4. 保存设置
+
+
+
+
 
 
