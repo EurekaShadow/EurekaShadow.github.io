@@ -7,6 +7,9 @@
 # Runlogs
 /logs
 
+# scripts
+/scripts
+
 # Generated files
 .docusaurus
 .cache-loader
