@@ -11,7 +11,7 @@ const config = {
     v4: true,
   },
 
-  url: 'https://EurekaShadow.github.io',
+  url: 'https://www.EurekaShadow.xin',//网站最终部署的域名
   baseUrl: '/',
 
   organizationName: 'EurekaShadow',
@@ -72,7 +72,8 @@ const config = {
 		appId: 'AFEW9ZLEC6',
 		//  Search-Only API Key
 		apiKey: '2732fa24db8a85aaa29ee5c2e96be219',
-		indexName: 'test-site'
+		indexName: 'test-site',
+		searchPagePath: 'search'
       },
 	  //添加giscus评论
       giscus: {
