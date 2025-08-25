@@ -1,0 +1,318 @@
+---
+slug: LeetCode30
+title: 串联所有单词的子串
+authors: eurekaX
+tags: [哈希表,字符串,滑动窗口]
+---
+import { Highlight, Keyword, Light, B1, B2, B3, BH3, B3W, MyColor} from '@site/src/components/ForMDX';
+
+
+### <B2>[力扣面试经典——30题](https://leetcode.cn/problems/substring-with-concatenation-of-all-words/description/?envType=study-plan-v2&envId=top-interview-150 "力扣")</B2>
+
+<!-- truncate -->
+
+
+### 💡 参考代码：
+
+```c
+/**
+ * 找出字符串中所有由words数组中所有单词串联组成的子串的起始索引
+ * 
+ * @param s 输入字符串
+ * @param words 单词数组
+ * @param wordsSize 单词数组长度
+ * @param returnSize 返回结果数组的长度
+ * @return 包含所有起始索引的数组
+ */
+int* findSubstring(char* s, char** words, int wordsSize, int* returnSize) {
+    // 如果输入为空或无效，返回空数组
+    if (s == NULL || words == NULL || wordsSize == 0) {
+        *returnSize = 0;
+        return NULL;
+    }
+
+    int sLen = strlen(s);                           // 输入字符串长度
+    int wordLen = strlen(words[0]);                 // 每个单词的长度（题目保证所有单词等长）
+    int totalLen = wordLen * wordsSize;             // 所有单词连接后的总长度
+    
+    // 如果字符串长度小于所需总长度，不可能存在解
+    if (sLen < totalLen) {
+        *returnSize = 0;
+        return NULL;
+    }
+
+    // 分配结果数组空间
+    int* result = (int*)malloc(sizeof(int) * sLen);
+    *returnSize = 0;
+
+    // 创建单词频率映射表
+    // 使用两个哈希表：allWords记录words中每个单词的出现次数，currentWords记录当前窗口中每个单词的出现次数
+    char** allWords = (char**)malloc(sizeof(char*) * wordsSize);
+    int* allWordsCount = (int*)calloc(wordsSize, sizeof(int));
+    int uniqueWords = 0;
+
+    // 构建allWords和allWordsCount，统计words中不重复单词及其出现次数
+    for (int i = 0; i < wordsSize; i++) {
+        int found = 0;
+        // 检查当前单词是否已经在allWords中存在
+        for (int j = 0; j < uniqueWords; j++) {
+            if (strcmp(words[i], allWords[j]) == 0) {
+                allWordsCount[j]++;
+                found = 1;
+                break;
+            }
+        }
+        // 如果是新单词，则添加到allWords中
+        if (!found) {
+            allWords[uniqueWords] = (char*)malloc(sizeof(char) * (wordLen + 1));
+            strcpy(allWords[uniqueWords], words[i]);
+            allWordsCount[uniqueWords] = 1;
+            uniqueWords++;
+        }
+    }
+
+    // 为currentWords分配空间
+    int* currentWordsCount = (int*)calloc(uniqueWords, sizeof(int));
+
+    // 滑动窗口算法：按不同的起始位置进行遍历
+    // 由于每个单词长度固定为wordLen，所以只需要考虑wordLen种起始位置
+    for (int start = 0; start < wordLen; start++) {
+        // 重置当前窗口的单词计数
+        memset(currentWordsCount, 0, sizeof(int) * uniqueWords);
+        int left = start;           // 窗口左边界
+        int right = start;          // 窗口右边界
+        int count = 0;              // 当前窗口中匹配的单词数量
+
+        // 移动窗口右边界
+        while (right + wordLen <= sLen) {
+            // 提取当前要处理的单词
+            char* word = (char*)malloc(sizeof(char) * (wordLen + 1));
+            strncpy(word, s + right, wordLen);
+            word[wordLen] = '\0';
+            right += wordLen;
+
+            // 检查提取的单词是否在words中存在
+            int wordIndex = -1;
+            for (int i = 0; i < uniqueWords; i++) {
+                if (strcmp(word, allWords[i]) == 0) {
+                    wordIndex = i;
+                    break;
+                }
+            }
+
+            // 如果单词存在于words中
+            if (wordIndex != -1) {
+                currentWordsCount[wordIndex]++;
+                count++;
+
+                // 如果当前单词出现次数超过了应有的次数，则需要移动左边界缩小窗口
+                while (currentWordsCount[wordIndex] > allWordsCount[wordIndex]) {
+                    char* leftWord = (char*)malloc(sizeof(char) * (wordLen + 1));
+                    strncpy(leftWord, s + left, wordLen);
+                    leftWord[wordLen] = '\0';
+                    
+                    int leftWordIndex = -1;
+                    for (int i = 0; i < uniqueWords; i++) {
+                        if (strcmp(leftWord, allWords[i]) == 0) {
+                            leftWordIndex = i;
+                            break;
+                        }
+                    }
+                    
+                    currentWordsCount[leftWordIndex]--;
+                    count--;
+                    left += wordLen;
+                    free(leftWord);
+                }
+
+                // 如果当前窗口包含了所有单词，则记录起始位置
+                if (count == wordsSize) {
+                    result[(*returnSize)++] = left;
+                }
+            } else {
+                // 如果单词不存在于words中，则重置窗口
+                memset(currentWordsCount, 0, sizeof(int) * uniqueWords);
+                count = 0;
+                left = right;
+            }
+            
+            free(word);
+        }
+    }
+
+    // 释放分配的内存
+    for (int i = 0; i < uniqueWords; i++) {
+        free(allWords[i]);
+    }
+    free(allWords);
+    free(allWordsCount);
+    free(currentWordsCount);
+
+    return result;
+}
+```
+
+### 📖 总结：
+
+<details>
+<summary>点击展开题目总结</summary>
+# 🤔 串联所有单词的子串
+
+---
+
+## 1️⃣ 题目核心信息
+
+🎯 **功能描述**：在字符串`s`中找出所有由`words`数组中所有单词按任意顺序连接而成的子串的起始位置
+
+📥 **输入输出**：
+- **输入**：
+  - `s`：目标字符串
+  - `words`：单词数组，所有单词长度相同
+  - `wordsSize`：单词数组长度
+- **输出**：
+  - 返回包含所有起始索引的整数数组
+  - `returnSize`：返回数组的实际长度
+
+---
+
+## 2️⃣ 实现原理
+
+💡 **核心思路**：使用滑动窗口算法，通过维护单词频率映射来检查每个可能的子串
+
+📋 **实现步骤**：
+1. 统计`words`数组中每个不重复单词的出现频次，构建频率映射表
+2. 按照单词长度进行分组遍历（0到wordLen-1），避免重复计算
+3. 对每组使用滑动窗口技术，维护当前窗口内的单词频率
+4. 当窗口内单词频率与目标频率匹配时，记录起始位置
+
+---
+
+## 3️⃣ 关键点解析
+
+### 🎯 代码技巧
+- **滑动窗口优化**：按照单词长度分组遍历，避免不必要的重复检查
+- **频率映射表**：使用两个数组模拟哈希表，记录单词出现频次
+- **窗口边界调整**：当单词频次超过限制时，动态移动左边界
+
+## 4️⃣ 使用场景
+
+### ✅ 适用情况：
+- 在长文本中查找由固定词汇组合成的模式串
+- 需要匹配多个等长子串的连接情况
+- 模式匹配问题，其中模式由多个可重复元素组成
+
+### ⚠️ 前提条件：
+- 所有单词必须等长
+- 必须使用words中所有单词恰好一次
+- 单词可以按任意顺序排列
+
+## 5️⃣ 复杂度分析
+
+- ⏱️ 时间复杂度：O(n × m)，其中n是字符串`s`的长度，m是单词长度
+- 💾 空间复杂度：O(k)，其中k是不重复单词的数量
+
+## 6️⃣ 注意事项
+
+### 🚩 边界情况：
+- 输入字符串为空或words数组为空
+- 字符串长度小于所有单词连接后的总长度
+- words数组中存在重复单词
+
+### 💥 易错点：
+- 忘记处理words中重复单词的情况
+- 滑动窗口边界条件判断错误
+- 内存释放不完全导致内存泄漏
+
+## 7️⃣ 补充说明
+
+# 🔍 代码执行过程详解
+
+我们以示例1为例：`s = "barfoothefoobarman"`, `words = ["foo","bar"]`
+
+---
+
+## 📋 示例输入参数
+
+- `s = "barfoothefoobarman"` (长度为18)
+- `words = ["foo","bar"]` (wordsSize = 2)
+- 每个单词长度 `wordLen = 3`
+- 总长度 `totalLen = 3 * 2 = 6`
+
+---
+
+## 🔧 第一步：构建单词频率映射表
+
+```c
+// words = ["foo","bar"]
+// 处理后得到：
+uniqueWords = 2
+allWords = ["foo", "bar"]
+allWordsCount = [1, 1]  // 每个单词出现1次
+🔄 第二步：滑动窗口遍历
+📌 start = 0 的情况（起始位置为0，步长为3）
+初始状态：
+
+left = 0, right = 0
+currentWordsCount = [0, 0]
+count = 0
+第1次循环 (right = 0):
+c
+// 提取单词: s[0..2] = "bar"
+word = "bar"
+wordIndex = 1  // "bar"在allWords中索引为1
+
+currentWordsCount[1]++  // [0, 1]
+count = 1
+
+// count < wordsSize(2)，不满足条件
+第2次循环 (right = 3):
+c
+// 提取单词: s[3..5] = "foo"
+word = "foo"
+wordIndex = 0  // "foo"在allWords中索引为0
+
+currentWordsCount[0]++  // [1, 1]
+count = 2
+
+// count == wordsSize，满足条件
+// 记录结果: result[0] = left = 0
+*returnSize = 1
+第3次循环 (right = 6):
+c
+// 提取单词: s[6..8] = "the"
+word = "the"
+wordIndex = -1  // "the"不在words中
+
+// 重置窗口
+memset(currentWordsCount, 0, sizeof(int) * uniqueWords)
+count = 0
+left = right = 9
+📌 start = 1 的情况（起始位置为1，步长为3）
+略过中间无匹配的部分...
+
+📌 start = 2 的情况（起始位置为2，步长为3）
+略过中间无匹配的部分...
+
+📌 start = 0 的情况继续（找到第二个匹配）
+当窗口移动到合适位置时：
+
+某次循环状态：
+left = 9
+right = 15
+已处理单词："foo"(s[9..11])和"bar"(s[12..14])
+c
+currentWordsCount = [1, 1]  // "foo"和"bar"各出现1次
+count = 2  // 匹配了2个单词
+
+// count == wordsSize，满足条件
+// 记录结果: result[1] = left = 9
+*returnSize = 2
+✅ 最终结果
+```c
+result = [0, 9]
+*returnSize = 2
+```
+这与题目期望的输出一致：子串"barfoo"(起始位置0)和"foobar"(起始位置9)都是由["foo","bar"]中所有单词连接而成。
+
+
+</details>

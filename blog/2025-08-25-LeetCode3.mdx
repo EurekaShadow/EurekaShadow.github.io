@@ -1,0 +1,214 @@
+---
+slug: LeetCode3
+title: 无重复字符的最长子串
+authors: eurekaX
+tags: [哈希表,字符串,滑动窗口]
+---
+import { Highlight, Keyword, Light, B1, B2, B3, BH3, B3W, MyColor} from '@site/src/components/ForMDX';
+
+
+### <B2>[力扣面试经典——3题](https://leetcode.cn/problems/longest-substring-without-repeating-characters/description/?envType=study-plan-v2&envId=top-interview-150 "力扣")</B2>
+
+<!-- truncate -->
+
+
+### 💡 参考代码：
+
+```c
+/**
+ * 找出字符串中不含有重复字符的最长子串的长度
+ * 使用滑动窗口 + 哈希表的方法
+ * 
+ * @param s 输入字符串
+ * @return 不含有重复字符的最长子串的长度
+ */
+int lengthOfLongestSubstring(char* s) {
+    // 处理边界情况：空字符串
+    if (s == NULL || strlen(s) == 0) {
+        return 0;
+    }
+    
+    int len = strlen(s);                    // 字符串长度
+    int maxLen = 0;                         // 最长子串长度
+    int left = 0;                           // 滑动窗口左边界
+    int charIndex[128];                     // 字符最后出现位置的索引数组（ASCII码范围）
+    
+    // 初始化字符索引数组为-1，表示字符尚未出现
+    for (int i = 0; i < 128; i++) {
+        charIndex[i] = -1;
+    }
+    
+    // 滑动窗口右边界向右移动
+    for (int right = 0; right < len; right++) {
+        char currentChar = s[right];        // 当前处理的字符
+        
+        // 如果当前字符在当前窗口中已经出现过
+        // 即：字符最后出现的位置 >= 窗口左边界
+        if (charIndex[currentChar] >= left) {
+            // 移动左边界到重复字符上次出现位置的下一位
+            // 这样可以保证窗口内没有重复字符
+            left = charIndex[currentChar] + 1;
+        }
+        
+        // 更新当前字符的最新位置
+        charIndex[currentChar] = right;
+        
+        // 计算当前窗口长度并更新最大长度
+        int currentLen = right - left + 1;
+        if (currentLen > maxLen) {
+            maxLen = currentLen;
+        }
+    }
+    
+    return maxLen;
+}
+```
+
+### 📖 总结：
+
+<details>
+<summary>点击展开题目总结</summary>
+
+## 🤔 无重复字符的最长子串
+
+---
+
+## 1️⃣ 题目核心信息
+
+🎯 **功能描述**：给定一个字符串，找出其中不含有重复字符的最长子串的长度
+
+📥 **输入输出**：
+- **输入**：`char* s` - 输入字符串
+- **输出**：返回不含有重复字符的最长子串的长度（整数）
+
+---
+
+## 2️⃣ 实现原理
+
+💡 **核心思路**：使用滑动窗口算法配合哈希表记录字符最后出现位置，动态维护一个无重复字符的窗口
+
+📋 **实现步骤**：
+1. 初始化滑动窗口左右边界和字符索引数组
+2. 遍历字符串，将右边界逐步右移
+3. 对于每个字符，检查是否在当前窗口内已经出现过
+4. 如果出现重复，则移动左边界至重复字符上次出现位置的下一位
+5. 持续更新最大长度
+
+---
+
+## 3️⃣ 关键点解析
+
+### 🎯 代码技巧
+- **滑动窗口优化**：通过记录字符最后出现位置，直接跳转左边界，避免逐步移动
+- **ASCII索引数组**：使用固定大小数组代替哈希表，提高访问效率
+- **边界处理**：通过比较字符位置与窗口左边界判断是否在当前窗口内重复
+
+## 4️⃣ 使用场景
+
+### ✅ 适用情况：
+- 查找满足特定条件的连续子序列
+- 需要维护窗口内元素唯一性的场景
+- 字符串模式匹配问题
+
+### ⚠️ 前提条件：
+- 输入为ASCII字符字符串
+- 需要连续子串而非子序列
+
+## 5️⃣ 复杂度分析
+
+- ⏱️ 时间复杂度：O(n)，其中n是字符串长度，每个字符最多被访问两次
+- 💾 空间复杂度：O(1)，使用固定大小的字符索引数组(128个ASCII字符)
+
+## 6️⃣ 注意事项
+
+### 🚩 边界情况：
+- 空字符串或NULL指针
+- 单字符字符串
+- 全部字符相同或全部不同
+
+### 💥 易错点：
+- 判断字符是否在当前窗口内重复的条件错误
+- 左边界移动位置计算错误
+- 忘记初始化字符索引数组
+
+```
+# 🔍 代码执行过程详解
+
+我们以示例1为例：`s = "abcabcbb"`
+
+---
+
+## 📋 示例输入参数
+
+- `s = "abcabcbb"` (长度为8)
+- 目标：找出不含有重复字符的最长子串的长度
+
+---
+
+## 🔧 初始化阶段
+
+```c
+len = 8
+maxLen = 0
+left = 0
+charIndex[128] = {-1, -1, ..., -1}  // 全部初始化为-1
+🔄 遍历过程详解
+第1步：right = 0, currentChar = 'a'
+字符 'a' 的ASCII值为97
+charIndex[97] = -1 < left(0)  // 字符'a'未在当前窗口出现过
+更新 charIndex[97] = 0
+当前窗口: "a", 长度 = 0 - 0 + 1 = 1
+maxLen = max(0, 1) = 1
+第2步：right = 1, currentChar = 'b'
+字符 'b' 的ASCII值为98
+charIndex[98] = -1 < left(0)  // 字符'b'未在当前窗口出现过
+更新 charIndex[98] = 1
+当前窗口: "ab", 长度 = 1 - 0 + 1 = 2
+maxLen = max(1, 2) = 2
+第3步：right = 2, currentChar = 'c'
+字符 'c' 的ASCII值为99
+charIndex[99] = -1 < left(0)  // 字符'c'未在当前窗口出现过
+更新 charIndex[99] = 2
+当前窗口: "abc", 长度 = 2 - 0 + 1 = 3
+maxLen = max(2, 3) = 3
+第4步：right = 3, currentChar = 'a'
+字符 'a' 的ASCII值为97
+charIndex[97] = 0 >= left(0)  // 字符'a'在当前窗口出现过！
+移动左边界: left = charIndex[97] + 1 = 0 + 1 = 1
+更新 charIndex[97] = 3
+当前窗口: "bca", 长度 = 3 - 1 + 1 = 3
+maxLen = max(3, 3) = 3 (保持不变)
+第5步：right = 4, currentChar = 'b'
+字符 'b' 的ASCII值为98
+charIndex[98] = 1 >= left(1)  // 字符'b'在当前窗口出现过！
+移动左边界: left = charIndex[98] + 1 = 1 + 1 = 2
+更新 charIndex[98] = 4
+当前窗口: "cab", 长度 = 4 - 2 + 1 = 3
+maxLen = max(3, 3) = 3 (保持不变)
+第6步：right = 5, currentChar = 'c'
+字符 'c' 的ASCII值为99
+charIndex[99] = 2 >= left(2)  // 字符'c'在当前窗口出现过！
+移动左边界: left = charIndex[99] + 1 = 2 + 1 = 3
+更新 charIndex[99] = 5
+当前窗口: "abc", 长度 = 5 - 3 + 1 = 3
+maxLen = max(3, 3) = 3 (保持不变)
+第7步：right = 6, currentChar = 'b'
+字符 'b' 的ASCII值为98
+charIndex[98] = 4 >= left(3)  // 字符'b'在当前窗口出现过！
+移动左边界: left = charIndex[98] + 1 = 4 + 1 = 5
+更新 charIndex[98] = 6
+当前窗口: "cb", 长度 = 6 - 5 + 1 = 2
+maxLen = max(3, 2) = 3 (保持不变)
+第8步：right = 7, currentChar = 'b'
+字符 'b' 的ASCII值为98
+charIndex[98] = 6 >= left(5)  // 字符'b'在当前窗口出现过！
+移动左边界: left = charIndex[98] + 1 = 6 + 1 = 7
+更新 charIndex[98] = 7
+当前窗口: "b", 长度 = 7 - 7 + 1 = 1
+maxLen = max(3, 1) = 3 (保持不变)
+✅ 最终结果
+函数返回 maxLen = 3
+
+这与题目期望一致：最长无重复字符子串是"abc"，长度为3。
+```
+</details>
