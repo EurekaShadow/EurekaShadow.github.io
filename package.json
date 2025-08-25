@@ -15,8 +15,6 @@
     "add-meta": "node add-metadata.js",
     "update-posts": "node scripts/update-recent-posts.js",
     "prestart": "yarn update-posts",
-    "prebuild": "yarn update-posts",
-    "predeploy": "yarn update-posts",
     "deploy-site": "node scripts/deploy-site.js site2",
 	"analyze": "node scripts/comprehensive-analysis.js",
 	"process-img": "node scripts/process-images.js",
