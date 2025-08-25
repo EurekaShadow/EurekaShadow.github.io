@@ -19,7 +19,8 @@
     "predeploy": "yarn update-posts",
     "deploy-site": "node scripts/deploy-site.js site2",
 	"analyze": "node scripts/comprehensive-analysis.js",
-	"process-img": "node scripts/process-images.js"
+	"process-img": "node scripts/process-images.js",
+	"switch-ssh": "node ./scripts/ssh-config-manager.js switch site2"
   },
   "dependencies": {
     "@docusaurus/core": "3.8.1",
