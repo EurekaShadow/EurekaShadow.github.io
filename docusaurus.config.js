@@ -11,8 +11,8 @@ const config = {
     v4: true,
   },
 
-  url: 'https://www.eurekashadow.xin/',
-  baseUrl: '/',
+  url: 'https://EurekaShadow.github.io',
+  baseUrl: '/EurekaShadow.github.io/',
 
   organizationName: 'EurekaShadow',
   projectName: 'EurekaShadow.github.io',
@@ -75,7 +75,7 @@ const config = {
         lang: 'zh-CN',
       },
       
-      image: 'img/My-temp-social-card.jpg',
+      image: 'img/docusaurus-social-card.jpg',
       navbar: {
         title: '我的网站',
         logo: {
