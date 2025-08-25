@@ -7,6 +7,8 @@ tags: [ffmpeg,图片]
 
 import { Highlight, Keyword, Light, B1, B2, B3, BH3, B3W, MyColor} from '@site/src/components/ForMDX';
 import CardImg from '@site/src/components/CardImg';
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
 
 ## <B2> process-images.js 脚本</B2>
 
@@ -29,16 +31,29 @@ import CardImg from '@site/src/components/CardImg';
 - 规范图片命名，避免重复文件名
 
 ## ▶️ 用法
+
+<Tabs>
+
+  <TabItem value="node" label="node">
 ```bash title="bash"
 # 运行脚本
-node process-images.js
-
+node scripts/process-images.js
 # 按提示操作：
 # 1. 选择要处理的图片目录
 # 2. 输入文件名前缀（直接回车跳过重命名）
 # 3. 选择是否生成日志文件
 # 4. 确认开始处理
 ```
+  </TabItem>
+
+  <TabItem value="yarn" label="yarn">
+```bash title="bash"
+yarn process-img
+```
+  </TabItem>
+
+</Tabs>
+
 ## ⚠️ 注意事项
 - 需要系统已安装ffmpeg
 - 默认处理 static/img 目录下的图片

@@ -18,7 +18,8 @@
     "prebuild": "yarn update-posts",
     "predeploy": "yarn update-posts",
     "deploy-site": "node scripts/deploy-site.js site2",
-	"analyze": "node scripts/comprehensive-analysis.js"
+	"analyze": "node scripts/comprehensive-analysis.js",
+	"process-img": "node scripts/process-images.js"
   },
   "dependencies": {
     "@docusaurus/core": "3.8.1",
