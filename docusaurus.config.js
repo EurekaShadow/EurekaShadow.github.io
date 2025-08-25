@@ -73,7 +73,8 @@ const config = {
 		//  Search-Only API Key
 		apiKey: '2732fa24db8a85aaa29ee5c2e96be219',
 		indexName: 'test-site',
-		searchPagePath: 'search'
+		searchPagePath: 'search',
+		contextualSearch: true
       },
 	  //添加giscus评论
       giscus: {
