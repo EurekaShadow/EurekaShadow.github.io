@@ -4,6 +4,7 @@ sidebar_position: 1.1
 description: 这是我的测试页1！
 ---
 import { Highlight, Keyword, Light, B1, B2, B3, BH3, B3W, MyColor} from '@site/src/components/ForMDX';
+import CardImg from '@site/src/components/CardImg';
 
 ### testpage1
 
@@ -44,6 +45,8 @@ ssh-keygen -t ed25519 -C "2560291241@qq.com" -f ~/.ssh/id_E1H
 ```
 
 这是一段测试文字，用于测试 `update-recent-posts.js`
+
+<p><CardImg src="/img/Gif/gif-example.gif" alt="gif示例图" isCenter={true} /></p>
 
 
 
