@@ -11,8 +11,8 @@ const config = {
     v4: true,
   },
         //https://eurekashadow.github.io/
-		//https://eurekashadow.xin/
-  url: 'https://eurekashadow.xin/',//网站最终部署的域名
+		//https://www.eurekashadow.xin/
+  url: 'https://www.eurekashadow.xin/',//网站最终部署的域名
   baseUrl: '/',
 
   organizationName: 'EurekaShadow',
