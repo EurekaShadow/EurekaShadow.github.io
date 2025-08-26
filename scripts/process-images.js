@@ -255,7 +255,7 @@ function getImageFiles(dirPath) {
             if (!fs.statSync(fullPath).isFile()) return false;
             
             const ext = path.extname(file).toLowerCase();
-            return ['.jpg', '.jpeg', '.png', '.gif', '.bmp', '.webp'].includes(ext);
+            return ['.jpg', '.jpeg', '.png', '.bmp', '.webp'].includes(ext); // 移除了 .gif
         });
     } catch (error) {
         return [];
@@ -273,7 +273,7 @@ function getDirectoryStats(dirPath) {
             const fullPath = path.join(dirPath, file);
             if (fs.statSync(fullPath).isFile()) {
                 const ext = path.extname(file).toLowerCase();
-                if (['.jpg', '.jpeg', '.png', '.gif', '.bmp', '.webp'].includes(ext)) {
+                if (['.jpg', '.jpeg', '.png', '.bmp', '.webp'].includes(ext)) { // 移除了 .gif
                     totalSize += fs.statSync(fullPath).size;
                     imageCount++;
                 }
@@ -398,7 +398,8 @@ async function processImages(targetDir, prefix, renameEnabled = true, logFile = 
             // 检查是否为文件
             if (!fs.statSync(fullPath).isFile()) continue;
             
-            if (['.png', '.gif', '.bmp', '.webp'].includes(ext)) {
+            // 移除了 .gif 的处理
+            if (['.png', '.bmp', '.webp'].includes(ext)) {
                 const newName = path.basename(file, ext) + '.jpg';
                 const newFullPath = path.join(targetDir, newName);
                 
