@@ -1,8 +1,8 @@
 ---
 slug: /Issues
-title: 遇到的问题
+title: Issues Encountered
 sidebar_position: 3
-description: 这个页面主要记录在部署文件站中遇到的问题以及解决方法。
+description: This page documents the problems encountered during the deployment of the documentation site and their solutions.
 ---
 
 import { Highlight, Keyword, Light, B1, B2, B3, BH3, B3W, MyColor} from '@site/src/components/ForMDX';
@@ -10,113 +10,109 @@ import CardImg from '@site/src/components/CardImg';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-## <B2>部署延迟</B2>
+## <B2>Deployment Delay</B2>
 
-这是本地经过 `yarn deploy` 后显示的情况，可见 `Done in ...`。但是真的部署成功了吗？
+This is what appears locally after running `yarn deploy`, showing `Done in ...`. But is the deployment really successful?
 
-<p><CardImg src="/img/Issues/Deploy_Fake_Done.jpg" alt="实际尚未部署成功" isCenter={true} isBoxed={true} /></p>
+<p><CardImg src="/img/Issues/Deploy_Fake_Done.jpg" alt="Deployment not actually successful" isCenter={true} isBoxed={true} /></p>
 
-之后点击 `https://eurekashadow.github.io/` 或者域名 `https://www.eurekashadow.xin/`,会出现下面这个页面：
+Afterward, when visiting `https://eurekashadow.github.io/` or the domain `https://www.eurekashadow.xin/`, the following page appears:
 
 <p><CardImg src="/img/Issues/After_Dploy.jpg" alt="There isn't a Git Pages site here." isCenter={true} isBoxed={true} /></p>
 
-这是可能是因为：GitHub Actions 使用的免费 CI/CD 资源（Runner）是共享的，在全球用户<Highlight> 高峰期 </Highlight>时出现了<Highlight> 排队现象 </Highlight>。
-打开`Github` 中的 `Actions` 可以看到正在排队状态，所以慢慢等吧。过一段时间，就会部署成功了：
-<p><CardImg src="/img/Issues/Real_Deploy_Done.jpg" alt="实际尚未部署成功" isCenter={true} isBoxed={true} /></p>
+This might be because the free CI/CD resources (Runners) used by GitHub Actions are shared globally, and during <Highlight>peak usage periods</Highlight>, there may be <Highlight>queuing issues</Highlight>.
+By checking the `Actions` tab in `GitHub`, you can see the deployment is in a queued state, so just wait patiently. After some time, the deployment will succeed:
+<p><CardImg src="/img/Issues/Real_Deploy_Done.jpg" alt="Deployment actually successful" isCenter={true} isBoxed={true} /></p>
 
-经过后续使用发现，**修复CNAME问题后**，再也没有出现这种所谓的部署延时的问题，也许根本不是什么<Highlight> 高峰期 </Highlight>导致的，罪魁祸首可能是原来**错误的
-CNAME.txt**！
+After further use, it was discovered that **after fixing the CNAME issue**, this so-called deployment delay problem no longer occurred. Perhaps it wasn’t due to <Highlight>peak usage periods</Highlight> at all—the real culprit might have been the **incorrect CNAME.txt** file!
 
 ---
 
-## <B2>关于CNAME</B2>
+## <B2>About CNAME</B2>
 
-我看这篇[文章](https://xxx.zhangyuqi.top/docs/MyWebsite/StudyBuildWebsite#6-%E8%87%AA%E5%AE%9A%E4%B9%89%E5%9F%9F%E5%90%8D)的时候，ta说要在static目录下创建一个
-CNAME.txt的空白文件。
+While reading this [article](https://xxx.zhangyuqi.top/docs/MyWebsite/StudyBuildWebsite#6-%E8%87%AA%E5%AE%9A%E4%B9%89%E5%9F%9F%E5%90%8D), the author mentioned creating a blank `CNAME.txt` file in the `static` directory.
 
-现在我遇到的问题是，每次本地显示部署完成后Github端总是 **自定义域名丢失** 像这样：（之前我已经填过域名了）
-<p><CardImg src="/img/Issues/domain_issue1.jpg" alt="域名被吞" isCenter={true} isBoxed={true} /></p>
+The issue I encountered was that every time the local deployment completed, the **custom domain would disappear** on GitHub's end, like this: (even though I had already entered the domain earlier)
+<p><CardImg src="/img/Issues/domain_issue1.jpg" alt="Domain missing" isCenter={true} isBoxed={true} /></p>
 
 <details>
-<summary>问题分析</summary>
+<summary>Problem Analysis</summary>
 
-重新填写域名：
-<p><CardImg src="/img/Issues/domain_issue2.jpg" alt="重新填写域名" isCenter={true} isBoxed={true} /></p>
+Re-entering the domain:
+<p><CardImg src="/img/Issues/domain_issue2.jpg" alt="Re-entering the domain" isCenter={true} isBoxed={true} /></p>
 
-填写域名后会再次触发Github Actions：
-<p><CardImg src="/img/Issues/deploy_done_in26s.jpg" alt="真正部署成功" isCenter={true} isBoxed={true} /></p>
+After entering the domain, GitHub Actions is triggered again:
+<p><CardImg src="/img/Issues/deploy_done_in26s.jpg" alt="Deployment actually successful" isCenter={true} isBoxed={true} /></p>
 
-这时候我打开Github仓库，查看 `git-pages` 分支，发现它又构建了一个 `CNAME` 文件（如下图，无文件格式），里面的内容是我的域名 `www.eurekashadow.xin` 
-我推测是在Github上重新添加 `Custom domain` 时自动构建了这个CNAME文件。那么之前提到的 `CNAME.txt` 是不是多余的呢？或者说实际上应该构建的是 `CNAME` 然后在里面加上域名 `www.eurekashadow.xin` 呢？
-<p><CardImg src="/img/Issues/About_CNAME1.jpg" alt="CNAME是多余的？" isCenter={true} isBoxed={true} /></p>
+At this point, when I checked the `git-pages` branch in the GitHub repository, I noticed it had generated a `CNAME` file (as shown below, with no file extension), containing my domain `www.eurekashadow.xin`.
+I speculate that this `CNAME` file was automatically generated when re-adding the `Custom domain` on GitHub. So, was the previously mentioned `CNAME.txt` unnecessary? Or should the correct approach have been to create a `CNAME` file and add the domain `www.eurekashadow.xin` inside it?
+<p><CardImg src="/img/Issues/About_CNAME1.jpg" alt="Is CNAME redundant?" isCenter={true} isBoxed={true} /></p>
 
-`CANME` 文件中内容：
-<p><CardImg src="/img/Issues/About_CNAME2.jpg" alt="CNAME是多余的？" isCenter={true} isBoxed={true} /></p>
+Content of the `CNAME` file:
+<p><CardImg src="/img/Issues/About_CNAME2.jpg" alt="Is CNAME redundant?" isCenter={true} isBoxed={true} /></p>
 
 </details>
 
-### <B3>CNAME问题结论</B3>
+### <B3>CNAME Issue Conclusion</B3>
 
-经测试发现，`CNAME.txt` 确实是 **多余的** ！正确的做法：
+After testing, it was confirmed that `CNAME.txt` is indeed **redundant**! The correct approach is:
 
 <details>
-<summary>创建**无文件格式的**CNAME</summary>
+<summary>Create a **no-extension** CNAME file</summary>
 
-<p><CardImg src="/img/Issues/Creat_CNAME1.jpg" alt="步骤1" isCenter={true} isBoxed={true} /></p>
-<p><CardImg src="/img/Issues/Creat_CNAME2.jpg" alt="步骤2" isCenter={true} isBoxed={true} /></p>
-<p><CardImg src="/img/Issues/Creat_CNAME3.jpg" alt="步骤3" isCenter={true} isBoxed={true} /></p>
+<p><CardImg src="/img/Issues/Creat_CNAME1.jpg" alt="Step 1" isCenter={true} isBoxed={true} /></p>
+<p><CardImg src="/img/Issues/Creat_CNAME2.jpg" alt="Step 2" isCenter={true} isBoxed={true} /></p>
+<p><CardImg src="/img/Issues/Creat_CNAME3.jpg" alt="Step 3" isCenter={true} isBoxed={true} /></p>
 
 </details>
 
-在新建的 `CNAME` 里面加入自己的域名：
-<p><CardImg src="/img/Issues/Modified_CNAME.jpg" alt="加入域名" isCenter={true} isBoxed={true} /></p>
+Add your domain to the newly created `CNAME` file:
+<p><CardImg src="/img/Issues/Modified_CNAME.jpg" alt="Adding the domain" isCenter={true} isBoxed={true} /></p>
 
-之后就可以正常部署了：
-
-
+After this, the deployment should proceed normally:
 
 ``` bash
 yarn deploy
 ```
 
 
-Github上的域名不会丢失：
-<p><CardImg src="/img/Issues/CNAME_Issue_Fixed.jpg" alt="CNAME问题已解决" isCenter={true} isBoxed={true} /></p>
+The domain names on Github will not be lost.：
+<p><CardImg src="/img/Issues/CNAME_Issue_Fixed.jpg" alt="The CNAME issue has been resolved." isCenter={true} isBoxed={true} /></p>
 
 ---
 
-## <B2>高亮与行号冲突（未解决）</B2>
+## <B2>Highlighting conflicts with line numbers (not resolved)</B2>
 
-这是我的 docusaurus.config.js 配置：
+This is my docusaurus.config.js configuration:
 
 ```js title="docusaurus.config.js"
 prism: {
-  // 代码高亮主题 - 浅色主题使用 GitHub 风格
+  // Code highlighting theme - Light theme uses GitHub style
   theme: prismThemes.github,
-  // 代码高亮主题 - 深色主题使用 Dracula 风格
+  // Code highlighting theme - Dark theme uses the Dracula style
   darkTheme: prismThemes.dracula,
   
-  // 自定义代码高亮标记配置
+  // Custom code highlighting configuration
   magicComments: [
-	// 高亮标记 - 用于突出显示重要代码行
+	// Highlighting - Used to emphasize important code lines
 	{
-	  className: 'code-block-highlighted-line',  // CSS 类名
-	  line: 'highlight-next-line',               // 行内标记
-	  block: { start: 'highlight-start', end: 'highlight-end' }  // 块标记
+	  className: 'code-block-highlighted-line',  // CSS class name
+	  line: 'highlight-next-line',               // Inline markup
+	  block: { start: 'highlight-start', end: 'highlight-end' }  // Block tag
 	},
-	// 新增代码标记 - 用于标识新增的代码行
+	// New code marker - Used to identify newly added code lines
 	{
 	  className: 'code-block-add-line',
 	  line: 'highlight-add-line',
 	  block: { start: 'highlight-add-start', end: 'highlight-add-end' }
 	},
-	// 更新代码标记 - 用于标识修改的代码行
+	// Update code markers - Used to identify modified code lines
 	{
 	  className: 'code-block-update-line',
 	  line: 'highlight-update-line',
 	  block: { start: 'highlight-update-start', end: 'highlight-update-end' }
 	},
-	// 错误代码标记 - 用于标识有问题的代码行
+	// Error code marker - Used to identify problematic code lines
 	{
 	  className: 'code-block-error-line',
 	  line: 'highlight-error-line',
@@ -124,49 +120,49 @@ prism: {
 	},
   ],
   
-  // 额外支持的语言（超出默认支持的语言列表）
-  // 默认支持的语言列表参考：https://github.com/FormidableLabs/prism-react-renderer/blob/master/packages/generate-prism-languages/index.ts#L9-L23
-  // Prism.js 完整支持语言列表：https://prismjs.com/#supported-languages
+  // Additional supported languages (beyond the default list of supported languages)
+  // Default supported language list reference:https://github.com/FormidableLabs/prism-react-renderer/blob/master/packages/generate-prism-languages/index.ts#L9-L23
+  // Prism.js Complete list of supported languages:https://prismjs.com/#supported-languages
   additionalLanguages: [
-	'java',   // Java 编程语言
-	'json',   // JSON 数据格式
+	'java',   // Java programming language
+	'json',   // JSON data format
 	'c',
   ],
 },
 ```
 
-这是关于 custom.css 配置：
+This is about the configuration of custom.css:
 ```css title="custom.css"
-/* 代码高亮行的样式 */
+/* Style of the code highlighted lines */
 .code-block-highlighted-line {
-  background-color: rgba(255, 255, 0, 0.2); /* 黄色高亮 */
+  background-color: rgba(255, 255, 0, 0.2); /* Yellow Highlight */
   display: block;
-  margin: 0; /* 避免布局问题 */
-  padding: 0 1em; /* 使用 em 单位更灵活 */
+  margin: 0; /* Avoid layout issues */
+  padding: 0 1em; /* Using em units is more flexible */
 }
 
 .code-block-add-line {
-  background-color: rgba(0, 255, 0, 0.2); /* 绿色新增 */
+  background-color: rgba(0, 255, 0, 0.2); /* New Green Feature */
   display: block;
   margin: 0;
   padding: 0 1em;
 }
 
 .code-block-update-line {
-  background-color: rgba(0, 0, 255, 0.2); /* 蓝色更新 */
+  background-color: rgba(0, 0, 255, 0.2); /* Blue Update */
   display: block;
   margin: 0;
   padding: 0 1em;
 }
 
 .code-block-error-line {
-  background-color: rgba(255, 0, 0, 0.2); /* 红色错误 */
+  background-color: rgba(255, 0, 0, 0.2); /* Red Error */
   display: block;
   margin: 0;
   padding: 0 1em;
 }
 
-/* 深色主题下的样式 */
+/* Styles for dark theme */
 html[data-theme='dark'] .code-block-highlighted-line {
   background-color: rgba(255, 255, 0, 0.2);
 }
@@ -184,89 +180,80 @@ html[data-theme='dark'] .code-block-error-line {
 }
 ```
 
-这是高亮和行号同时使用的方法：
+This is the method of using both highlighting and line numbers:
 ```
 \```c showLineNumbers
 #include <stdio.h>
 
 int main() {
-    //高亮下一行( highlight-next-line)
+    //Highlight the next line( highlight-next-line)
     printf("Hello, World!\n");
     
-    //高亮开始( highlight-start)
+    //Highlighting begins( highlight-start)
     int x = 10;
     int y = 20;
     int sum = x + y;
-    //高亮结束( highlight-end)
+    //Highlighting ends( highlight-end)
     
     return 0;
 }
 \```
 ```
-这是显示冲突的情况：
-<p><CardImg src="/img/Issues/HighlightConflict.jpg" alt="CNAME问题已解决" isCenter={true} isBoxed={true} /></p>
+This is an example of a conflict situation:
+<p><CardImg src="/img/Issues/HighlightConflict.jpg" alt="The CNAME issue has been resolved." isCenter={true} isBoxed={true} /></p>
 
-高亮、行号可以**单独使用**，但两者**同时使用**就会造成**冲突**，[别人](https://imroc.cc/note/docusaurus/codeblock#%E9%AB%98%E4%BA%AE%E5%A4%9A%E8%A1%8C/)都可以正常使用，为什么我就不行了？暂时未排查出原因！
-
-暂时的妥协方法就是两者**分开使用**了。（20250919）
+Highlighting and line numbers can be used **separately**, but using both together will cause **conflicts**. [Others](https://imroc.cc/note/docusaurus/codeblock#%E9%AB%98%E4%BA%AE%E5%A4%9A%E8%A1%8C/) can all use them normally. Why can't I? The reason has not been identified yet! 
+The temporary compromise solution is to use the two separately. (20250919)
 
 ---
 
-## <B2>📦 node_modules 体积过大导致卡顿问题</B2>
+## <B2>📦 The excessive size of node_modules causes lag issues</B2>
 
-### 🎯 问题现象
+### 🎯 Problem Phenomenon 
 
-在本地开发环境中观察到明显的性能问题：
+Obvious performance issues were observed in the local development environment: 
 
-- 当 `node_modules` 文件夹体积过大时（如达到 17GB），本地运行的网站出现严重卡顿
-- 页面间跳转缓慢，通常需要 3 秒以上才能完成导航
-- 开发服务器编译时间显著增加
-- 整体开发体验下降，影响工作效率
+- When the size of the `node_modules` folder becomes excessively large (reaching 17GB), the locally running website experiences severe lag.
+- Navigation between pages is slow, usually taking more than 3 seconds to complete.
+- The compilation time of the development server significantly increases.
+- The overall development experience deteriorates, affecting work efficiency.
 
-### 🔧 问题解决
+### 🔧 Issue resolved
 
-通过清理 `node_modules` 文件夹解决此问题：
+Solve this Issue by cleaning the `node_modules` folder:
 
 ```bash title="bash"
-npm install rimraf -g                           # 安装 rimraf 工具
-rimraf node_modules                             # 删除 node_modules
-npm cache clean --force                         # 清除缓存
-# npm config set registry https://registry.npmmirror.com/  # 使用新淘宝镜像（可选）
-npm install                                     # 重新安装依赖		
+npm install rimraf -g                           # Install the rimraf tool
+rimraf node_modules                             # Delete "node_modules"
+npm cache clean --force                         # clear cache
+# npm config set registry https://registry.npmmirror.com/  # Use the new Taobao mirror (optional)
+npm install                                     # Reinstall dependencies		
 ```		
 
-### ✨ 清理后的效果
+### ✨ The effect after cleaning 
+- The size of `node_modules` has been reduced from 17GB to approximately 200MB.
+- The compilation speed of the project has significantly improved.
+- Page transitions are completed almost instantly.
+- The local development environment runs smoothly.
 
-- `node_modules` 体积从 17GB 减少到约 200MB
-- 项目编译速度显著提升
-- 页面跳转几乎瞬间完成
-- 本地开发环境运行流畅
+### 💡 Why is cleaning safe? 
+1. **Dependency Declaration Mechanism**
+- All the actual dependencies used by the project are clearly recorded in the `package.json` file
+- `node_modules` is merely the "instantiation" result of these declared dependencies
+- When reinstalling, all the necessary dependencies will be restored according to the `package.json` file 
+2. **Design Principles of npm/yarn**
+- The package manager ensures that all the dependencies specified in the `package.json` file are correctly installed.
+- It will not omit any explicitly declared dependencies during reinstallation.
 
-### 💡 为什么清理是安全的
+### 📝 Conclusion of the issue 
+The excessive size of `node_modules` can significantly affect the performance of the local development environment. Regular cleaning is an effective method to maintain the efficient operation of the development environment. This issue is particularly prominent in large projects and should be carried out as a routine maintenance task. 
+### ⚠️ Important Update (Further Observation) 
+Further practice has revealed that the sluggishness of the development environment may have multiple causes: 
+1. `node_modules` size issue (This section mainly discusses)
+2. Docusaurus build cache issue (This might be **more important**) 
+If merely cleaning the `node_modules` directory doesn't yield significant results, it is recommended to try clearing the Docusaurus build cache.
 
-1. **依赖声明机制**
-   - 所有项目实际使用的依赖都明确记录在 `package.json` 文件中
-   - `node_modules` 只是这些声明依赖的"实例化"结果
-   - 重新安装时会根据 `package.json` 恢复所有必需依赖
-
-2. **npm/yarn 的设计原则**
-   - 包管理器会确保 `package.json` 中声明的所有依赖都被正确安装
-   - 不会在重新安装时遗漏任何明确声明的依赖
-
-### 📝 问题结论
-
-`node_modules` 体积过大会显著影响本地开发环境性能，定期清理是保持开发环境高效运行的有效方法。此问题在大型项目中尤为明显，应作为常规维护工作来执行。
-
-### ⚠️ 重要补充（后续观察）
-
-经过进一步实践发现，开发环境卡顿可能有多个原因：
-
-1. `node_modules` 体积问题（本小节主要讨论）
-2. Docusaurus 构建缓存问题（可能**更重要**）
-
-如果仅清理 `node_modules` 效果不明显，建议尝试清理 Docusaurus 构建缓存。
-
-### 🚀 真正有效的解决方案
+### 🚀 A truly effective solution
 
 <Tabs>
   <TabItem value="yarn" label="yarn">
@@ -282,141 +269,139 @@ npm install                                     # 重新安装依赖
   </TabItem>  
 </Tabs>
 
-这表明开发环境卡顿主要由 Docusaurus 构建缓存和开发服务器状态引起，而非 node_modules 体积问题。不过，定期清理不必要的依赖仍然很有必要，可以有效减少磁盘空间浪费。
+This indicates that the sluggishness of the development environment is mainly caused by the build cache and the status of the development server, rather than the size of the node_modules. However, it is still necessary to regularly clean up unnecessary dependencies, which can effectively reduce disk space waste.
 
 ---
 
-## <B2>build文件夹过大问题</B2>
+## <B2>The Issue of the build folder being too large</B2>
 
-这个问题排了好久好久，终于得以解决，吾心甚慰！~🥱
+This problem had been lingering for a very long time, but finally it was resolved. I'm very relieved! ~🥱
 
-## 问题描述
-build文件夹，或者更准确的说是其中的有6个js文件巨大，每个都有接近20mb左右，最终导致build文件夹总体达128mb。问了一下AI它说这是一种非常异常的情况，大型文件站的build文件夹都不一定能达到这个量级。
-
-## 解决过程
-于是我想方设法给build"瘦身"。一开始发现`ForMDX.js`文件中导入了没有用到的大型库，当时我几乎以为问题就要解决了，但是点击build属性一看还是128mb，给了我当头一击，我当时都要碎了。
-
-现在已经半夜2点了，唉，今天的凡人还没看呢，老魔心魔不知道怎么呈现的。然后在AI的辅助下，一步步排查仍然没发现问题所在，后来灵机一动，把没用到的 `src/components/FileBlock.tsx`与`src/theme/MDXComponents.tsx`这两个文件删去，问题解决！build成功"瘦身"，变为13mb左右。
-
-## 当前状态
-现在是既没有喜悦也没用懊恼，只是无感，人麻了。关于此问题的进一步记录明天再来弄吧，睡觉先。
+## Problem Description
+The "build" folder, or more precisely, the six js files within it, are extremely large, each being approximately 20mb in size. This ultimately results in the build folder reaching a total size of 128mb. I asked the AI about it and it said this is a very abnormal situation. Even large-scale file servers' build folders usually do not reach this magnitude. 
+## Solution Process
+So I tried every possible way to "slim down" the build process. At first, I discovered that the `ForMDX.js` file imported large libraries that were not being used. At that moment, I almost thought the problem was solved. But when I checked the build attribute and it was still 128mb, it hit me like a ton of bricks. I was about to break down at that moment. 
+It's already 2 o'clock in the morning. Ugh, haven’t watched Mortal’s Journey today. Curious about Han Li’s demonic psyche in this episode. Then, with the assistance of the AI, I gradually investigated but still couldn't find the problem. Later, an idea struck me, and I deleted the unused `src/components/FileBlock.tsx` and `src/theme/MDXComponents.tsx` files. The problem was solved! The build was successful and "thinned out", becoming around 13mb. 
+## Current Status
+At present, there is neither joy nor regret, just a sense of numbness. Let's deal with the further records of this issue tomorrow. For now, I am going to bed.
 
 <details>
-<summary>AI的问题总结</summary>
+<summary>AI-generated question summary</summary>
 
-## 问题背景
-- **现象**：build 文件夹达到 128MB 的异常大小
-- **解决后**：删除两个未完成的文件后，build 文件夹降至 13MB 正常大小
-- **问题根源**：
-  - 保留`src/components/FileBlock.tsx`
-  - 保留`src/theme/MDXComponents.tsx`
-  - 但未完成 `docusaurus.config.js` 中 `plugins` 配置
+## Problem Background
+- **Observation**: The `build` folder abnormally grew to 128MB in size
+- **After resolution**: After deleting two incomplete files, the `build` folder returned to a normal size of 13MB
+- **Root cause**:
+  - Kept `src/components/FileBlock.tsx`
+  - Kept `src/theme/MDXComponents.tsx`
+  - But didn't complete the `plugins` configuration in `docusaurus.config.js`
 
-## 问题成因分析
+## Root Cause Analysis
 
-### 根本原因
-1. **循环依赖和错误导入**
-   - FileBlock 组件中使用了 `require('!!raw-loader!@site/' + filepath)`
-   - 动态导入让 webpack 尝试处理项目中所有文件
+### Primary Causes
+1. **Circular dependency and improper imports**
+   - FileBlock component used `require('!!raw-loader!@site/' + filepath)`
+   - Dynamic imports caused webpack to attempt processing all project files
 
-2. **MDX 组件循环引用**
-   - MDXComponents.tsx 重新导出了 CodeBlock 组件
-   - 造成了组件映射的混乱
+2. **MDX component circular references**
+   - MDXComponents.tsx re-exported the CodeBlock component
+   - Created confusion in component mapping
 
-3. **构建工具混乱**
-   - webpack 无法正确解析依赖关系
-   - 大量不必要的文件被打包
-   - 生成错误的代码分割 chunks
+3. **Build tool misconfiguration**
+   - Webpack failed to properly resolve dependencies
+   - Numerous unnecessary files were bundled
+   - Generated incorrect code-split chunks
 
-## 问题解决过程
+## Problem Resolution Process
 
-### 完整问题链
+### Complete Issue Chain
 ```
-未完成的 FileBlock 组件 → 动态 raw-loader 导入 → webpack 尝试处理所有文件 → 
-大量重复打包 → 错误的代码分割 → 生成巨型 JS 文件 → 128MB 构建文件
+Unfinished FileBlock component → Dynamic raw-loader imports → Webpack attempts to process all files → 
+Massive duplicate bundling → Incorrect code splitting → Oversized JS file generation → 128MB build output
 ```
 
 
-### 解决方法
-删除两个干扰文件后，webpack 恢复正常工作：
-1. 消除动态导入源
-2. 恢复正常组件映射
-3. 清除构建工具困惑
+### Solution
+After removing the two problematic files, webpack resumed normal operation:
+1. Eliminated dynamic import source
+2. Restored normal component mapping
+3. Resolved build tool confusion
 
-## 经验教训
+## Lessons Learned
 
-### 开发实践要点
-1. **未完成功能的潜在危害**
-   - 即使未启用，残留代码也可能严重影响项目
-   - 及时清理未使用的代码文件
+### Key Development Practices
+1. **Hidden Dangers of Unfinished Features**
+   - Residual code can significantly impact the project even when inactive
+   - Regularly clean up unused code files
 
-2. **动态导入风险**
-   - `require('!!raw-loader!@site/' + filepath)` 类动态路径需谨慎使用
-   - 会触发构建工具处理所有可能文件
+2. **Risks of Dynamic Imports**
+   - Exercise caution with dynamic paths like `require('!!raw-loader!@site/' + filepath)`
+   - May trigger build tools to process all potential files
 
-3. **组件覆盖注意事项**
-   - 覆盖 Docusaurus 默认组件时要确保不破坏原有依赖关系
+3. **Component Override Considerations**
+   - Ensure default Docusaurus component overrides don't break existing dependencies
 
-### 预防措施
-- 及时清理未使用的代码文件
-- 实验新功能时使用单独分支
-- 定期检查自定义组件的依赖引入
-- 注意主题组件的正确覆盖方式
+### Preventive Measures
+- Regularly clean up unused code files
+- Use separate branches for experimental features
+- Periodically check dependencies of custom components
+- Pay attention to proper theme component overrides
 
-## 后续建议
+## Follow-up Recommendations
 
-如需重新实现代码文件导入功能：
-1. 完成完整的插件配置，特别是 `exclude` 规则
-2. 限制文件访问范围，使用白名单机制
-3. 避免完全动态路径，使用更具体的路径模式
+For reimplementing file import functionality:
+1. Complete full plugin configuration, especially `exclude` rules
+2. Limit file access scope using allowlist mechanism
+3. Avoid fully dynamic paths - use more specific path patterns
 
-## 结论
-**13MB 的构建大小是正常的**，说明问题已彻底解决。此案例说明在前端开发中，问题根源可能来自看似无关的残留文件，需要格外注意未完成功能的清理工作。
+## Conclusion
+**The 13MB build size is normal**, confirming the issue is fully resolved. This case demonstrates that in frontend development, problems may originate from seemingly unrelated residual files, may originate from seemingly unrelated residual files, highlighting the importance of thorough cleanup of unfinished features.
 
 </details>
 
-## CardImg 组件点击图片卡死问题
+## CardImg Component Image Click Freeze Issue
 
-原来关于图片组件的代码是放在，`ForMDX.js` 中的，后来迁出为 `CardImg.js`。
+The original image component code was located in `ForMDX.js`, and was later migrated out to `CardImg.js`.
 
-在 `CardImg.js` 中应该引入： 
+In `CardImg.js`, the following should be imported:
 ```
 import { PhotoProvider, PhotoView } from 'react-photo-view';
 import Lazyimg from 'react-lazyimg-component';
 import 'react-photo-view/dist/react-photo-view.css';
 ```
 
-实际上缺了：
+In fact, it is lacking:
 ```
 import 'react-photo-view/dist/react-photo-view.css';
 ```
 
-由于 `ForMDX.js` 中仍然保留那三条引入，故 `CardImg.js` 与 `ForMDX.js` 具有`隐式依赖`，此时图片组件正常工作。
+Since `ForMDX.js` still kept those three imports, `CardImg.js` had an `implicit dependency` on `ForMDX.js`, making the image component work properly at that time.
 
-但是由于后续在排查 `build` 文件夹过大问题的时候，发现 `ForMDX.js` 那三条引入是**多余的**，删去。此时**隐式依赖断裂**，图片组件无法工作。
-这种问题往往是很棘手的，虽然在本次问题中，再不济我也可以通过重构图片组件复现功能。但是如果在某种情况下这种重构变得尤为困难，甚至说简直不可能的时候，
-想要排查这种 `隐式依赖` 就会变得 **极为困难！** 这次只是侥幸，记得图片组件似乎是要三个引入的，所以顺利将问题解决。日后应谨记此教训，在开发中，要尽量避免类似的错误。🥱
+Later while troubleshooting the oversized `build` folder issue, those three imports in `ForMDX.js` were found to be **redundant** and got removed. This broke the **implicit dependency**, causing the image component to stop working.
+
+These implicit dependency issues can be nasty to debug. In this case, the image component could at least be refactored to restore functionality. But if faced with a situation where refactoring becomes extremely difficult or nearly impossible, tracking down such `implicit dependencies` would be **a nightmare!**
+
+Got lucky this time - vaguely remembered the image component needed those three imports, so the fix was straightforward. Let this serve as a reminder: avoid creating such hidden dependencies in the first place. 🥱
 
 ---
 
-## Vercel Preview 部署错误问题解决
+## Resolving Vercel Preview Deployment Errors
 
-### 问题描述
-当使用 `yarn deploy` 部署到 GitHub Pages 的 `gh-pages` 分支时，Vercel 会自动检测到分支变化并尝试创建 Preview 部署，但由于 `gh-pages` 分支只包含静态文件而没有 `package.json`，导致构建失败，GitHub Deployments 中显示 ❌preview 错误。
+### Problem Description
+When deploying to the `gh-pages` branch of GitHub Pages using `yarn deploy`, Vercel automatically detects branch changes and attempts to create a Preview deployment. However, since the `gh-pages` branch only contains static files without a `package.json`, the build fails, showing a ❌preview error in GitHub Deployments.
 
-### 问题原因
-- Vercel 默认会为所有分支推送创建 Preview 部署
-- `gh-pages` 分支是构建后的静态文件，缺少源代码和构建配置
-- Vercel 尝试运行 `npm run build` 失败
+### Root Cause
+- Vercel by default creates Preview deployments for all branch pushes
+- The `gh-pages` branch contains only built static files, lacking source code and build configuration
+- Vercel fails when attempting to run `npm run build`
 
-### 解决方案
+### Solution
 
-**配置生产环境构建：**
-1. 进入 Vercel 项目 Settings → Git
-2. 在 Behavior 选项中选择 **"Only build production"**
-3. 确保生产分支设置为 `main`（或主分支）
-4. 保存设置
-
+**Configure Production Build:**
+1. Go to Vercel project Settings → Git
+2. Under Behavior options, select **"Only build production"**
+3. Ensure the production branch is set to `main` (or your primary branch)
+4. Save settings
 
 
 

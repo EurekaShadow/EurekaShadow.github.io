@@ -1,10 +1,10 @@
 ---
-sidebar_label: '测试页4'
+sidebar_label: 'Test Page 4'
 sidebar_position: 1.4
-description: 这是我的测试页4！
+description: This is my test page 4!
 ---
 
-### 暂时没看出来有什么用的按钮
+### Button with unclear purpose
 export const Highlight = ({children, color}) => (
   <span
     style={{
@@ -21,7 +21,7 @@ export const Highlight = ({children, color}) => (
   </span>
 );
 
-**代码：**
+**Code:**
 ```js
 export const Highlight = ({children, color}) => (
   <span
@@ -43,15 +43,10 @@ export const Highlight = ({children, color}) => (
 This is <Highlight color="#25c2a0">Docusaurus green</Highlight> !
 
 This is <Highlight color="#F2BBE0">Facebook Pink</Highlight> !
-<div className='flex gap-5' >
-  <a href="\blog" class="source_card_button" target="_blank">**📂 Blog**</a>
-</div>
 
-<div style={{ marginBottom: '20px' }}></div>
+<div className='flex gap-5' > <a href="\blog" class="source_card_button" target="_blank">**📂 Blog**</a> </div> <div style={{ marginBottom: '20px' }}></div>
 
-## 生成SSH密钥
+## Generate SSH Key
 ```
 ssh-keygen -t ed25519 -C "2560291241@qq.com" -f ~/.ssh/id_E1H
 ```
-
-

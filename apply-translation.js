@@ -6,6 +6,7 @@ const path = require('path');
 const TRANSLATED_FILE = 'translation-source-translated.txt'; // 翻译后的文件
 const SEPARATOR = '===FILE_SEPARATOR==='; // 文件分隔符
 const FILE_INFO_PREFIX = '===FILE_INFO:'; // 文件信息前缀
+const TARGET_LOCALE = 'en'; // 目标语言目录
 
 /**
  * 解析翻译后的文件内容
@@ -46,7 +47,8 @@ function parseTranslatedFile(filePath) {
           }
           
           filesData.push({
-            path: filePath,
+            originalPath: filePath,
+            relativePath: relativePath,
             frontmatter: frontmatter,
             content: contentBody
           });
@@ -88,48 +90,62 @@ function reconstructFileContent(fileData) {
 }
 
 /**
- * 备份原始文件
- * @param {string} filePath - 文件路径
+ * 获取国际化目录路径
+ * @param {string} originalPath - 原始文件路径
+ * @param {string} locale - 目标语言
+ * @returns {string} 国际化目录中的文件路径
  */
-function backupOriginalFile(filePath) {
-  if (fs.existsSync(filePath)) {
-    const backupPath = filePath + '.backup';
-    fs.copyFileSync(filePath, backupPath);
-    console.log(`已备份原始文件: ${backupPath}`);
+function getI18nPath(originalRelativePath, locale) {
+  // 分析原始路径确定插件类型
+  let pluginPath = '';
+  let contentPath = '';
+  
+  if (originalRelativePath.startsWith('docs/')) {
+    pluginPath = `i18n/${locale}/docusaurus-plugin-content-docs/current`;
+    contentPath = originalRelativePath.substring(5); // 移除 'docs/' 前缀
+  } else if (originalRelativePath.startsWith('blog/')) {
+    pluginPath = `i18n/${locale}/docusaurus-plugin-content-blog`;
+    contentPath = originalRelativePath.substring(5); // 移除 'blog/' 前缀
+  } else {
+    // 其他页面文件
+    pluginPath = `i18n/${locale}/docusaurus-plugin-content-pages`;
+    contentPath = originalRelativePath;
   }
+  
+  return path.join(process.cwd(), pluginPath, contentPath);
 }
 
 /**
- * 应用翻译到文件
+ * 应用翻译到国际化目录
  * @param {Array} filesData - 解析后的文件数据
  */
 function applyTranslations(filesData) {
-  console.log(`开始应用 ${filesData.length} 个文件的翻译...`);
+  console.log(`开始应用 ${filesData.length} 个文件的翻译到 ${TARGET_LOCALE} 目录...`);
   
   let successCount = 0;
   let errorCount = 0;
   
   filesData.forEach(fileData => {
     try {
+      // 计算国际化目录中的目标路径
+      const i18nPath = getI18nPath(fileData.relativePath, TARGET_LOCALE);
+      
       // 确保目录存在
-      const dir = path.dirname(fileData.path);
+      const dir = path.dirname(i18nPath);
       if (!fs.existsSync(dir)) {
         fs.mkdirSync(dir, { recursive: true });
       }
       
-      // 备份原始文件
-      backupOriginalFile(fileData.path);
-      
       // 重构文件内容
       const newContent = reconstructFileContent(fileData);
       
-      // 写入翻译后的内容
-      fs.writeFileSync(fileData.path, newContent, 'utf8');
+      // 写入翻译后的内容到国际化目录
+      fs.writeFileSync(i18nPath, newContent, 'utf8');
       
-      console.log(`✓ 已更新: ${fileData.path}`);
+      console.log(`✓ 已创建翻译文件: ${i18nPath}`);
       successCount++;
     } catch (error) {
-      console.error(`✗ 更新失败 ${fileData.path}:`, error.message);
+      console.error(`✗ 创建翻译文件失败 ${fileData.relativePath}:`, error.message);
       errorCount++;
     }
   });
@@ -138,6 +154,9 @@ function applyTranslations(filesData) {
   console.log(`  成功: ${successCount} 个文件`);
   console.log(`  失败: ${errorCount} 个文件`);
   console.log(`  总计: ${filesData.length} 个文件`);
+  
+  console.log(`\n翻译文件已保存到 i18n/${TARGET_LOCALE}/ 目录中`);
+  console.log(`您可以运行 'npm run build' 来构建多语言网站`);
 }
 
 /**
@@ -168,7 +187,7 @@ function main() {
     output: process.stdout
   });
   
-  rl.question(`\n确认要应用这些翻译并覆盖原始文件吗？这将备份原始文件并创建新版本 (y/N): `, (answer) => {
+  rl.question(`\n确认要将这些翻译应用到 i18n/${TARGET_LOCALE}/ 目录吗？(y/N): `, (answer) => {
     if (answer.toLowerCase() === 'y' || answer.toLowerCase() === 'yes') {
       applyTranslations(filesData);
     } else {

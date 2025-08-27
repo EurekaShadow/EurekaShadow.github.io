@@ -1,7 +1,7 @@
 ---
-sidebar_label: '测试页0'
+sidebar_label: 'Test Page 0'
 sidebar_position: 1
-description: 测试页0，包含常用组件与跳转示例。
+description: testpage0，featuring common components and example of navigation.
 ---
 
 import { Highlight, Keyword, Light, B1, B2, B3, BH3, B3W,Button, MyColor, Card} from '@site/src/components/ForMDX';
@@ -10,73 +10,73 @@ import TabItem from '@theme/TabItem';
 import CardImg from '@site/src/components/CardImg';
 
 
-## 本文档全部import：
+## All imports in this document:
 ```
 import { Highlight, Keyword, Light, B1, B2, B3, BH3, B3W,Button, MyColor, Card} from '@site/src/components/ForMDX';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 ```
 
-## 🔗 按钮链接
+## 🔗 Button Link
 
 
 <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem' }}>
-  <a href="https://www.bilibili.com/video/BV12v4y1y7uV" class="source_card_button" target="_blank">📖 STM32 教程</a>
-  <a href="/docs/reflection-space" class="source_card_button" target="_blank">🌸 回想空间</a>
-  <a href="https://e.tb.cn/h.hTZaa83WZiz2Wfr" class="source_card_button" target="_blank">🌽 还不错的玉米</a>
-  <a href="https://qun.qq.com/universal-share/share?ac=1&authKey=BvgzFVJKMU0dbLEz%2BkWm8tydUKa%2F%2BTpBiaW9Ner6BemqNZfLQyN3xGlo%2BjLzhTL5&busi_data=eyJncm91cENvZGUiOiI5MzgyMTk4NjMiLCJ0b2tlbiI6IkUzNFhjVzJuUE9FY3IxSm14SmFza2J1RWhTcHJWMElMTkxITkNHcjBwcXhmMVN5Y21JUVljZ25ieldaRUFCUjEiLCJ1aW4iOiIyNTYwMjkxMjQxIn0%3D&data=lHupxGd_sZuAjGp9DpXZH7KnauiAdCCqC_JIFVTwLE5-rOMCTKgggw9oo9XpURlTsaCKXlUUDCeolPJ87PqKZA&svctype=4&tempid=h5_group_info" class="source_card_button" target="_blank">📱 测试群链接</a>
+  <a href="https://www.bilibili.com/video/BV12v4y1y7uV" class="source_card_button" target="_blank">📖 STM32 Tutorial</a>
+  <a href="/docs/reflection-space" class="source_card_button" target="_blank">🌸 reflection-space</a>
+  <a href="https://e.tb.cn/h.hTZaa83WZiz2Wfr" class="source_card_button" target="_blank">🌽 Decent quality corn</a>
+  <a href="https://qun.qq.com/universal-share/share?ac=1&authKey=BvgzFVJKMU0dbLEz%2BkWm8tydUKa%2F%2BTpBiaW9Ner6BemqNZfLQyN3xGlo%2BjLzhTL5&busi_data=eyJncm91cENvZGUiOiI5MzgyMTk4NjMiLCJ0b2tlbiI6IkUzNFhjVzJuUE9FY3IxSm14SmFza2J1RWhTcHJWMElMTkxITkNHcjBwcXhmMVN5Y21JUVljZ25ieldaRUFCUjEiLCJ1aW4iOiIyNTYwMjkxMjQxIn0%3D&data=lHupxGd_sZuAjGp9DpXZH7KnauiAdCCqC_JIFVTwLE5-rOMCTKgggw9oo9XpURlTsaCKXlUUDCeolPJ87PqKZA&svctype=4&tempid=h5_group_info" class="source_card_button" target="_blank">📱 Test Group Link</a>
 </div>
 
 <div style={{ marginBottom: '20px' }}></div>
-**代码：**（无需`import`）
+**Code：**（No need to `import`）
 ```js
 <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem' }}>
-  <a href="https://www.bilibili.com/video/BV12v4y1y7uV" class="source_card_button" target="_blank">📖 STM32 教程</a>
-  <a href="/docs/reflection-space" class="source_card_button" target="_blank">🌸 回想空间</a>
-  <a href="https://e.tb.cn/h.hTZaa83WZiz2Wfr" class="source_card_button" target="_blank">🌽 还不错的玉米</a>
-  <a href="https://qun.qq.com/universal-share/share?ac=1&authKey=BvgzFVJKMU0dbLEz%2BkWm8tydUKa%2F%2BTpBiaW9Ner6BemqNZfLQyN3xGlo%2BjLzhTL5&busi_data=eyJncm91cENvZGUiOiI5MzgyMTk4NjMiLCJ0b2tlbiI6IkUzNFhjVzJuUE9FY3IxSm14SmFza2J1RWhTcHJWMElMTkxITkNHcjBwcXhmMVN5Y21JUVljZ25ieldaRUFCUjEiLCJ1aW4iOiIyNTYwMjkxMjQxIn0%3D&data=lHupxGd_sZuAjGp9DpXZH7KnauiAdCCqC_JIFVTwLE5-rOMCTKgggw9oo9XpURlTsaCKXlUUDCeolPJ87PqKZA&svctype=4&tempid=h5_group_info" class="source_card_button" target="_blank">📱 测试群链接</a>
+  <a href="https://www.bilibili.com/video/BV12v4y1y7uV" class="source_card_button" target="_blank">📖 STM32 Tutorial</a>
+  <a href="/docs/reflection-space" class="source_card_button" target="_blank">🌸 reflection-space</a>
+  <a href="https://e.tb.cn/h.hTZaa83WZiz2Wfr" class="source_card_button" target="_blank">🌽 Decent quality corn</a>
+  <a href="https://qun.qq.com/universal-share/share?ac=1&authKey=BvgzFVJKMU0dbLEz%2BkWm8tydUKa%2F%2BTpBiaW9Ner6BemqNZfLQyN3xGlo%2BjLzhTL5&busi_data=eyJncm91cENvZGUiOiI5MzgyMTk4NjMiLCJ0b2tlbiI6IkUzNFhjVzJuUE9FY3IxSm14SmFza2J1RWhTcHJWMElMTkxITkNHcjBwcXhmMVN5Y21JUVljZ25ieldaRUFCUjEiLCJ1aW4iOiIyNTYwMjkxMjQxIn0%3D&data=lHupxGd_sZuAjGp9DpXZH7KnauiAdCCqC_JIFVTwLE5-rOMCTKgggw9oo9XpURlTsaCKXlUUDCeolPJ87PqKZA&svctype=4&tempid=h5_group_info" class="source_card_button" target="_blank">📱 Test Group Link</a>
 </div>
 ```
 
 
 ---
 
-## 按钮下载（外链）
-<a href="https://pan.baud-dance.com/d/STM32CubeIDE/st-stm32cubeide_1.18.0_24413_20250227_1633_x86_64.exe" class="source_download_button" target="_blank">立即下载</a>
+## Download Button (External Link)
+<a href="https://pan.baud-dance.com/d/STM32CubeIDE/st-stm32cubeide_1.18.0_24413_20250227_1633_x86_64.exe" class="source_download_button" target="_blank">Download Now</a>
 
-**代码：**（无需`import`）
+**Code：**（No need to `import`）
 
 ```js
-<a href="https://pan.baud-dance.com/d/STM32CubeIDE/st-stm32cubeide_1.18.0_24413_20250227_1633_x86_64.exe" class="source_download_button" target="_blank">立即下载</a>
+<a href="https://pan.baud-dance.com/d/STM32CubeIDE/st-stm32cubeide_1.18.0_24413_20250227_1633_x86_64.exe" class="source_download_button" target="_blank">Download Now</a>
 ```
 
 ---
 
-## 自定义按钮
+## Custom Button
 <div style={{
   display: 'flex',
   flexDirection: 'column',
   rowGap: '1rem'
 }}>
-  {/* 第一行按钮 */}
+  {/* First Row Buttons */}
   <div style={{ display: 'flex', gap: '1rem' }}>
-    <Button icon="📘" href="https://example.com">默认按钮</Button>
-    <Button icon="📘" href="https://example.com" color="#2D8E0A">绿色按钮</Button>
-	<Button icon="📘" href="https://example.com" color="#1877F2" size="large">蓝色大按钮</Button>
+    <Button icon="📘" href="https://example.com">Default Button</Button>
+    <Button icon="📘" href="https://example.com" color="#2D8E0A">Green Button</Button>
+	<Button icon="📘" href="https://example.com" color="#1877F2" size="large">The large blue button</Button>
   </div>
 
-  {/* 第二行按钮 */}
+  {/* Second Row Buttons */}
   <div style={{ display: 'flex', gap: '1rem' }}>
-    <Button icon="📘" href="https://example.com">默认按钮</Button>
-    <Button icon="📘" href="#">按钮1</Button>
-	<Button icon="📘" href="https://github.com/your-repo" color="#333"textColor="white" size="medium">GitHub 仓库</Button>
+    <Button icon="📘" href="https://example.com">Default Button</Button>
+    <Button icon="📘" href="#">Button 1</Button>
+	<Button icon="📘" href="https://github.com/your-repo" color="#333"textColor="white" size="medium">GitHub Repository</Button>
   </div>
 
-  {/* 第三行按钮 */}
+  {/* Third Row Buttons */}
   <div style={{ display: 'flex', gap: '1rem' }}>
-	<Button icon="⚙️" onClick={() => alert('点击了')}>打开设置</Button>
-	<Button loading>加载中...</Button>
-	<Button disabled>不可点击</Button>
+	<Button icon="⚙️" onClick={() => alert('点击了')}>MENU</Button>
+	<Button loading>Loading...</Button>
+	<Button disabled>unclickable</Button>
   </div> 
   
 </div>
@@ -90,79 +90,81 @@ import TabItem from '@theme/TabItem';
   flexDirection: 'column',
   rowGap: '1rem'
 }}>
-  {/* 第一行按钮 */}
+  {/* First Row Buttons */}
   <div style={{ display: 'flex', gap: '1rem' }}>
-    <Button icon="📘" href="https://example.com">默认按钮</Button>
-    <Button icon="📘" href="https://example.com" color="#2D8E0A">绿色按钮</Button>
-	<Button icon="📘" href="https://example.com" color="#1877F2" size="large">蓝色大按钮</Button>
+    <Button icon="📘" href="https://example.com">Default Button</Button>
+    <Button icon="📘" href="https://example.com" color="#2D8E0A">Green Button</Button>
+	<Button icon="📘" href="https://example.com" color="#1877F2" size="large">The large blue button</Button>
   </div>
 
-  {/* 第二行按钮 */}
+  {/* Second Row Buttons */}
   <div style={{ display: 'flex', gap: '1rem' }}>
-    <Button icon="📘" href="https://example.com">默认按钮</Button>
-    <Button icon="📘" href="#">按钮1</Button>
-	<Button icon="📘" href="https://github.com/your-repo" color="#333"textColor="white" size="medium">GitHub 仓库</Button>
+    <Button icon="📘" href="https://example.com">Default Button</Button>
+    <Button icon="📘" href="#">Button 1</Button>
+	<Button icon="📘" href="https://github.com/your-repo" color="#333"textColor="white" size="medium">GitHub Repository</Button>
   </div>
 
-  {/* 第三行按钮 */}
+  {/* Third Row Buttons */}
   <div style={{ display: 'flex', gap: '1rem' }}>
-	<Button icon="⚙️" onClick={() => alert('点击了')}>打开设置</Button>
-	<Button loading>加载中...</Button>
-	<Button disabled>不可点击</Button>
+	<Button icon="⚙️" onClick={() => alert('点击了')}>MENU</Button>
+	<Button loading>Loading...</Button>
+	<Button disabled>unclickable</Button>
   </div> 
   
 </div>
 ```
 ---
 
-## 高亮/关键词
+## Highlight/Key Words
 <p><Highlight bgColor={MyColor.docusaurusGreen} fontColor={MyColor.white}>Docusaurus green</Highlight>and<Highlight bgColor={MyColor.Pink} fontColor={MyColor.white}>Pink</Highlight>are my favorite colors.</p>
-<Highlight>这是一个高亮段落</Highlight>
-<Highlight bgColor={MyColor.Blue} fontColor={MyColor.black}>这是一个高亮段落</Highlight> 
-<p>这是一个<Keyword>关键词</Keyword>哈哈哈哈</p>哈哈哈
+<Highlight>This is a highlighted paragraph</Highlight>
+<Highlight bgColor={MyColor.Blue} fontColor={MyColor.black}>This is a highlighted paragraph</Highlight>
+<p>This is a <Keyword>keyword</Keyword> Hahaha</p> Hahaha 
 
-**代码：**（需 `import {Highlight,Keyword} from '@site/src/components/ForMDX';` ）
+**Code:** (Requires `import {Highlight, Keyword} from '@site/src/components/ForMDX';`)
 ```js
 <p><Highlight bgColor={MyColor.docusaurusGreen} fontColor={MyColor.white}>Docusaurus green</Highlight>and<Highlight bgColor={MyColor.Pink} fontColor={MyColor.white}>Pink</Highlight>are my favorite colors.</p>
-<Highlight>这是一个高亮段落</Highlight>
-<Highlight bgColor={MyColor.Blue} fontColor={MyColor.black}>这是一个高亮段落</Highlight> 
-<p>这是一个<Keyword>关键词</Keyword>哈哈哈哈</p>哈哈哈
+<Highlight>This is a highlighted paragraph</Highlight>
+<Highlight bgColor={MyColor.Blue} fontColor={MyColor.black}>This is a highlighted paragraph</Highlight>
+<p>This is a <Keyword>keyword</Keyword> Hahaha</p> Hahaha 
 ```
 
 ---
 
-## 🔁卡片链接
+## 🔁Card link
 
-以下是一些页面跳转的卡片式按钮示例，可用于快速导航测试或构建索引页。
+Here are some example card-style buttons for page navigation, which can be used for quick navigation testing or to build index pages.
 
 <div style={{ display: 'grid', gap: '1rem' }}>
     <Card>
-      <a href="/docs/mydoc/testpage5" target="_blank"><strong>1️⃣ 跳转至：</strong>测试页5🔗</a>
+      <a href="/docs/mydoc/testpage5" target="_blank"><strong>1️⃣ Click to:</strong> Test Page 5🔗</a>
     </Card>
 	
     <Card>
-      <a href="/docs/mydoc/testpage1" target="_blank"><strong>5️⃣ 跳转至：</strong>测试页1🔗</a>
+      <a href="/docs/mydoc/testpage1" target="_blank"><strong>5️⃣ Click to:</strong>Test Page 1🔗</a>
     </Card>
 </div>
 
 <div style={{height: '20px'}}></div>
 
-**代码：**（无需 `import` ）
+**Code：**（No need to `import`）
 ```js
 <div style={{ display: 'grid', gap: '1rem' }}>
     <Card>
-      <a href="/docs/mydoc/testpage5" target="_blank"><strong>1️⃣ 跳转至：</strong>测试页5🔗</a>
+      <a href="/docs/mydoc/testpage5" target="_blank"><strong>1️⃣ Click to:</strong> Test Page 5🔗</a>
     </Card>
 	
     <Card>
-      <a href="/docs/mydoc/testpage1" target="_blank"><strong>5️⃣ 跳转至：</strong>测试页1🔗</a>
+      <a href="/docs/mydoc/testpage1" target="_blank"><strong>5️⃣ Click to:</strong>Test Page 1🔗</a>
     </Card>
 </div>
+
+<div style={{height: '20px'}}></div>
 ```
 
 ---
 
-## 显示代码行号
+## Show line numbers of the code
 
 ```c showLineNumbers
 int main(){
@@ -173,7 +175,7 @@ int main(){
     }
 }
 ```
-**代码：**
+**Code：**
 ```c 
 \```c showLineNumbers
 int main(){
@@ -187,7 +189,7 @@ int main(){
 ```
 ---
 
-## 显示代码文件名
+## Show title
 
 ```c title="main.c"
 int main(){
@@ -198,7 +200,7 @@ int main(){
     }
 }
 ```
-**代码：**
+**Code：**
 ```c 
 \```c title="main.c"
 int main(){
@@ -212,7 +214,7 @@ int main(){
 ```
 ---
 
-## 高亮代码行
+## Highlight the code lines
 ```c
 #include <stdio.h>
 
@@ -229,7 +231,7 @@ int main() {
     return 0;
 }
 ```
-**代码：**
+**Code：**
 ```c 
 \```c
 #include <stdio.h>
@@ -249,7 +251,7 @@ int main() {
 \```
 ```
 
-## 新增代码标记
+## New code marking
 ```c
 #include <stdio.h>
 
@@ -266,7 +268,7 @@ int main() {
     return 0;
 }
 ```
-**代码：**
+**Code：**
 ```c
 \```c
 #include <stdio.h>
@@ -286,7 +288,7 @@ int main() {
 \```
 ```
 
-## 更新代码标记
+## Update code marking
 ```c
 #include <stdio.h>
 
@@ -303,7 +305,7 @@ int main() {
     return 0;
 }
 ```
-**代码：**
+**Code：**
 ```c
 \```c
 #include <stdio.h>
@@ -323,7 +325,7 @@ int main() {
 \```
 ```
 
-## 错误代码标记
+## Error code marking
 ```c
 #include <stdio.h>
 
@@ -340,7 +342,7 @@ int main() {
     return 0;
 }
 ```
-**代码：**
+**Code：**
 ```c
 \```c
 #include <stdio.h>
@@ -361,7 +363,7 @@ int main() {
 ```
 
 
-## 多语言
+## Multi-Language
 
 <Tabs>
 
@@ -401,7 +403,7 @@ int main() {
   
 </Tabs>
 
-**代码：**（需 `import Tabs from '@theme/Tabs';` `import TabItem from '@theme/TabItem';`）
+**Code：**（Requires `import Tabs from '@theme/Tabs';` `import TabItem from '@theme/TabItem';`）
 
 ```
 <Tabs>
@@ -444,13 +446,13 @@ int main() {
 ```
 
 <details>
-<summary>补充说明</summary>
+<summary>Reinforcement</summary>
 
-在上面的多语言中，`value` 是**唯一**且可自定义的，但最好和后面的 `label`对应。不可出现下面这种情况：
+In the above multilingual version, `value` is the **sole** and customizable element, but it is recommended to match it with the subsequent `label`. The following situation should not occur:
 ```
 <Tabs>
 
-<TabItem value="bash" label="有密钥">
+<TabItem value="bash" label="With Secret Key">
 
 \```bash
 ffmpeg -allowed_extensions ALL -i "index.m3u8" -c copy -bsf:a aac_adtstoasc -hls_key_info_file "index/0.key" "output.mp4"
@@ -458,7 +460,7 @@ ffmpeg -allowed_extensions ALL -i "index.m3u8" -c copy -bsf:a aac_adtstoasc -hls
 
 </TabItem>  
   
-<TabItem value="bash" label="无密钥">
+<TabItem value="bash" label="Without Secret Key">
 
 \```bash
 ffmpeg -i "index.m3u8" -c copy -bsf:a aac_adtstoasc "output.mp4"
@@ -469,18 +471,18 @@ ffmpeg -i "index.m3u8" -c copy -bsf:a aac_adtstoasc "output.mp4"
 </Tabs>
 ```
 
-会报错：
+An error will occur:
 
 > Docusaurus error: Duplicate values "bash" found in `<Tabs>`. Every value needs to be unique.
 
 
-少量演示代码可以直接使用上面的多语言模块，但难以维护。使用这个方法[基于 CodeBlock 实现 FileBlock](https://imroc.cc/note/docusaurus/fileblock#%E5%9F%BA%E4%BA%8E-codeblock-%E5%AE%9E%E7%8E%B0-fileblock)
-可以解决这个问题，但我还没实现，因为需要用到插件，暂时就先到这儿吧，日后如有需要再研究。
+A small amount of demonstration code can be directly used with the above multilingual module, but it is difficult to maintain. Using this method [implementing FileBlock based on CodeBlock](https://imroc.cc/note/docusaurus/fileblock#%E5%9F%BA%E4%BA%8E-codeblock-%E5%AE%9E%E7%8E%B0-fileblock )
+can solve this problem, but I haven't implemented it yet because it requires plugins. Let's stop here for now. We'll continue to explore if there's a need in the future.
 </details>
 
 ---
 
-## 折叠详情组件
+## Collapsible Detail Component
 
 <details>
 <summary>Test</summary>
@@ -496,7 +498,7 @@ int main(){
 
 </details>
 
-**代码：**
+**Code：**
 ```
 <details>
 <summary>Test</summary>
@@ -514,23 +516,22 @@ int main(){
 ```
 ---
 
-## 插入音频
-
+## Insert Audio 
 <audio controls>
-  <source src="/audio/王铮亮-不凡.mp3" type="audio/mpeg" />
-  您的浏览器不支持音频播放，请升级或使用其他浏览器。
+<source src="/audio/王铮亮-不凡.mp3" type="audio/mpeg" />
+Your browser does not support audio playback. Please upgrade your browser or use another one.
 </audio>
 
-**代码：**
+**Code：**
 ```
 <audio controls>
-  <source src="/audio/王铮亮-不凡.mp3" type="audio/mpeg" />
-  您的浏览器不支持音频播放，请升级或使用其他浏览器。
+<source src="/audio/王铮亮-不凡.mp3" type="audio/mpeg" />
+Your browser does not support audio playback. Please upgrade your browser or use another one.
 </audio>
 ```
 ---
 
-## 插入视频外链
+## Insert Video URL
 
 <iframe 
   width="100%" 
@@ -542,7 +543,7 @@ int main(){
 
 <div style={{height: '20px'}}></div>
 
-**代码：**
+**Code:**
 ```
 <iframe 
   width="100%" 
@@ -554,97 +555,96 @@ int main(){
 ```
 ---
 
-## 小贴士
-
+## Tips 
 :::tip[My Tip]
 
-绿色小贴士，用于推荐用法、技巧等场景
+Green Tip, used for recommending usage, techniques, etc. scenarios 
 
 :::
 
 :::danger[Take care]
 
-红色危险，用于指示高风险操作、错误操作等场景
+Red danger, used to indicate scenarios such as high-risk operations, incorrect operations, etc. 
 
 :::
 
 :::info[My Info]
 
-蓝色信息提示，用于补充说明、背景知识等场景
+Blue information prompt, used for supplementary explanations, background knowledge, and other scenarios 
 
 :::
 
 :::note[My note]
 
-浅灰备注，需要特别注意的内容
+Light gray note: Content requiring special attention 
 
 :::
 
 :::warning[My warning]
 
-黄色，指示可能有风险的操作
+Yellow indicates that the operation may be risky. 
 
 :::
 
-### 绿色
+### Green
 ```
 :::tip[My Tip]
 
-绿色小贴士，用于推荐用法、技巧等场景
+Green Tip, used for recommending usage, techniques, etc. scenarios 
 
 :::
 ```
-### 红色
+### Red
 ```
 :::danger[Take care]
 
-红色危险，用于指示高风险操作、错误操作等场景
+Red danger, used to indicate scenarios such as high-risk operations, incorrect operations, etc. 
 
 :::
 ```
-### 蓝色
+### Blue
 ```
 :::info[My Info]
 
-蓝色信息提示，用于补充说明、背景知识等场景
+Blue information prompt, used for supplementary explanations, background knowledge, and other scenarios 
 
 :::
 ```
-### 灰色
+### Gray
 ```
 :::note[My note]
 
-浅灰备注，需要特别注意的内容
+Light gray note: Content requiring special attention 
 
 :::
 ```
-### 黄色
+### Yellow
 ```
 :::warning[My warning]
 
-黄色，指示可能有风险的操作
+Yellow indicates that the operation may be risky. 
 
 :::
 ```
 ---
 
-## 同目录跳转
+## Same-directory Navigation
 
 [testpage2](./testpage2.md)
 ```
 [testpage2](./testpage2.md)
 ```
 
-## 不同目录跳转
+## Cross-directory Navigation
 
-[回想空间](/docs/reflection-space)
+[reflection-space](/docs/reflection-space)
 ```
-[回想空间](/docs/reflection-space)
+[reflection-space](/docs/reflection-space)
 ```
 
 ---
 
-## 插入图片
+## illustrate
 
 ### markdown
 
@@ -658,7 +658,7 @@ int main(){
 
 <img
   src="/img/Eureka.jpg"
-  alt="示例图片"
+  alt="example pic"
   style={{
     width: '100%',
     maxWidth: '300px',
@@ -674,7 +674,7 @@ int main(){
 <img
   // highlight-next-line
   src="/img/Eureka.jpg"
-  alt="示例图片"
+  alt="example pic"
   style={{
     width: '100%',
     maxWidth: '300px',
@@ -685,58 +685,58 @@ int main(){
 />
 ```
 
-### 组件（无卡片装饰）
+### PlainComponent
 
-<p><CardImg src="/img/example.jpg" alt="示例图1" isCenter={true} /></p>
+<p><CardImg src="/img/example.jpg" alt="example-pic1" isCenter={true} /></p>
 
-**代码：**（需`import CardImg from '@site/src/components/CardImg';`）
+**Code:**（Requires`import CardImg from '@site/src/components/CardImg';`）
 ```
-<p><CardImg src="/img/example.jpg" alt="示例图1" isCenter={true} /></p>
+<p><CardImg src="/img/example.jpg" alt="example-pic1" isCenter={true} /></p>
 ```
 
-### 组件（卡片装饰）
+### CardComponent
 
-<p><CardImg src="/img/example.jpg" alt="示例图2" isCenter={true} isBoxed={true} /></p>
+<p><CardImg src="/img/example.jpg" alt="example-pic2" isCenter={true} isBoxed={true} /></p>
 
-**代码：**（需`import CardImg from '@site/src/components/CardImg';`）
+**Code:**（Requires`import CardImg from '@site/src/components/CardImg';`）
 ```
-<p><CardImg src="/img/example.jpg" alt="示例图2" isCenter={true} isBoxed={true} /></p>
+<p><CardImg src="/img/example.jpg" alt="example-pic2" isCenter={true} isBoxed={true} /></p>
 ```
 
 ---
 
-## 自定义标题
+## Custom Title 
+# <B1>First Level Heading</B1>
+## <B2>Second Level Heading</B2>
+### <B3>Unordered Third Level Heading</B3>
+### <BH3>1.</BH3> Ordered Third Level Heading
+### <B3W>Third Level Heading in Green Font</B3W>
 
-# <B1>一级标题</B1>
-## <B2>二级标题</B2>
-### <B3>无序三级标题</B3>
-### <BH3>1.</BH3>有序三级标题
-### <B3W>绿色字体三级标题</B3W>
-
-**使用方法：**（需`import {  B1, B2, B3, BH3, B3W} from '@site/src/components/ForMDX';`）
+**Code:**（Requires`import {  B1, B2, B3, BH3, B3W} from '@site/src/components/ForMDX';`）
 ```
-# <B1>一级标题</B1>
-## <B2>二级标题</B2>
-### <B3>无序三级标题</B3>
-### <BH3>1.</BH3>有序三级标题
-### <B3W>绿色字体三级标题</B3W>
+## Custom Title 
+# <B1>First Level Heading</B1>
+## <B2>Second Level Heading</B2>
+### <B3>Unordered Third Level Heading</B3>
+### <BH3>1.</BH3> Ordered Third Level Heading
+### <B3W>Third Level Heading in Green Font</B3W>
 ```
 
-上面关于B1、B2等自定义标题的样式可在`.src/css/custom.css`中修改
+The styles for custom titles such as B1 and B2 can be modified in the file `.src/css/custom.css`.
 
 ---
 
-## 📚 参考资料
+## 📚 References
 
-- [波特律动](https://github.com/BaudDance/docs/blob/main/docs/stm32/getting-started/getting-started.mdx "按键链接跳转")
+- [BaudDance](https://github.com/BaudDance/docs/blob/main/docs/stm32/getting-started/getting-started.mdx "Button Link Navigation")
 
-- [Zhang的学习笔记](https://github.com/Ratherthan17/notes/blob/main/src/components/ForMDX/forMDX.js "图片嵌入、绑定自定义域名等")
+- [Zhang's Study Notes](https://github.com/Ratherthan17/notes/blob/main/src/components/ForMDX/forMDX.js "Image embedding, custom domain binding, etc.")
 
-- [Joseph Gan's Blog](https://bwgjoseph.com/docusaurus-how-to-enable-showlastupdate-feature-when-deployed-via-gitlab-ci "最后更新时间")
+- [Joseph Gan's Blog](https://bwgjoseph.com/docusaurus-how-to-enable-showlastupdate-feature-when-deployed-via-gitlab-ci "last_updated_at")
 
-- [roc的技术笔记](https://imroc.cc/note/category/docusaurus "学习")
+- [roc's Tech Notes](https://imroc.cc/note/category/docusaurus "Study")
 
-- [AlanWang's Blog](https://www.alanwang.site/posts/blog-guides/docusaurus-search "学习")
+- [AlanWang's Blog](https://www.alanwang.site/posts/blog-guides/docusaurus-search "Study")
 
 
 
