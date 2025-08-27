@@ -112,3 +112,18 @@ i18n:
   label: i18n
   permalink: /i18n
   description: 关于 i18n 国际化配置，现支持中文、英文
+  
+Search:
+  label: Search
+  permalink: /Search
+  description: 关于 Search 功能的配置 
+ 
+Algolia:
+  label: Algolia
+  permalink: /Algolia
+  description: 关于 Algolia 搜索的配置  
+  
+搜索:
+  label: 搜索
+  permalink: /搜索
+  description: 关于 搜索 功能的配置   
