@@ -1,0 +1,299 @@
+---
+slug: LeetCode392
+title: 判断子序列
+authors: eurekaX
+tags: [双指针,字符串]
+---
+import { Highlight, Keyword, Light, B1, B2, B3, BH3, B3W, MyColor} from '@site/src/components/ForMDX';
+
+
+### <B2>[力扣面试经典——392题](https://leetcode.cn/problems/is-subsequence/description/?envType=study-plan-v2&envId=top-interview-150 "力扣")</B2>
+
+<!-- truncate -->
+
+
+### 💡 参考代码：
+
+```c
+/**
+ * 判断字符串 s 是否为字符串 t 的子序列
+ * 
+ * @param s 待检查的子序列字符串
+ * @param t 主字符串
+ * @return bool 如果 s 是 t 的子序列返回 true，否则返回 false
+ */
+bool isSubsequence(char * s, char * t) {
+    // 使用双指针分别指向两个字符串的当前位置
+    int i = 0; // 指向字符串 s 的指针
+    int j = 0; // 指向字符串 t 的指针
+    
+    // 遍历两个字符串
+    while (s[i] != '\0' && t[j] != '\0') {
+        // 如果当前字符匹配，则移动 s 的指针
+        if (s[i] == t[j]) {
+            i++;
+        }
+        // 总是移动 t 的指针
+        j++;
+    }
+    
+    // 如果 s 的指针到达末尾，说明 s 是 t 的子序列
+    return s[i] == '\0';
+}
+```
+
+### 📖 总结：
+
+<details>
+<summary>点击展开题目总结</summary>
+# 🤔 判断子序列
+
+---
+
+## 1️⃣ 题目核心信息
+
+🎯 **功能描述**：判断字符串 s 是否为字符串 t 的子序列，即能否通过删除 t 中的一些字符（也可以不删除）得到 s，且不改变字符的相对位置
+
+📥 **输入输出**：
+- **输入**：两个字符串 s（待检查的子序列）和 t（主字符串）
+- **输出**：布尔值，如果 s 是 t 的子序列返回 true，否则返回 false
+
+---
+
+## 2️⃣ 实现原理
+
+💡 **核心思路**：使用双指针技术逐个匹配字符，或者预处理主字符串建立索引表以优化大量查询场景
+
+📋 **实现步骤**：
+1. 基础解法：使用两个指针分别遍历 s 和 t 字符串
+2. 当字符匹配时，同时移动两个指针；不匹配时只移动 t 的指针
+3. 进阶解法：预处理 t 字符串，为每个位置建立字符索引表
+4. 查询时直接利用索引表快速定位下一个匹配字符的位置
+
+---
+
+## 3️⃣ 关键点解析
+
+### 🎯 代码技巧
+- 双指针技术：有效处理序列匹配问题
+- 预处理优化：通过空间换时间，提高大量查询场景下的效率
+- 边界处理：正确判断指针到达字符串末尾的情况
+
+## 4️⃣ 使用场景
+
+### ✅ 适用情况：
+- 判断一个字符串是否为另一个字符串的子序列
+- 文本处理中的模式匹配
+- 大量重复查询同一主字符串的子序列判断
+
+### ⚠️ 前提条件：
+- 输入字符串只包含小写英文字母
+- 主字符串相对固定，需要多次查询不同子序列
+
+## 5️⃣ 复杂度分析
+
+- ⏱️ 时间复杂度：
+  - 基础解法：O(|t|)，其中 |t| 是主字符串长度
+  - 进阶解法：预处理 O(|t|)，单次查询 O(|s|)
+
+- 💾 空间复杂度：
+  - 基础解法：O(1)
+  - 进阶解法：O(|t| × 26) = O(|t|)
+
+## 6️⃣ 注意事项
+
+### 🚩 边界情况：
+- 空字符串 s 总是任何字符串 t 的子序列
+- 非空字符串 s 永远不是空字符串 t 的子序列
+- s 长度大于 t 长度时，s 不可能是 t 的子序列
+
+### 💥 易错点：
+- 忘记处理字符串结束符 '\0'
+- 在进阶解法中索引映射错误（字符到数组下标转换）
+- 查询时位置更新逻辑错误，导致重复匹配同一位置字符
+
+## 7️⃣ 进阶解法
+```c
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <limits.h>
+
+/**
+ * 预处理字符串 t，建立字符位置索引表
+ * 
+ * @param t 主字符串
+ * @param tLen 主字符串长度
+ * @param indexMap 字符索引表，indexMap[c][i] 表示字符 c 在位置 i 之后第一次出现的位置
+ */
+void preprocess(char* t, int tLen, int** indexMap) {
+    // 为每个字符分配空间，存储下一个出现位置的信息
+    for (int i = 0; i < 26; i++) {
+        indexMap[i] = (int*)malloc((tLen + 1) * sizeof(int));
+        // 初始化为 -1，表示未找到
+        for (int j = 0; j <= tLen; j++) {
+            indexMap[i][j] = -1;
+        }
+    }
+    
+    // 从后往前填充索引表
+    for (int i = tLen - 1; i >= 0; i--) {
+        int c = t[i] - 'a'; // 将字符转换为索引 0-25
+        // 复制上一个位置的所有字符的索引信息
+        for (int j = 0; j < 26; j++) {
+            indexMap[j][i] = indexMap[j][i + 1];
+        }
+        // 更新当前字符在位置 i 的索引
+        indexMap[c][i] = i;
+    }
+}
+
+/**
+ * 使用预处理的索引表快速判断 s 是否为 t 的子序列
+ * 
+ * @param s 待检查的子序列字符串
+ * @param indexMap 预处理得到的字符索引表
+ * @return bool 如果 s 是 t 的子序列返回 true，否则返回 false
+ */
+bool isSubsequenceAdvanced(char* s, int** indexMap) {
+    int pos = 0; // 当前在 t 中的位置
+    
+    for (int i = 0; s[i] != '\0'; i++) {
+        int c = s[i] - 'a'; // 将字符转换为索引 0-25
+        // 查找字符 c 在当前位置之后第一次出现的位置
+        pos = indexMap[c][pos];
+        // 如果找不到，说明不是子序列
+        if (pos == -1) {
+            return false;
+        }
+        // 移动到找到位置的下一个位置
+        pos++;
+    }
+    
+    return true;
+}
+
+/**
+ * 释放预处理索引表占用的内存
+ * 
+ * @param indexMap 字符索引表
+ */
+void freeIndexMap(int** indexMap) {
+    for (int i = 0; i < 26; i++) {
+        free(indexMap[i]);
+    }
+    free(indexMap);
+}
+
+// 示例用法
+int main() {
+
+    // 进阶解法测试
+    printf("\n进阶解法测试:\n");
+    char t[] = "ahbgdc";
+    int tLen = strlen(t);
+    
+    // 预处理
+    int** indexMap = (int**)malloc(26 * sizeof(int*));
+    preprocess(t, tLen, indexMap);
+    
+    // 查询
+    printf("isSubsequenceAdvanced(\"abc\", indexMap): %s\n", 
+           isSubsequenceAdvanced("abc", indexMap) ? "true" : "false");
+    printf("isSubsequenceAdvanced(\"axc\", indexMap): %s\n", 
+           isSubsequenceAdvanced("axc", indexMap) ? "true" : "false");
+    
+    // 释放内存
+    freeIndexMap(indexMap);
+    
+    return 0;
+}
+```
+## 8⃣ 补充说明
+
+### 1. 预处理阶段
+
+—— `preprocess` 函数
+
+这个函数的主要目的是为字符串 t 构建一个索引表，使得后续查询更高效。
+
+#### 核心思想
+
+构建一个二维数组 `indexMap[26][tLen+1]`，其中：
+
+- 第一维代表26个小写字母（a-z）
+- 第二维代表在字符串 t 中的位置（0 到 tLen）
+- `indexMap[c][i]` 的值表示字符 c 在位置 i 之后（包括位置 i）第一次出现的位置
+
+#### 举例说明
+
+假设 `t = "abcba"`，长度为5：
+
+1. **初始化**：创建一个 26×6 的二维数组，所有值初始化为 -1
+
+2. **从后往前填充**：
+   - 位置4（字符'a'）:
+     - 先复制位置5的所有信息（都是-1）
+     - 更新字符'a'在位置4的值为4
+   - 位置3（字符'b'）:
+     - 先复制位置4的所有信息
+     - 更新字符'b'在位置3的值为3
+   - 位置2（字符'c'）:
+     - 先复制位置3的所有信息
+     - 更新字符'c'在位置2的值为2
+   - 位置1（字符'b'）:
+     - 先复制位置2的所有信息
+     - 更新字符'b'在位置1的值为1
+   - 位置0（字符'a'）:
+     - 先复制位置1的所有信息
+     - 更新字符'a'在位置0的值为0
+
+最终得到的部分索引表（只显示相关字符）：
+```
+indexMap['a'-'a'][0]=0, indexMap['a'-'a'][1]=4, indexMap['a'-'a'][2]=4, indexMap['a'-'a'][3]=4, indexMap['a'-'a'][4]=4, indexMap['a'-'a'][5]=-1
+indexMap['b'-'a'][0]=1, indexMap['b'-'a'][1]=1, indexMap['b'-'a'][2]=3, indexMap['b'-'a'][3]=3, indexMap['b'-'a'][4]=-1, indexMap['b'-'a'][5]=-1
+indexMap['c'-'a'][0]=2, indexMap['c'-'a'][1]=2, indexMap['c'-'a'][2]=2, indexMap['c'-'a'][3]=-1, indexMap['c'-'a'][4]=-1, indexMap['c'-'a'][5]=-1
+```
+
+### 2. 查询阶段
+
+—— `isSubsequenceAdvanced` 函数
+
+使用预处理好的索引表快速判断子序列：
+
+#### 工作原理
+
+维护一个当前位置 `pos`，对于要查找的字符串 `s` 中的每个字符：
+
+1. 查找该字符在当前位置之后第一次出现的位置
+2. 如果找不到（返回-1），则说明不是子序列
+3. 如果找到，则将位置更新为找到位置的下一个位置
+
+#### 举例说明
+
+继续使用上面的例子，`t = "abcba"`，现在要检查 `s = "acb"` 是否为子序列：
+
+1. 初始位置 `pos = 0`
+2. 查找字符 'a'：
+   - `indexMap['a'-'a'][0] = 0`
+   - 找到位置0，更新 `pos = 0 + 1 = 1`
+3. 查找字符 'c'：
+   - `indexMap['c'-'a'][1] = 2`
+   - 找到位置2，更新 `pos = 2 + 1 = 3`
+4. 查找字符 'b'：
+   - `indexMap['b'-'a'][3] = 3`
+   - 找到位置3，更新 `pos = 3 + 1 = 4`
+5. 字符串遍历完成，返回 `true`
+
+如果检查 `s = "abc"`：
+
+1. 初始位置 `pos = 0`
+2. 查找字符 'a'：`indexMap['a'-'a'][0] = 0`，`pos = 1`
+3. 查找字符 'b'：`indexMap['b'-'a'][1] = 1`，`pos = 2`
+4. 查找字符 'c'：`indexMap['c'-'a'][2] = 2`，`pos = 3`
+5. 返回 `true`
+
+这种方法的优势在于，无论主字符串 `t` 有多长，每次查询的时间复杂度只与待查询字符串 `s` 的长度有关，而与 `t` 的长度无关。这对于需要大量查询的场景非常有用。
+
+关于此进阶解法，我**尚不理解**！
+</details>

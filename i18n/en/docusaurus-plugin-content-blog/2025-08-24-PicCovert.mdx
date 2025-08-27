@@ -1,0 +1,164 @@
+---
+slug: AboutPic
+title: 图片转换
+authors: eurekaX
+tags: [ffmpeg,图片]
+---
+
+import { Highlight, Keyword, Light, B1, B2, B3, BH3, B3W, MyColor} from '@site/src/components/ForMDX';
+import CardImg from '@site/src/components/CardImg';
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+## <B2> [process-images.js](https://github.com/EurekaShadow/EurekaShadow.github.io/blob/master/scripts/process-images.js ) 脚本</B2>
+
+本文将介绍 `process-images.js` 脚本以及在使用过程中需要注意的问题。
+
+<!-- truncate -->
+
+## 🎯 功能
+- 格式转换：将PNG、GIF、BMP、WebP等格式转换为JPG
+- 智能压缩：自动优化JPG图片大小，保持质量平衡
+- 批量重命名：按指定前缀自动编号重命名图片
+- 处理统计：显示压缩率、处理时间等详细信息
+- 日志记录：可选生成详细处理日志
+
+## 📝 用途
+适用于网站图片优化，特别适合Docusaurus等静态网站项目，帮助：
+
+- 减小图片文件大小，提升网页加载速度
+- 统一图片格式，便于管理
+- 规范图片命名，避免重复文件名
+
+## ▶️ 用法
+
+<Tabs>
+
+  <TabItem value="node" label="node">
+```bash title="bash"
+# 运行脚本
+node scripts/process-images.js
+# 按提示操作：
+# 1. 选择要处理的图片目录
+# 2. 输入文件名前缀（直接回车跳过重命名）
+# 3. 选择是否生成日志文件
+# 4. 确认开始处理
+```
+  </TabItem>
+
+  <TabItem value="yarn" label="yarn">
+```bash title="bash"
+yarn process-img
+```
+  </TabItem>
+
+</Tabs>
+
+## ⚠️ 注意事项
+- 需要系统已安装ffmpeg
+- 默认处理 static/img 目录下的图片
+- 原文件会被删除，建议先备份重要图片
+- 日志文件默认保存在项目根目录的 logs/ 文件夹
+- 处理大图片或大量图片时需要较长时间
+- 脚本会自动跳过已按命名规则处理的文件
+
+## 📁 目录结构
+```
+项目根目录/
+├── static/img/          # 图片处理目录
+│   ├── Blog/           # 子目录图片
+│   └── *.png/jpg等     # 待处理图片
+├── logs/               # 日志文件目录（自动生成）
+└── process-images.js   # 脚本文件
+```
+---
+
+## 错误将图片进行转换压缩重命名后，想要复原
+
+### 1. 恢复已跟踪的文件到之前状态
+```bash
+git checkout HEAD~1 -- "D:/Docusaurus/test-site/static/img/Blog/"
+```
+### 2. 查看未跟踪的文件
+```bash
+git ls-files --others "D:/Docusaurus/test-site/static/img/Blog/"
+```
+
+### 3. 清理未跟踪的文件（预览）
+```bash
+git clean -n "D:/Docusaurus/test-site/static/img/Blog/"
+```
+
+### 4. 确认无误后执行清理
+```bash
+git clean -f "D:/Docusaurus/test-site/static/img/Blog/"
+```
+
+### 5. 查看最终状态
+```bash
+git status
+```
+
+## 预防措施
+在运行图片处理脚本前：
+```
+# 1. 提交当前状态
+git add .
+git commit -m "Before running image processing script"
+
+# 2. 创建备份分支
+git checkout -b backup-before-processing
+
+# 3. 回到主分支进行处理
+git checkout main
+
+# 运行脚本...
+# node process-images.js
+
+# 如果不满意结果，可以轻松回到备份状态：
+# git reset --hard backup-before-processing
+```
+
+## 压缩 gif 图片思路
+> 后续应把 gif 转 jpg 的代码删去
+### 交互流程设计
+```
+=== 图片处理脚本 ===
+请选择处理类型：
+1. 普通图片处理（PNG/JPG等格式转换和压缩）
+2. GIF图片优化
+
+请输入选项编号:
+
+# 如果选择1：进入原有流程
+# 如果选择2：进入GIF专用流程
+```
+
+### GIF处理流程
+```
+请选择要处理的GIF目录:
+1. ~/static/img/xxx目录 (包含N个GIF文件)
+...
+
+请选择GIF处理选项：
+1. 仅转换格式（PNG/JPG）
+2. 轻微压缩（减小20-30%，保持质量）
+3. 中度压缩（减小50-70%，适度降低质量）
+4. 重度压缩（减小80%+，显著降低质量）
+5. 自定义压缩
+
+是否需要重命名处理后的文件？(Y/N):
+```
+
+### ffmpeg命令示例
+```bash title="bash"
+# 轻微压缩
+ffmpeg -i input.gif -filter_complex "[0:v] split [a][b];[a] palettegen=reserve_transparent=on:transparency_color=ffffff [p];[b][p] paletteuse" output.gif
+
+# 中度压缩
+ffmpeg -i input.gif -filter_complex "[0:v] fps=15,scale=iw/2:-1 [a];[a] split [b][c];[b] palettegen=reserve_transparent=on:transparency_color=ffffff [p];[c][p] paletteuse" output.gif
+
+# 重度压缩
+ffmpeg -i input.gif -filter_complex "[0:v] fps=10,scale=iw/3:-1 [a];[a] split [b][c];[b] palettegen=reserve_transparent=on:transparency_color=ffffff [p];[c][p] paletteuse" -colors 32 output.gif
+```
+

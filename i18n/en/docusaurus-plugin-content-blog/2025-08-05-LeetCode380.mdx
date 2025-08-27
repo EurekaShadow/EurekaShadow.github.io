@@ -1,0 +1,825 @@
+---
+slug: LeetCode380
+title: O(1)时间插入、删除和获取随机元素
+
+authors: eurekaX
+tags: [数组]
+---
+import { Highlight, Keyword, Light, B1, B2, B3, BH3, B3W, MyColor} from '@site/src/components/ForMDX';
+
+
+### <B2>[力扣面试经典——380题](https://leetcode.cn/problems/insert-delete-getrandom-o1/?envType=study-plan-v2&envId=top-interview-150 "力扣")</B2>
+
+<!-- truncate -->
+
+
+### 💡 参考代码：
+
+```c
+/**
+ * 哈希表节点结构体
+ * 用于存储元素值和其在数组中的索引位置
+ */
+typedef struct {
+    int value;              // 元素值
+    int index;              // 该元素在数组中的索引位置
+    UT_hash_handle hh;      // uthash库所需的句柄
+} HashItem;
+
+/**
+ * RandomizedSet结构体
+ * 组合数组和哈希表实现O(1)时间复杂度的插入、删除和随机获取操作
+ */
+typedef struct {
+    int* nums;              // 存储实际元素的数组
+    int numsSize;           // 当前数组中元素的个数
+    HashItem* indices;      // 哈希表，存储元素值到索引的映射
+} RandomizedSet;
+
+/**
+ * 创建RandomizedSet对象
+ * @return 新创建的RandomizedSet对象指针
+ */
+RandomizedSet* randomizedSetCreate() {
+    srand(time(NULL)); // 初始化随机数种子
+    RandomizedSet* obj = (RandomizedSet*)malloc(sizeof(RandomizedSet));
+    obj->nums = (int*)malloc(sizeof(int) * 200000); // 预分配足够空间
+    obj->numsSize = 0;                              // 初始元素个数为0
+    obj->indices = NULL;                            // 哈希表初始为空
+    return obj;
+}
+
+/**
+ * 向集合中插入元素
+ * @param obj RandomizedSet对象指针
+ * @param val 要插入的元素值
+ * @return 插入成功返回true，元素已存在返回false
+ */
+bool randomizedSetInsert(RandomizedSet* obj, int val) {
+    HashItem* tmp = NULL;
+    // 在哈希表中查找元素是否已存在
+    HASH_FIND_INT(obj->indices, &val, tmp);
+    if (tmp != NULL) {
+        return false; // 元素已存在，插入失败
+    }
+    
+    // 将新元素添加到数组末尾
+    obj->nums[obj->numsSize] = val;
+    
+    // 在哈希表中创建新节点，记录元素值和其在数组中的索引
+    tmp = (HashItem*)malloc(sizeof(HashItem));
+    tmp->value = val;
+    tmp->index = obj->numsSize;
+    HASH_ADD_INT(obj->indices, value, tmp);
+    
+    obj->numsSize++; // 数组元素个数增加
+    return true;
+}
+
+/**
+ * 从集合中删除元素
+ * @param obj RandomizedSet对象指针
+ * @param val 要删除的元素值
+ * @return 删除成功返回true，元素不存在返回false
+ */
+bool randomizedSetRemove(RandomizedSet* obj, int val) {
+    HashItem* tmp = NULL;
+    // 在哈希表中查找要删除的元素
+    HASH_FIND_INT(obj->indices, &val, tmp);
+    if (tmp == NULL) {
+        return false; // 元素不存在，删除失败
+    }
+    
+    // 获取要删除元素在数组中的索引位置
+    int index = tmp->index;
+    
+    // 获取数组中最后一个元素的值
+    int lastValue = obj->nums[obj->numsSize - 1];
+    // 将最后一个元素移动到要删除元素的位置（覆盖要删除的元素）
+    obj->nums[index] = lastValue;
+    
+    // 更新最后一个元素在哈希表中的索引位置
+    HashItem* lastItem = NULL;
+    HASH_FIND_INT(obj->indices, &lastValue, lastItem);
+    if (lastItem != NULL) {
+        lastItem->index = index;
+    }
+    
+    // 从哈希表中删除目标元素节点并释放内存
+    HASH_DEL(obj->indices, tmp);
+    free(tmp);
+    
+    obj->numsSize--; // 数组元素个数减少
+    return true;
+}
+
+/**
+ * 随机获取集合中的一个元素
+ * @param obj RandomizedSet对象指针
+ * @return 随机返回的元素值
+ */
+int randomizedSetGetRandom(RandomizedSet* obj) {
+    // 使用随机数生成0到numsSize-1之间的索引
+    int randomIndex = rand() % obj->numsSize;
+    return obj->nums[randomIndex]; // 返回数组中对应位置的元素
+}
+
+/**
+ * 释放RandomizedSet对象占用的内存
+ * @param obj RandomizedSet对象指针
+ */
+void randomizedSetFree(RandomizedSet* obj) {
+    // 遍历并释放哈希表中所有的节点内存
+    HashItem* curr, *tmp;
+    HASH_ITER(hh, obj->indices, curr, tmp) {
+        HASH_DEL(obj->indices, curr);
+        free(curr);
+    }
+    
+    // 释放数组内存和对象本身内存
+    free(obj->nums);
+    free(obj);
+}
+```
+
+### 📖 总结：
+
+<details>
+<summary>点击展开题目总结</summary>
+# 🤔 O(1)时间插入、删除和获取随机元素
+
+---
+
+## 1️⃣ 题目核心信息
+
+🎯 **功能描述**：设计一个支持在平均O(1)时间复杂度下进行插入、删除和获取随机元素的数据结构
+
+📥 **输入输出**：
+- **输入**：
+  - `val`：要插入或删除的整数值
+  - 无参数：用于获取随机元素
+- **输出**：
+  - `insert`：插入成功返回true，失败返回false
+  - `remove`：删除成功返回true，失败返回false
+  - `getRandom`：返回集合中的任意一个元素
+  - `create`：返回初始化的RandomizedSet对象
+  - `free`：释放对象内存，无返回值
+
+---
+
+## 2️⃣ 实现原理
+
+💡 **核心思路**：使用数组存储元素以支持O(1)随机访问，结合哈希表记录元素值到索引的映射以支持O(1)查找
+
+📋 **实现步骤**：
+1. 使用动态数组存储所有元素，支持通过索引O(1)访问任意元素
+2. 使用哈希表维护元素值到数组索引的映射关系，支持O(1)查找元素
+3. 插入时将元素添加到数组末尾并在哈希表中记录索引
+4. 删除时将目标元素与数组末尾元素交换，更新哈希表并删除目标元素
+
+---
+
+## 3️⃣ 关键点解析
+
+### 🎯 代码技巧
+- **数组+哈希表组合**：数组支持随机访问，哈希表支持快速查找
+- **删除元素时的交换技巧**：将待删除元素与末尾元素交换，避免数组元素移动
+- **双重数据结构同步维护**：同时维护数组和哈希表中元素信息的一致性
+
+## 4️⃣ 使用场景
+
+### ✅ 适用情况：
+- 需要频繁进行插入、删除和随机访问操作的场景
+- 对时间复杂度要求严格的随机集合应用
+- 实现随机抽样或随机化算法的数据结构
+
+### ⚠️ 前提条件：
+- 元素值唯一，不支持重复元素
+- 需要足够的内存空间维护数组和哈希表
+- getRandom调用时集合必须非空
+
+## 5️⃣ 复杂度分析
+
+- ⏱️ 时间复杂度：
+  - insert: O(1) 平均时间复杂度
+  - remove: O(1) 平均时间复杂度
+  - getRandom: O(1) 时间复杂度
+  - create: O(1) 时间复杂度
+  - free: O(n) 时间复杂度，n为元素个数
+
+- 💾 空间复杂度：O(n)，n为存储的元素个数，需要数组和哈希表存储
+
+## 6️⃣ 注意事项
+
+### 🚩 边界情况：
+- 插入已存在的元素
+- 删除不存在的元素
+- 集合为空时调用getRandom（题目保证不会出现）
+- 集合只有一个元素时的删除操作
+
+### 💥 易错点：
+- 删除元素后忘记更新交换元素在哈希表中的索引
+- 内存释放不完整，忘记释放哈希表节点
+- getRandom实现中随机数范围错误，应为[0, numsSize)
+
+## 7️⃣ 惑之未解
+
+这是力扣里面的最优解？但是我看不懂~😂
+
+我现在打算先理解灵码给出的代码吧，之后再来探索下面的内容！🧐
+暂时将下面代码全部删除，现在正在排查build文件夹过大的问题（发现不是这里的代码块导致的问题，日后可恢复！！！）
+```c
+/**
+ * FNV哈希算法常量定义
+ * FNV32_BASE: FNV-1哈希算法的基础值
+ * FNV32_PRIME: FNV-1哈希算法的素数
+ */
+#define FNV32_BASE ((unsigned int) 0x811c9dc5)
+#define FNV32_PRIME ((unsigned int) 0x01000193)
+
+/**
+ * FNV-1哈希算法实现
+ * @param buf 要哈希的数据缓冲区
+ * @param len 数据长度
+ * @return 计算得到的哈希值
+ */
+static unsigned int memhash(const void *buf, size_t len)
+{
+	unsigned int hash = FNV32_BASE;
+	unsigned char *ucbuf = (unsigned char *) buf;
+	while (len--) {
+		unsigned int c = *ucbuf++;
+		hash = (hash * FNV32_PRIME) ^ c;
+	}
+	return hash;
+}
+
+/**
+ * 哈希表项结构体
+ * 用于链式解决哈希冲突
+ */
+struct hashmap_entry {
+    unsigned int hash;                  // 存储预计算的哈希值
+    struct hashmap_entry *next;         // 指向下一个冲突项的指针
+};
+
+/**
+ * 初始化哈希表项
+ * @param entry 要初始化的哈希表项
+ * @param hash  预计算的哈希值
+ */
+static inline void hashmap_entry_init(struct hashmap_entry *entry, unsigned int hash) {
+    entry->hash = hash;
+    entry->next = NULL;
+}
+
+/**
+ * 根据键值计算哈希值并初始化哈希表项
+ */
+#define __hashmap_entry_init(entry, key, len) hashmap_entry_init(entry, memhash(key, len))
+
+/**
+ * 哈希表项比较回调函数类型定义
+ * @param entry     哈希表中的项
+ * @param key       要比较的键
+ * @param key_data  键数据
+ * @return 相等返回0，不相等返回非0值
+ */
+typedef int (*hashmap_entry_cmp_callback)(struct hashmap_entry *entry, struct hashmap_entry *key, void *key_data);
+
+/**
+ * 哈希表结构体
+ */
+struct hashmap {
+    struct hashmap_entry **table;       // 哈希桶数组
+    unsigned int table_size;            // 哈希桶数组大小
+    unsigned int private_size;          // 当前存储的元素数量
+    hashmap_entry_cmp_callback cmp;     // 元素比较回调函数
+    unsigned int grow_at;               // 触发扩容的阈值
+    unsigned int shrink_at;             // 触发收缩的阈值
+};
+
+/**
+ * 哈希表配置常量
+ * hashmap_init_size: 初始哈希表大小
+ * hashmap_factor: 负载因子(百分比)
+ * hashmap_resize_bit: 扩容/收缩时的位移量
+ */
+#define hashmap_init_size 64
+#define hashmap_factor 80
+#define hashmap_resize_bit 2
+
+/**
+ * 分配哈希表桶数组
+ * @param map  哈希表结构体指针
+ * @param size 桶数组大小
+ */
+static void alloc_table(struct hashmap *map, unsigned int size) 
+{
+        map->table_size = size;
+        map->table = calloc(size, sizeof(void *));  // 初始化为NULL
+
+        // 计算扩容和收缩阈值
+        map->grow_at = size * hashmap_factor / 100;
+        if (size <= hashmap_init_size) 
+            map->shrink_at = 0;
+        else 
+            map->shrink_at = map->grow_at / ((1 << hashmap_resize_bit) + 1); 
+}
+
+/**
+ * 比较两个哈希表项是否相等
+ * @param map       哈希表结构体指针
+ * @param entry     哈希表中的项
+ * @param key       要比较的键
+ * @param key_data  键数据
+ * @return 相等返回true，否则返回false
+ */
+static inline int entry_equals(struct hashmap *map, struct hashmap_entry *entry, struct hashmap_entry *key, void *key_data) 
+{
+    return ((entry->hash == key->hash) && (entry == key || !map->cmp(entry, key, key_data))); 
+}
+
+/**
+ * 初始化哈希表
+ * @param map        哈希表结构体指针
+ * @param init_size  初始大小
+ * @param cmp        比较回调函数
+ */
+static void hashmap_init(struct hashmap *map, unsigned int init_size, hashmap_entry_cmp_callback cmp) 
+{
+    
+    unsigned int size = hashmap_init_size;
+
+    map->cmp = cmp;
+
+    // 根据初始大小计算合适的哈希表大小
+    init_size = init_size * 100 / hashmap_factor;
+    while (init_size > size) {
+        size <<= hashmap_resize_bit;
+    }
+
+    alloc_table(map, size);
+    map->private_size = 0;
+}
+
+/**
+ * 计算哈希桶索引
+ * @param map 哈希表结构体指针
+ * @param key 键项
+ * @return 桶索引
+ */
+static inline unsigned int bucket(struct hashmap *map, struct hashmap_entry *key) 
+{
+    return key->hash & (map->table_size - 1);
+}
+
+/**
+ * 查找键项在哈希表中的位置指针
+ * @param map       哈希表结构体指针
+ * @param key       要查找的键
+ * @param key_data  键数据
+ * @return 指向该项指针的指针
+ */
+static struct hashmap_entry **find_entry_ptr(struct hashmap *map, struct hashmap_entry *key, void *key_data) 
+{
+    unsigned int b = bucket(map, key);
+
+    struct hashmap_entry **entry = &map->table[b];
+    while (*entry && !entry_equals(map, *entry, key, key_data)) {
+        entry = &(*entry)->next;
+    }
+
+    return entry;
+}
+
+/**
+ * 重新哈希（扩容或收缩）
+ * @param map      哈希表结构体指针
+ * @param new_size 新的哈希表大小
+ */
+static void rehash(struct hashmap *map, unsigned int new_size)
+{
+    int i, old_size = map->table_size;
+    struct hashmap_entry **old_table = map->table;
+
+    alloc_table(map, new_size);
+
+    // 将旧表中的所有项重新插入新表
+    for (i = 0; i < old_size; i++) {
+        struct hashmap_entry *e = old_table[i];
+
+        while (e) {
+            struct hashmap_entry *next = e->next;
+            unsigned int b = bucket(map, e);
+            e->next = map->table[b];
+            map->table[b] = e;
+            e = next;
+        }
+    }
+    free(old_table);
+}
+
+/**
+ * 从哈希表中移除项
+ * @param map       哈希表结构体指针
+ * @param key       要移除的键
+ * @param key_data  键数据
+ * @return 被移除的项，不存在则返回NULL
+ */
+static struct hashmap_entry *hashmap_remove(struct hashmap *map, struct hashmap_entry *key, void *key_data) 
+{
+    struct hashmap_entry **e;
+    struct hashmap_entry *old;
+
+    e = find_entry_ptr(map, key, key_data);
+    if (!*e) return NULL;
+
+    old = *e;
+    *e = old->next;
+    old->next = NULL;
+
+    // 如果元素数量低于收缩阈值，则进行收缩
+    if (--map->private_size < map->shrink_at)
+        rehash(map, map->table_size >> hashmap_resize_bit);
+    
+    return old;
+}
+
+/**
+ * 检查键是否存在于哈希表中
+ * @param map       哈希表结构体指针
+ * @param key       要检查的键
+ * @param key_data  键数据
+ * @return 存在返回true，否则返回false
+ */
+static bool hashmap_exists(struct hashmap *map, struct hashmap_entry *key, void *key_data) {
+    struct hashmap_entry **e = find_entry_ptr(map, key, key_data);
+    if (!*e) return false;
+    
+    return true;
+}
+
+/**
+ * 向哈希表中添加项
+ * @param map    哈希表结构体指针
+ * @param entry  要添加的项
+ */
+static void hashmap_add(struct hashmap *map, struct hashmap_entry *entry) 
+{
+    unsigned int b = bucket(map, entry);
+
+    entry->next = map->table[b];
+    map->table[b] = entry;
+    
+    // 如果元素数量超过扩容阈值，则进行扩容
+    if (++map->private_size > map->grow_at)
+        rehash(map, map->table_size << hashmap_resize_bit);
+}
+
+/**
+ * 向哈希表中放置项（如果已存在则替换）
+ * @param map    哈希表结构体指针
+ * @param entry  要放置的项
+ * @return 被替换的旧项，没有则返回NULL
+ */
+static struct hashmap_entry *hashmap_put(struct hashmap *map, struct hashmap_entry *entry) {
+    struct hashmap_entry *old = hashmap_remove(map, entry, NULL);
+    hashmap_add(map, entry);
+    return old;
+}
+
+/**
+ * 哈希表迭代器结构体
+ */
+struct hashmap_iter {
+    struct hashmap *map;        // 关联的哈希表
+    struct hashmap_entry *next; // 下一个要访问的项
+    int table_pos;              // 当前桶索引
+};
+
+/**
+ * 初始化哈希表迭代器
+ * @param iter 迭代器结构体指针
+ * @param map  要迭代的哈希表
+ */
+static void hashmap_iter_init(struct hashmap_iter *iter, struct hashmap *map)
+{
+    iter->map = map;
+    iter->next = NULL;
+    iter->table_pos = 0;
+}
+
+/**
+ * 获取迭代器的下一个项
+ * @param iter 迭代器结构体指针
+ * @return 下一个哈希表项，没有则返回NULL
+ */
+static struct hashmap_entry *hashmap_iter_next(struct hashmap_iter *iter) {
+    struct hashmap_entry *curr = iter->next;
+
+    for ( ; ; ) {
+        if (curr) {
+            iter->next = curr->next;
+            return curr;
+        }
+
+        if (iter->table_pos >= iter->map->table_size)
+            return NULL;
+        
+        curr = iter->map->table[iter->table_pos++];
+    }
+} 
+
+/**
+ * 清空哈希表并释放所有内存
+ * @param map    哈希表结构体指针
+ * @param offset 项结构体中hashmap_entry成员的偏移量
+ */
+static void hashmap_clear(struct hashmap *map, unsigned int offset) {
+    
+    struct hashmap_iter iter;
+    struct hashmap_entry *e;
+
+    hashmap_iter_init(&iter, map);
+
+    // 逐个释放所有项的内存
+    while ((e = hashmap_iter_next(&iter)))
+        free((char *)e - offset);
+
+    free(map->table);
+    memset(map, 0, sizeof(struct hashmap));
+}   
+
+/**
+ * 整型键值的哈希表项结构体
+ */
+struct int_hashmap_entry {
+    int key;                    // 键
+    int value;                  // 值
+    struct hashmap_entry entry; // 基础哈希表项
+};
+
+/**
+ * 计算int_hashmap_entry中entry成员的偏移量
+ */
+#define INT_HASHMAP_OFFSET offsetof(struct int_hashmap_entry, entry) 
+
+/**
+ * 通过哈希表项指针获取包含它的int_hashmap_entry指针
+ */
+#define get_int_hashmap_entry_data(entry, type, member) \
+    ((type *) ((u_char *)(entry) - offsetof(type, member)))
+
+/**
+ * 创建整型哈希表项
+ * @param key   键
+ * @param value 值
+ * @return 新创建的项，失败返回NULL
+ */
+static inline struct int_hashmap_entry *int_hashmap_entry_create(int key, int value) {
+    struct int_hashmap_entry *int_entry;
+
+    int_entry = malloc(sizeof(struct int_hashmap_entry));
+    if (!int_entry) return NULL;
+
+    int_entry->key = key;
+    int_entry->value = value;
+    __hashmap_entry_init(&int_entry->entry, &key, sizeof(int));
+    return int_entry;
+}
+
+/**
+ * 整型哈希表结构体
+ */
+struct int_hashmap {
+    struct hashmap map;  // 基础哈希表
+};
+
+/**
+ * 整型哈希表项比较函数
+ * @param entry     哈希表中的项
+ * @param key       要比较的键
+ * @param key_data  键数据
+ * @return 相等返回0，不相等返回非0值
+ */
+static int int_hashmap_entry_cmp(struct hashmap_entry *entry, struct hashmap_entry *key, void *key_data) {
+    struct int_hashmap_entry *int_entry = get_int_hashmap_entry_data(entry, struct int_hashmap_entry, entry);
+
+    if (key_data) {
+        if (int_entry->key == (*(int *) key_data)) return 0;
+        else return 1;
+    } else {
+        struct int_hashmap_entry *key_entry = get_int_hashmap_entry_data(key, struct int_hashmap_entry, entry);
+        if (int_entry->key == key_entry->key) return 0;
+        return 1;
+    }
+}
+
+/**
+ * 初始化整型哈希表
+ * @param int_map   整型哈希表结构体指针
+ * @param init_size 初始大小
+ */
+static inline void int_hashmap_init(struct int_hashmap *int_map, unsigned int init_size)
+{
+    hashmap_init(&int_map->map, init_size, int_hashmap_entry_cmp);
+}
+
+/**
+ * 从整型哈希表中移除项
+ * @param int_map 整型哈希表结构体指针
+ * @param key     要移除的键
+ * @return 被移除的项，不存在则返回NULL
+ */
+static inline struct int_hashmap_entry *int_hashmap_remove(struct int_hashmap *int_map, int key) {
+    struct hashmap_entry key_entry;
+    __hashmap_entry_init(&key_entry, &key, sizeof(int));
+
+    struct hashmap_entry *e = hashmap_remove(&int_map->map, &key_entry, &key);
+    if (!e) return NULL;
+
+    struct int_hashmap_entry *data = get_int_hashmap_entry_data(e, struct int_hashmap_entry, entry);
+
+    return data;
+}
+
+/**
+ * 向整型哈希表中放置项
+ * @param int_map 整型哈希表结构体指针
+ * @param key     键
+ * @param value   值
+ * @return 被替换的旧项，没有则返回NULL
+ */
+static inline struct int_hashmap_entry *int_hashmap_put(struct int_hashmap *int_map, int key, int value) {
+    struct hashmap_entry *e = hashmap_put(&int_map->map, &int_hashmap_entry_create(key, value)->entry);
+    if (!e) return NULL;
+
+    struct int_hashmap_entry *data = get_int_hashmap_entry_data(e, struct int_hashmap_entry, entry);
+    return data;
+}
+
+/**
+ * 检查键是否存在于整型哈希表中
+ * @param int_map 整型哈希表结构体指针
+ * @param key     要检查的键
+ * @return 存在返回true，否则返回false
+ */
+static inline bool int_hashmap_exists(struct int_hashmap *int_map, int key) {
+    struct hashmap_entry key_entry;
+    __hashmap_entry_init(&key_entry, &key, sizeof(int));
+
+    return hashmap_exists(&int_map->map, &key_entry, &key);
+}
+
+/**
+ * 向整型哈希表中添加项
+ * @param int_map 整型哈希表结构体指针
+ * @param key     键
+ * @param value   值
+ */
+static inline void int_hashmap_add(struct int_hashmap *int_map, int key, int value) {
+    hashmap_add(&int_map->map, &int_hashmap_entry_create(key, value)->entry);
+}
+
+/**
+ * 清空整型哈希表并释放所有内存
+ * @param int_map 整型哈希表结构体指针
+ */
+static inline void int_hashmap_clear(struct int_hashmap *int_map) {
+    hashmap_clear(&int_map->map, INT_HASHMAP_OFFSET);
+}
+
+/**
+ * RandomizedSet结构体
+ * 结合数组和哈希表实现O(1)时间复杂度的插入、删除和随机获取
+ */
+typedef struct {
+    int *nums;                  // 存储实际元素的数组
+    int alloc;                  // 数组已分配的空间大小
+    int nr;                     // 数组中当前元素的数量
+    struct int_hashmap map;     // 整型哈希表，存储元素值到数组索引的映射
+} RandomizedSet;
+
+/**
+ * 默认数组分配大小
+ */
+#define DEFAULT_ALLOC 1024
+
+/**
+ * 创建RandomizedSet对象
+ * @return 新创建的RandomizedSet对象指针，失败返回NULL
+ */
+RandomizedSet *randomizedSetCreate() {
+    RandomizedSet *rand_set;
+
+    rand_set = malloc(sizeof(RandomizedSet));
+    if (!rand_set) return NULL;
+
+    rand_set->nums = calloc(DEFAULT_ALLOC, sizeof(int));
+    if (!rand_set->nums) {
+        free(rand_set);
+        return NULL;
+    }
+
+    rand_set->alloc = DEFAULT_ALLOC;
+    rand_set->nr = 0;
+    int_hashmap_init(&rand_set->map, 1024);
+    return rand_set;
+}
+
+/**
+ * 向集合中插入元素
+ * @param rand_set RandomizedSet对象指针
+ * @param val      要插入的元素值
+ * @return 插入成功返回true，元素已存在返回false
+ */
+bool randomizedSetInsert(RandomizedSet *rand_set, int val) {
+    // 检查元素是否已存在
+    if (int_hashmap_exists(&rand_set->map, val)) return false;
+
+    // 如果数组空间不足，则扩容
+    if (rand_set->nr >= rand_set->alloc) {
+        int new_alloc = rand_set->alloc * 2;
+        rand_set->nums = realloc(rand_set->nums, new_alloc * sizeof(int));
+        if (!rand_set->nums) return false;
+        rand_set->alloc = new_alloc;
+    }
+
+	// 把新元素放在数组当前元素个数对应的索引位置
+	obj->nums[obj->numsSize] = val;
+    // 在哈希表中记录元素值和其在数组中的索引
+    int_hashmap_add(&rand_set->map, val, rand_set->nr);
+    //数组中当前元素数量+1
+	rand_set->nr++;
+    return true;
+}
+
+/**
+ * 从集合中删除元素
+ * @param rand_set RandomizedSet对象指针
+ * @param val      要删除的元素值
+ * @return 删除成功返回true，元素不存在返回false
+ */
+bool randomizedSetRemove(RandomizedSet *rand_set, int val) {
+    // 从哈希表中移除元素并获取其信息
+    struct int_hashmap_entry *entry = int_hashmap_remove(&rand_set->map, val);
+    if (!entry) return false;
+
+    // 获取要删除元素在数组中的索引
+    int index = entry->value;
+    // 获取数组中最后一个元素的值
+    int last_val = rand_set->nums[--rand_set->nr];
+    // 将最后一个元素移动到要删除元素的位置
+    rand_set->nums[index] = last_val;
+
+    // 如果删除的不是最后一个元素，需要更新最后一个元素在哈希表中的索引
+    if (index != rand_set->nr) {
+        struct int_hashmap_entry *last_entry = int_hashmap_remove(&rand_set->map, last_val);
+        last_entry->value = index;
+        hashmap_add(&rand_set->map.map, &last_entry->entry);
+    }
+
+    free(entry);  // 释放被删除项的内存
+    return true;
+}
+
+/**
+ * 随机获取集合中的一个元素
+ * @param rand_set RandomizedSet对象指针
+ * @return 随机返回的元素值
+ */
+int randomizedSetGetRandom(RandomizedSet *rand_set) {
+    // 使用随机数生成0到nr-1之间的索引
+    return rand_set->nums[rand() % rand_set->nr];
+}
+
+/**
+ * 释放RandomizedSet对象占用的内存
+ * @param rand_set RandomizedSet对象指针
+ */
+void randomizedSetFree(RandomizedSet *rand_set) {
+    if (rand_set->nums)
+        free(rand_set->nums);
+    int_hashmap_clear(&rand_set->map);
+
+    free(rand_set);
+}
+
+/**
+ * Your RandomizedSet struct will be instantiated and called as such:
+ * RandomizedSet* obj = randomizedSetCreate();
+ * bool param_1 = randomizedSetInsert(obj, val);
+ 
+ * bool param_2 = randomizedSetRemove(obj, val);
+ 
+ * int param_3 = randomizedSetGetRandom(obj);
+ 
+ * randomizedSetFree(obj);
+*/
+```
+
+
+</details>
+
+## <B2>[补充解释](/blog/LeetCode380plus)</B2>

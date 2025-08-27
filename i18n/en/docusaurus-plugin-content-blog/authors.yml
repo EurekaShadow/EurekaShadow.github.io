@@ -1,0 +1,10 @@
+eurekaX:
+  name: Eureka X
+  title: Mr.Nobody
+  url: https://github.com/EurekaShadow
+  image_url: https://github.com/EurekaShadow.png
+  page:
+    # customize the url of the author page at /blog/authors/<permalink>
+    permalink: '/all-Eureka-X-articles'
+  socials:
+    github: EurekaShadow

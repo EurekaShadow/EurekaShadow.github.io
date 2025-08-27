@@ -24,7 +24,7 @@ const config = {
 
   i18n: {
     defaultLocale: 'zh-Hans',
-    locales: ['zh-Hans'],
+    locales: ['zh-Hans', 'en'],
   },
 
   // 简化 plugins 部分
@@ -98,6 +98,11 @@ const config = {
           src: 'img/Eureka.svg',
         },
         items: [
+          {
+            type: 'localeDropdown',
+            position: 'right',
+            // 确保没有添加会干扰的属性
+          },         
           {
             type: 'docSidebar',
             sidebarId: 'DocumentSidebar',

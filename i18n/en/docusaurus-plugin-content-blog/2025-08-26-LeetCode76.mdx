@@ -1,0 +1,189 @@
+---
+slug: LeetCode76
+title: 最小覆盖子串
+authors: eurekaX
+tags: [字符串,滑动窗口,哈希表]
+---
+import { Highlight, Keyword, Light, B1, B2, B3, BH3, B3W, MyColor} from '@site/src/components/ForMDX';
+
+
+### <B2>[力扣面试经典——76题](https://leetcode.cn/problems/minimum-window-substring/description/?envType=study-plan-v2&envId=top-interview-150 "力扣")</B2>
+
+<!-- truncate -->
+
+
+### 💡 参考代码：
+
+```c
+/**
+ * 找到字符串 s 中包含字符串 t 所有字符的最小子串
+ * 使用滑动窗口算法，时间复杂度 O(m+n)，空间复杂度 O(1)
+ * 
+ * @param s 输入字符串
+ * @param t 目标字符串
+ * @return 返回最小覆盖子串，如果不存在则返回空字符串
+ */
+char* minWindow(char* s, char* t) {
+    // 边界条件检查
+    if (!s || !t || strlen(s) == 0 || strlen(t) == 0) {
+        return "";
+    }
+    
+    int sLen = strlen(s);
+    int tLen = strlen(t);
+    
+    // 如果 s 的长度小于 t，不可能包含 t 的所有字符
+    if (sLen < tLen) {
+        return "";
+    }
+    
+    // 使用数组代替哈希表记录字符频次（ASCII码范围）
+    // need[i] 记录 t 中字符 i 的出现次数
+    // window[i] 记录当前窗口中字符 i 的出现次数
+    int need[128] = {0};
+    int window[128] = {0};
+    
+    // 统计字符串 t 中每个字符的频次
+    for (int i = 0; i < tLen; i++) {
+        need[t[i]]++;
+    }
+    
+    // 统计 t 中不同字符的个数
+    int needCnt = 0;
+    for (int i = 0; i < 128; i++) {
+        if (need[i] > 0) {
+            needCnt++;
+        }
+    }
+    
+    // 滑动窗口的左右指针
+    int left = 0, right = 0;
+    // 窗口中满足 need 条件的字符种类数
+    int valid = 0;
+    // 记录最小覆盖子串的起始索引及长度
+    int start = 0, len = INT_MAX;
+    
+    // 开始滑动窗口
+    while (right < sLen) {
+        // c 是将移入窗口的字符
+        char c = s[right];
+        // 扩大窗口
+        right++;
+        
+        // 进行窗口内数据的一系列更新
+        if (need[c] > 0) {
+            window[c]++;
+            // 当前字符在窗口中的数量达到需求
+            if (window[c] == need[c]) {
+                valid++;
+            }
+        }
+        
+        // 判断左侧窗口是否要收缩
+        while (valid == needCnt) {
+            // 在这里更新最小覆盖子串
+            if (right - left < len) {
+                start = left;
+                len = right - left;
+            }
+            
+            // d 是将移出窗口的字符
+            char d = s[left];
+            // 缩小窗口
+            left++;
+            
+            // 进行窗口内数据的一系列更新
+            if (need[d] > 0) {
+                // 如果移除字符 d 后不满足条件，valid 减一
+                if (window[d] == need[d]) {
+                    valid--;
+                }
+                window[d]--;
+            }
+        }
+    }
+    
+    // 返回最小覆盖子串
+    if (len == INT_MAX) {
+        return "";
+    }
+    
+    // 分配内存并复制结果
+    char* result = (char*)malloc((len + 1) * sizeof(char));
+    strncpy(result, s + start, len);
+    result[len] = '\0';
+    
+    return result;
+}
+```
+
+### 📖 总结：
+
+<details>
+<summary>点击展开题目总结</summary>
+# 🤔 最小覆盖子串
+
+---
+
+## 1️⃣ 题目核心信息
+
+🎯 **功能描述**：找到字符串 s 中包含字符串 t 所有字符的最小子串，要求子串中每个字符的数量不少于 t 中该字符的数量。
+
+📥 **输入输出**：
+- **输入**：字符串 s（源字符串）、字符串 t（目标字符串）
+- **输出**：返回 s 中涵盖 t 所有字符的最小子串，如果不存在则返回空字符串
+
+---
+
+## 2️⃣ 实现原理
+
+💡 **核心思路**：使用滑动窗口（双指针）算法，通过扩展和收缩窗口来找到满足条件的最小子串。
+
+📋 **实现步骤**：
+1. 统计目标字符串 t 中每个字符的出现次数，存储在 need 数组中
+2. 使用双指针维护一个滑动窗口，右指针不断扩展窗口
+3. 当窗口满足条件时（包含 t 的所有字符且数量足够），记录当前窗口并尝试收缩左指针
+4. 在所有满足条件的窗口中找到长度最小的那个
+
+---
+
+## 3️⃣ 关键点解析
+
+### 🎯 代码技巧
+- 使用数组代替哈希表提高访问效率（ASCII 字符集）
+- 通过 valid 变量高效判断窗口是否满足条件，避免每次遍历比较
+- 滑动窗口的扩展与收缩时机控制
+- 边界条件的精确处理
+
+## 4️⃣ 使用场景
+
+### ✅ 适用情况：
+- 在长字符串中查找包含特定字符集合的最短子串
+- 字符串匹配问题，需要考虑字符频次而非仅仅存在性
+- 需要在线性时间内解决的子串查找问题
+
+### ⚠️ 前提条件：
+- 输入字符串不为空
+- 需要查找的子串字符可以重复
+- 字符集范围确定（如 ASCII）
+
+## 5️⃣ 复杂度分析
+
+- ⏱️ 时间复杂度：O(m + n)，其中 m 是字符串 s 的长度，n 是字符串 t 的长度，每个字符最多被访问两次
+
+- 💾 空间复杂度：O(1)，使用固定大小的数组（128个ASCII字符）
+
+## 6️⃣ 注意事项
+
+### 🚩 边界情况：
+- 输入字符串为空或长度为0
+- s 的长度小于 t 的长度
+- t 中包含 s 中不存在的字符
+- s 本身就是满足条件的最小子串
+
+### 💥 易错点：
+- 混淆字符存在性和字符数量要求
+- 窗口收缩条件判断错误，导致错过最优解
+- valid 变量更新时机不正确
+- 内存分配和字符串复制时忘记添加结束符 '\0'
+</details>

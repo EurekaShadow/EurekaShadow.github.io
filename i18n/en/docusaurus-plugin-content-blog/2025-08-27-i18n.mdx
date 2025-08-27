@@ -1,0 +1,31 @@
+---
+slug: i18n
+title: 国际化
+authors: eurekaX
+tags: [i18n]
+---
+
+import { Highlight, Keyword, Light, B1, B2, B3, BH3, B3W, MyColor} from '@site/src/components/ForMDX';
+import CardImg from '@site/src/components/CardImg';
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+本文介绍使用 i18n 的配置方法，是对于 Docusaurus 官方教程的补充。
+<!-- truncate -->
+
+# <B2> 配置 i18n 教程 🎬</B2>
+
+```
+yarn write-translations --locale en
+```
+
+```
+# 确保英文文档目录存在且有内容
+mkdir -p i18n/en/docusaurus-plugin-content-docs/current
+cp -r docs/* i18n/en/docusaurus-plugin-content-docs/current/
+
+# 确保有英文博客内容（如果有的话）
+mkdir -p i18n/en/docusaurus-plugin-content-blog
+cp -r blog/* i18n/en/docusaurus-plugin-content-blog/ 2>/dev/null || true
+```
+
