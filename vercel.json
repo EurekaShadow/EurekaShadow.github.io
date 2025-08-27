@@ -1,0 +1,48 @@
+{
+    "rewrites": [
+      {
+        "source": "/:locale/docs/:path*",
+        "destination": "/:locale/index.html"
+      },
+      {
+        "source": "/:locale/blog/:path*",
+        "destination": "/:locale/index.html"
+      },
+      {
+        "source": "/:locale/page/:page*/",
+        "destination": "/:locale/index.html"
+      },
+      {
+        "source": "/docs/:path*",
+        "destination": "/index.html"
+      },
+      {
+        "source": "/blog/:path*",
+        "destination": "/index.html"
+      },
+      {
+        "source": "/page/:page*/",
+        "destination": "/index.html"
+      }
+    ],
+    "headers": [
+      {
+        "source": "/:locale/assets/(.*)",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "public, max-age=31536000, immutable"
+          }
+        ]
+      },
+      {
+        "source": "/assets/(.*)",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "public, max-age=31536000, immutable"
+          }
+        ]
+      }
+    ]
+  }
