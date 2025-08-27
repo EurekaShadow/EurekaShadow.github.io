@@ -4,23 +4,23 @@
     "description": "The label for version current"
   },
   "sidebar.DocumentSidebar.category.我的项目": {
-    "message": "我的项目",
+    "message": "My project",
     "description": "The label for category 我的项目 in sidebar DocumentSidebar"
   },
   "sidebar.DocumentSidebar.category.我的项目.link.generated-index.description": {
-    "message": "这个目录主要记录我做过的大大小小项目（或许现在只有小，没有大😂）",
+    "message": "This directory mainly records all the various projects I have undertaken (maybe there are only small ones at present, no large ones 😂)",
     "description": "The generated-index page description for category 我的项目 in sidebar DocumentSidebar"
   },
   "sidebar.DocumentSidebar.category.项目1": {
-    "message": "项目1",
+    "message": "Project1",
     "description": "The label for category 项目1 in sidebar DocumentSidebar"
   },
   "sidebar.DocumentSidebar.category.嵌入式相关": {
-    "message": "嵌入式相关",
+    "message": "Embedded",
     "description": "The label for category 嵌入式相关 in sidebar DocumentSidebar"
   },
   "sidebar.DocumentSidebar.category.嵌入式相关.link.generated-index.description": {
-    "message": "这个目录主要记录嵌入式相关内容",
+    "message": "This directory mainly records information related to embedded systems.",
     "description": "The generated-index page description for category 嵌入式相关 in sidebar DocumentSidebar"
   },
   "sidebar.DocumentSidebar.category.STM32": {
@@ -28,15 +28,15 @@
     "description": "The label for category STM32 in sidebar DocumentSidebar"
   },
   "sidebar.DocumentSidebar.category.模板": {
-    "message": "模板",
+    "message": "Template",
     "description": "The label for category 模板 in sidebar DocumentSidebar"
   },
   "sidebar.DocumentSidebar.category.模板.link.generated-index.description": {
-    "message": "这个目录主要存放一些模板，供后续使用",
+    "message": "This directory mainly stores some templates for future use.",
     "description": "The generated-index page description for category 模板 in sidebar DocumentSidebar"
   },
   "sidebar.DocumentSidebar.category.内嵌目录": {
-    "message": "内嵌目录",
+    "message": "Embedded Table of Contents",
     "description": "The label for category 内嵌目录 in sidebar DocumentSidebar"
   }
 }

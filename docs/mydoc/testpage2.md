@@ -14,3 +14,4 @@ description: 这是我的测试页2！
 
 之前部署到 `git pages`，则需要 `yarn deploy`，这会在本地构建一个 `build` 文件夹，但是Vercel的部署不用，因为 `build` 是在远端进行的。
 
+这是一个测试，测试修复的update-recent-post.js是否能够正常工作！

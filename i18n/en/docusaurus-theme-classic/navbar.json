@@ -1,6 +1,6 @@
 {
   "title": {
-    "message": "我的网站",
+    "message": "My site",
     "description": "The title in the navbar"
   },
   "logo.alt": {
@@ -8,11 +8,11 @@
     "description": "The alt text of navbar logo"
   },
   "item.label.记录": {
-    "message": "记录",
+    "message": "Records",
     "description": "Navbar item with label 记录"
   },
   "item.label.博客": {
-    "message": "博客",
+    "message": "Blog",
     "description": "Navbar item with label 博客"
   },
   "item.label.GitHub": {
