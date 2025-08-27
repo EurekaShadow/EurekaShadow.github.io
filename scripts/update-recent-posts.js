@@ -290,39 +290,43 @@ function generateRecentPostsList() {
     console.log(`${index + 1}. ${formatDate(displayDate)} - ${file.title} (${file.directory})`);
   });
   
-  // 为每篇内容生成Markdown格式的链接
-  const markdownList = recentFiles.map(file => {
-    // 根据排序方式显示不同的日期信息
-    let displayDate;
-    switch (SORT_BY) {
-      case 'modified':
-        displayDate = formatDate(file.modifiedTime);
-        break;
-      case 'created':
-        displayDate = formatDate(file.createdTime);
-        break;
-      case 'published':
-        displayDate = formatDate(file.publishedDate);
-        break;
-      default:
-        displayDate = formatDate(file.modifiedTime);
-    }
-    
-    // 根据文件所在目录生成正确的链接
-    let linkPath;
-    if (file.directory === 'blog') {
-      // 博客文件使用 /blog/slug 格式
-      linkPath = `/blog/${file.slug || path.basename(file.path, file.extension)}`;
+// 为每篇内容生成Markdown格式的链接（不包含扩展名）
+const markdownList = recentFiles.map(file => {
+  // 根据排序方式显示不同的日期信息
+  let displayDate;
+  switch (SORT_BY) {
+    case 'modified':
+      displayDate = formatDate(file.modifiedTime);
+      break;
+    case 'created':
+      displayDate = formatDate(file.createdTime);
+      break;
+    case 'published':
+      displayDate = formatDate(file.publishedDate);
+      break;
+    default:
+      displayDate = formatDate(file.modifiedTime);
+  }
+  
+  // 生成正确的链接路径
+  let linkPath;
+  if (file.directory === 'blog') {
+    // 博客文件使用 /blog/slug 格式
+    linkPath = `/blog/${file.slug || path.basename(file.path, path.extname(file.path))}`;
+  } else {
+    // 文档文件处理：使用 urlPath（已在前面处理过）
+    // 移除扩展名并确保以 /docs/ 开头
+    let cleanPath = file.urlPath;
+    if (cleanPath.startsWith('docs/')) {
+      linkPath = `/${cleanPath}`;
     } else {
-      // 文档文件使用相对于 docs 目录的路径
-      const docRelativePath = file.relativePath.startsWith('docs/') ? 
-        file.relativePath.substring(5) : file.relativePath;
-      linkPath = `/${file.relativePath.replace(/\\/g, '/')}`;
+      linkPath = `/docs/${cleanPath}`;
     }
-    
-    // 生成Markdown格式的链接
-    return `- [${displayDate} - ${file.title}](${linkPath})`;
-  });
+  }
+  
+  // 生成Markdown格式的链接
+  return `- [${displayDate} - ${file.title}](${linkPath})`;
+});
   
   // 将所有链接用换行符连接成一个字符串
   return markdownList.join('\n');
