@@ -16,7 +16,7 @@ import CardImg from '@site/src/components/CardImg';
 
 1. 尝试用 `cloudflare`的 CDN 进行加速，一番折腾之后，加了一个寂寞，故放弃 [cloudflare](https://www.cloudflare-cn.com/ ) 方案；
 
-> 后记：可能 `cloudflare` 加速是有一点作用的，但是之前或许由于这个[问题](/docs/Issues#build文件夹过大问题 )，导致效果不太明显。由于后来部署在 Vercel 后已经能够实现流畅[访问](https://www.eurekashadow.xin/ )了，所以就不弄 `cloudflare` 了。
+> 后记：可能 `cloudflare` 加速是有一点作用的，但是之前或许由于这个[问题](/docs/Issues#the-issue-of-the-build-folder-being-too-large )，导致效果不太明显。由于后来部署在 Vercel 后已经能够实现流畅[访问](https://www.eurekashadow.xin/ )了，所以就不弄 `cloudflare` 了。
 
 2. 尝试用 [阿里云 OSS + CDN](https://www.aliyun.com/solution/tech-solution/oss-x-cdn?spm=5176.28507329.J_XmGx2FZCDAeIy2ZCWL7sW.32.384a2868h1X2kE&scm=20140722.S_product@@%E6%8A%80%E6%9C%AF%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88@@2835888._.RL_CDN-LOC_2024NSHelpLink-OR_ser-PAR1_213e36dc17561936131571537ec7dc-V_4-P0_0-P1_0 )的方式进行加速，未遂。原因是 OSS 服务需要域名备案，而域名备案需要ESC(云服务器)，得花钱买，没钱且暂时没精力去折腾什么服务器；
 

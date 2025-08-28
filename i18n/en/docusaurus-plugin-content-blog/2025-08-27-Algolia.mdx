@@ -1,6 +1,6 @@
 ---
 slug: Algolia
-title: 为 Docusaurus 添加 Algolia 搜索功能
+title: Add Algolia Search Functionality to Docusaurus
 authors: eurekaX
 tags: [Algolia,Search,搜索]
 ---
@@ -10,10 +10,273 @@ import CardImg from '@site/src/components/CardImg';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-本文介绍使用 Algolia 的配置方法，为网站添加搜索功能。
+This article introduces how to add search functionality to a Docusaurus website using Algolia.
+
 <!-- truncate -->
 
-# <B2> 配置 Algolia 教程 🔎</B2>
 
-下面内容待施工。。。🥱
+## <B2> Algolia Configuration Tutorial 🔎</B2>
+
+I referred to this [article](https://www.alanwang.site/posts/blog-guides/docusaurus-search#%E5%88%9B%E5%BB%BA-algolia-%E8%B4%A6%E5%8F%B7 ) to add a search function to my website. However, during the implementation process, I encountered some problems and the original article's explanation was not detailed enough. Therefore, I decided to write a more detailed blog to record the entire configuration process.
+
+
+## Obtain the Algolia API
+
+The objective of this section is to obtain these three `APIs` of `Algolia`:
+```
+1. Application ID
+2. Search API Key
+3. Admin API Key
+``` 
+### API Name Correlation
+The names of the APIs in `Algolia` do not **exactly match** those in the code. The corresponding relationship is as follows:
+```js title="docusaurus.config.js"
+Application ID -> appId
+Search API Key -> apiKey
+```
+```js title="Actions secrets"
+Application ID -> ALGOLIA_APP_ID
+Admin API Key -> ALGOLIA_API_KEY
+```
+
+
+### Register an Algolia account
+1. Open [Algolia's official website](https://www.algolia.com/ "Algolia"), use your Github account to register and log in
+<p><CardImg src="/img/Blog/Algolia1.jpg" alt="Algolia1" isCenter={true} isBoxed={true} /></p>
+
+2. Click on `Not now...` to skip the initial setup.
+<p><CardImg src="/img/Blog/Algolia2.jpg" alt="Algolia2" isCenter={true} isBoxed={true} /></p>
+
+### Obtain API
+1. Open the `Settings` configuration page
+<p><CardImg src="/img/Blog/Algolia3.jpg" alt="Algolia3" isCenter={true} isBoxed={true} /></p>
+
+2. View API Key
+<p><CardImg src="/img/Blog/Algolia4.jpg" alt="Algolia4" isCenter={true} isBoxed={true} /></p>
+
+<p><CardImg src="/img/Blog/Algolia5.jpg" alt="Algolia5" isCenter={true} isBoxed={true} /></p>
+
+The above three `API`s are exactly what we need. This page can remain open for your convenience in copying and pasting later. At this point, the three `API`s should have been successfully obtained.
+:::danger[Important Reminder]
+Do not share the **Admin API Key!** This is sensitive information and its leakage may lead to security issues. ！
+:::
+
+<details>
+<summary>Only two APIs were found. ?</summary>
+
+If when viewing the `API`, you notice that there are only **two** APIs, namely `Application ID` and `Search API Key`, but no `Admin API Key`? ！ This indicates that you did not follow this [step] (./Algolia#register-algolia-account) precisely. What you see now is the default Application `Docsearch` created by `Algolia`. This Application currently does not have a key. (Following the official tutorial step by step should result in one, but I haven't tried it. 😱) The solution is to create another Application here: `Settings/API Keys` 
+<p><CardImg src="/img/Blog/Algolia26.jpg" alt="Algolia26" isCenter={true} isBoxed={true} /></p>
+
+After filling in the name, keep the other configurations as default. Simply click `Next:Review & Confirm` -> `Create Application`. The `API` acquisition method for the new Application is the same as above.
+
+</details>
+
+## Create Actions Secrets
+1. Open the Github repository where the website project code is stored, and go to: `Settings/Secrets and variables/Actions`. 
+<p><CardImg src="/img/Blog/Algolia8.jpg" alt="Algolia8" isCenter={true} isBoxed={true} /></p>
+
+2. Return to the Algolia page and copy the `Application ID`: 
+<p><CardImg src="/img/Blog/Algolia9.jpg" alt="Algolia9" isCenter={true} isBoxed={true} /></p>
+
+3. Return to the Github page, enter the name `ALGOLIA_APP_ID`, paste the secret key, and click `Add secret`. 
+<p><CardImg src="/img/Blog/Algolia11.jpg" alt="Algolia10" isCenter={true} isBoxed={true} /></p>
+
+4. Return to the Algolia page and copy the "Admin API Key": 
+<p><CardImg src="/img/Blog/Algolia12.jpg" alt="Algolia11" isCenter={true} isBoxed={true} /></p>
+
+5. Return to the Github page, enter the name `ALGOLIA_API_KEY`, paste the secret key, and click `Add secret`. 
+<p><CardImg src="/img/Blog/Algolia13.jpg" alt="Algolia12" isCenter={true} isBoxed={true} /></p>
+
+6. Expected Outcome: 
+<p><CardImg src="/img/Blog/Algolia14.jpg" alt="Algolia14" isCenter={true} isBoxed={true} /></p>
+
+Create a Github Actions workflow
+* You can create a file named `.github/workflows/docsearch.yml` in the root directory of your local project:
+<p><CardImg src="/img/Blog/Algolia6.jpg" alt="Algolia6" isCenter={true} isBoxed={true} /></p>
+
+```yml title=".github/workflows/docsearch.yml"
+name: DocSearch Scraper
+
+# Define the triggering conditions for the workflow
+on:
+  # Allow manual triggering of the workflow
+  workflow_dispatch:
+  # Automatic operation (UTC time)
+  schedule:
+    - cron: '0 0 * * *'
+
+# Define workflow tasks
+jobs:
+  algolia:
+    # Operation Environment
+    runs-on: ubuntu-latest
+    steps:
+      # Check out the code repository
+      - uses: actions/checkout@v3
+
+      # Install the jq tool for handling JSON.
+      - name: Install jq
+        run: sudo apt-get install jq
+
+      # Verify the existence of the configuration file
+      - name: Validate docsearch.json exists
+        run: |
+          if [ ! -f "docsearch.json" ]; then
+            echo "docsearch.json not found!"
+            exit 1
+          fi
+
+      # Read and set the Algolia configuration
+      - name: Get the content of docsearch.json as config
+        id: algolia_config
+        run: echo "config=$(cat docsearch.json | jq -r tostring)" >> $GITHUB_OUTPUT
+
+      # Run the DocSearch crawler
+      - name: Run algolia/docsearch-scraper image
+        env:
+          # Obtain the Algolia credentials from secrets
+          ALGOLIA_APP_ID: ${{ secrets.ALGOLIA_APP_ID }}
+          ALGOLIA_API_KEY: ${{ secrets.ALGOLIA_API_KEY }}
+          CONFIG: ${{ steps.algolia_config.outputs.config }}
+        run: |
+          echo "Starting DocSearch scraper..."
+          docker run \
+            --env APPLICATION_ID=${ALGOLIA_APP_ID} \
+            --env API_KEY=${ALGOLIA_API_KEY} \
+            --env "CONFIG=${CONFIG}" \
+            algolia/docsearch-scraper
+          echo "DocSearch scraper completed successfully."
+```
+
+If you want to configure it so that this workflow is triggered **after deployment**, you can refer to this [article](https://www.alanwang.site/posts/blog-guides/docusaurus-search#%E5%88%9B%E5%BB%BA-github-actions ). However, I think manual and scheduled triggering are already sufficient, so I did not try other triggering methods. 
+## Create docsearch.json
+
+<p><CardImg src="/img/Blog/Algolia15.jpg" alt="Algolia15" isCenter={true} isBoxed={true} /></p>
+
+The highlighted yellow part below needs to be customized with your own settings. `index_name` can be customized, but it must be consistent with the subsequent `docusaurus.config.js` configuration. `start_urls` and `sitemap_urls` should be changed to your own links.
+```json title="docsearch.json"
+{
+   // highlight-start
+  "index_name": "test-site",
+  "start_urls": ["https://www.eurekashadow.xin/"],
+  "sitemap_urls": ["https://www.eurekashadow.xin/sitemap.xml"],
+  // highlight-end
+  // highlight-add-start
+  "js_render": true,
+  "js_wait": 1,
+  // highlight-add-end
+  "selectors": {
+    "lvl0": {
+      "selector": "(//ul[contains(@class,'menu__list')]//a[contains(@class, 'menu__link menu__link--sublist menu__link--active')]/text() | //nav[contains(@class, 'navbar')]//a[contains(@class, 'navbar__link--active')]/text())[last()]",
+      "type": "xpath",
+      "global": true,
+      "default_value": "Documentation"
+    },
+    "lvl1": "header h1, article h1",
+    "lvl2": "article h2",
+    "lvl3": "article h3",
+    "lvl4": "article h4",
+    "lvl5": "article h5, article td:first-child",
+    "lvl6": "article h6",
+    "text": "article p, article li, article td:last-child"
+  },
+  "custom_settings": {
+    "attributesForFaceting": ["type", "lang", "language", "version", "docusaurus_tag"],
+    "attributesToRetrieve": ["hierarchy", "content", "anchor", "url", "url_without_anchor", "type"],
+    "attributesToHighlight": ["hierarchy", "content"],
+    "attributesToSnippet": ["content:10"],
+    "camelCaseAttributes": ["hierarchy", "content"],
+    "searchableAttributes": [
+      "unordered(hierarchy.lvl0)",
+      "unordered(hierarchy.lvl1)",
+      "unordered(hierarchy.lvl2)",
+      "unordered(hierarchy.lvl3)",
+      "unordered(hierarchy.lvl4)",
+      "unordered(hierarchy.lvl5)",
+      "unordered(hierarchy.lvl6)",
+      "content"
+    ],
+    "distinct": true,
+    "attributeForDistinct": "url",
+    "customRanking": ["desc(weight.pageRank)", "desc(weight.level)", "asc(weight.position)"],
+    "ranking": ["words", "filters", "typo", "attribute", "proximity", "exact", "custom"],
+    "highlightPreTag": "<span class='algolia-docsearch-suggestion--highlight'>",
+    "highlightPostTag": "</span>",
+    "minWordSizefor1Typo": 3,
+    "minWordSizefor2Typos": 7,
+    "allowTyposOnNumericTokens": false,
+    "minProximity": 1,
+    "ignorePlurals": true,
+    "advancedSyntax": true,
+    "attributeCriteriaComputedByMinProximity": true,
+    "removeWordsIfNoResults": "allOptional",
+    "separatorsToIndex": "_",
+    "synonyms": [
+      ["js", "javascript"],
+      ["ts", "typescript"]
+    ]
+  }
+}
+```
+> Note: The two lines marked in green (js_render and js_wait) are **extremely important**. Without these two lines, Algolia may only be able to crawl the data of the homepage. When clicking F12 on pages other than the homepage, you may find a 404 page, but the webpage can still be displayed normally at this time. This inconsistent display with the source code makes it impossible to crawl the complete data. By adding these two lines to indicate that crawling should be done after the rendering is completed, all data can be normally obtained.
+
+## Configure docusaurus.config.js
+1. Position illustration:
+<p><CardImg src="/img/Blog/Algolia16.jpg" alt="Algolia16" isCenter={true} isBoxed={true} /></p>
+
+2. New code:
+```js title="docusaurus.config.js"
+//Add Algolia search
+algolia: {
+    // Application ID
+    appId: '********',
+    //  Search API Key
+    apiKey: '*******************',
+    indexName: 'test-site',//Consistent with the index_name in docsearch.json
+    searchPagePath: 'search',
+    contextualSearch: true
+    },
+```
+[Don't remember the correspondence between the names?](./Algolia#API Name Correlation )
+
+
+
+
+## Website Deployment
+* Push the code to the remote repository using `git push`.
+<p><CardImg src="/img/Blog/Algolia18.jpg" alt="Algolia18" isCenter={true} isBoxed={true} /></p>
+
+## Manually trigger the workflow to retrieve information
+
+* After the deployment on Vercel has been completed, go back to the GitHub repository, click on Actions, select "Docsearch scraper", and then click "Run workflow". This will trigger the workflow, which will crawl the website information and generate an index file for subsequent Algolia search.
+<p><CardImg src="/img/Blog/Algolia19.jpg" alt="Algolia19" isCenter={true} isBoxed={true} /></p>
+
+* Operation completed:
+<p><CardImg src="/img/Blog/Algolia20.jpg" alt="Algolia20" isCenter={true} isBoxed={true} /></p>
+
+## View Algolia Records
+1. Click on `Data Source`
+<p><CardImg src="/img/Blog/Algolia21.jpg" alt="Algolia21" isCenter={true} isBoxed={true} /></p>
+
+2. Click on `indices`, as shown in the following figure, it can be seen that the index file has been generated. Under the index `test-site`, a total of `134` records were found. The number of these records depends on the website content. If the content is extensive, the number of records will also be large. This is just a demonstration of the website, and there are only `134` records. Normal index records may have thousands or even tens of thousands.
+
+> Note that the configuration is considered successful only when there are matching records here with the content of your website. If the website content is extensive and the resulting records here are only a few, it clearly indicates that something has gone wrong somewhere. It might be that the two lines [here](./Algolia#create-docsearchjson) were not added?
+<p><CardImg src="/img/Blog/Algolia22.jpg" alt="Algolia22" isCenter={true} isBoxed={true} /></p>
+
+## Deploy the website to GitPages
+> In fact, you can view the results locally. The purpose of deploying and then checking is to further confirm whether the results are correct. After all, sometimes everything runs fine locally, but when deployed to GitPages, problems arise. (This is referring to you! i18n, the annoying flashing issue still hasn't been resolved... 😔)
+<p><CardImg src="/img/Blog/Algolia23.jpg" alt="Algolia23" isCenter={true} isBoxed={true} /></p>
+
+* Deployment completed:
+<p><CardImg src="/img/Blog/Algolia24.jpg" alt="Algolia24" isCenter={true} isBoxed={true} /></p>
+
+## Result
+Mission accomplished! Now the website can use the search function! 🎉
+<p><CardImg src="/img/Gif/gif-example.gif" alt="AlgoliaResult" isCenter={true} isBoxed={true} /></p>
+
+This process was quite complicated. Thanks to the following references, without his article as a reference, I'm afraid I wouldn't have been able to complete this search function. But even with the references, it wasn't achieved overnight. To realize this search function, I spent a lot of time and took many detours. I hope this summary can be helpful to those who come across it (maybe even myself in the future? 😥)
+
+## 📚 References
+
+[1]. [AlanWang's Blog](https://www.alanwang.site/posts/blog-guides/docusaurus-search "Study")
 
