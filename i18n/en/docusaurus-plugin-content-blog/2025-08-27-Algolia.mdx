@@ -64,7 +64,7 @@ Do not share the **Admin API Key!** This is sensitive information and its leakag
 <details>
 <summary>Only two APIs were found. ?</summary>
 
-If when viewing the `API`, you notice that there are only **two** APIs, namely `Application ID` and `Search API Key`, but no `Admin API Key`? ！ This indicates that you did not follow this [step] (./Algolia#register-algolia-account) precisely. What you see now is the default Application `Docsearch` created by `Algolia`. This Application currently does not have a key. (Following the official tutorial step by step should result in one, but I haven't tried it. 😱) The solution is to create another Application here: `Settings/API Keys` 
+If when viewing the `API`, you notice that there are only **two** APIs, namely `Application ID` and `Search API Key`, but no `Admin API Key`? ！ This indicates that you did not follow this [step](./Algolia#register-an-algolia-account ) precisely. What you see now is the default Application `Docsearch` created by `Algolia`. This Application currently does not have a key. (Following the official tutorial step by step should result in one, but I haven't tried it. 😱) The solution is to create another Application here: `Settings/API Keys` 
 <p><CardImg src="/img/Blog/Algolia26.jpg" alt="Algolia26" isCenter={true} isBoxed={true} /></p>
 
 After filling in the name, keep the other configurations as default. Simply click `Next:Review & Confirm` -> `Create Application`. The `API` acquisition method for the new Application is the same as above.
@@ -90,7 +90,7 @@ After filling in the name, keep the other configurations as default. Simply clic
 6. Expected Outcome: 
 <p><CardImg src="/img/Blog/Algolia14.jpg" alt="Algolia14" isCenter={true} isBoxed={true} /></p>
 
-Create a Github Actions workflow
+## Create a Github Actions workflow
 * You can create a file named `.github/workflows/docsearch.yml` in the root directory of your local project:
 <p><CardImg src="/img/Blog/Algolia6.jpg" alt="Algolia6" isCenter={true} isBoxed={true} /></p>
 
@@ -218,7 +218,7 @@ The highlighted yellow part below needs to be customized with your own settings.
   }
 }
 ```
-> Note: The two lines marked in green (js_render and js_wait) are **extremely important**. Without these two lines, Algolia may only be able to crawl the data of the homepage. When clicking F12 on pages other than the homepage, you may find a 404 page, but the webpage can still be displayed normally at this time. This inconsistent display with the source code makes it impossible to crawl the complete data. By adding these two lines to indicate that crawling should be done after the rendering is completed, all data can be normally obtained.
+> Note: The two lines marked in green (`js_render` and `js_wait`) are **extremely important**. Without these two lines, Algolia may only be able to crawl the data of the homepage. When clicking F12 on pages other than the homepage, you may find a 404 page, but the webpage can still be displayed normally at this time. This inconsistent display with the source code makes it impossible to crawl the complete data. By adding these two lines to indicate that crawling should be done after the rendering is completed, all data can be normally obtained.
 
 ## Configure docusaurus.config.js
 1. Position illustration:
@@ -237,7 +237,7 @@ algolia: {
     contextualSearch: true
     },
 ```
-[Don't remember the correspondence between the names?](./Algolia#API Name Correlation )
+[Don't remember the correspondence between the names?](./Algolia#api-name-correlation )
 
 
 
