@@ -1,0 +1,112 @@
+---
+slug: LeetCode48
+title: 旋转图像
+authors: eurekaX
+tags: [数组,矩阵,数字]
+---
+import { Highlight, Keyword, Light, B1, B2, B3, BH3, B3W, MyColor} from '@site/src/components/ForMDX';
+
+
+### <B2>[力扣面试经典——48题](https://leetcode.cn/problems/rotate-image/description/?envType=study-plan-v2&envId=top-interview-150 "力扣")</B2>
+
+<!-- truncate -->
+
+
+### 💡 参考代码：
+
+```c
+
+/**
+ * 将n×n矩阵顺时针旋转90度
+ * @param matrix 输入的二维矩阵
+ * @param matrixSize 矩阵的行数n
+ * @param matrixColSize 矩阵每行的列数数组
+ */
+void rotate(int** matrix, int matrixSize, int* matrixColSize) {
+    int n = matrixSize;
+    
+    // 步骤1: 沿主对角线翻转矩阵（转置）
+    // 将matrix[i][j]与matrix[j][i]交换
+    for (int i = 0; i < n; i++) {
+        for (int j = i + 1; j < n; j++) {
+            int temp = matrix[i][j];
+            matrix[i][j] = matrix[j][i];
+            matrix[j][i] = temp;
+        }
+    }
+    
+    // 步骤2: 沿垂直中线翻转每一行
+    // 对于每行，将第j列与第(n-1-j)列交换
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n / 2; j++) {
+            int temp = matrix[i][j];
+            matrix[i][j] = matrix[i][n - 1 - j];
+            matrix[i][n - 1 - j] = temp;
+        }
+    }
+}
+```
+
+### 📖 总结：
+
+<details>
+<summary>点击展开题目总结</summary>
+# 🤔 矩阵旋转90度
+
+---
+
+## 1️⃣ 题目核心信息
+
+🎯 **功能描述**：将一个n×n的二维矩阵表示的图像顺时针旋转90度，要求在原地完成操作，不能使用额外的矩阵空间。
+
+📥 **输入输出**：
+- **输入**：`matrix` - 指向二维整数数组的指针，表示原始图像矩阵；`matrixSize` - 矩阵行数n；`matrixColSize` - 每行列数的数组
+- **输出**：无返回值，直接修改输入的 `matrix` 矩阵实现旋转
+
+---
+
+## 2️⃣ 实现原理
+
+💡 **核心思路**：通过两次翻转操作实现顺时针旋转90度：先沿主对角线翻转(转置)，再沿垂直中线翻转每行元素。
+
+📋 **实现步骤**：
+1. 遍历矩阵上三角部分，将 `matrix[i][j]` 与 `matrix[j][i]` 交换，完成矩阵转置
+2. 遍历每一行，将每行中对称位置的元素 `matrix[i][j]` 与 `matrix[i][n-1-j]` 交换，完成水平翻转
+
+---
+
+## 3️⃣ 关键点解析
+
+### 🎯 代码技巧
+- **双重循环边界控制**：对角线翻转时内层循环从 `j = i + 1` 开始，避免重复交换
+- **原地操作**：通过元素交换实现，不使用额外存储空间
+- **索引计算**：水平翻转时利用 `n-1-j` 计算对称位置
+
+## 4️⃣ 使用场景
+
+### ✅ 适用情况：
+- 图像处理中的旋转操作
+- 矩阵变换相关算法
+- 需要节省空间的原地算法实现
+
+### ⚠️ 前提条件：
+- 输入必须是n×n的方阵
+- 矩阵元素可以被修改
+
+## 5️⃣ 复杂度分析
+
+- ⏱️ 时间复杂度：O(n²)，需要访问矩阵中的每个元素两次（对角线翻转和水平翻转各一次）
+
+- 💾 空间复杂度：O(1)，只使用了常数级别的额外变量存储临时值
+
+## 6️⃣ 注意事项
+
+### 🚩 边界情况：
+- n=1时，矩阵无需旋转
+- n=2时，需要正确处理所有元素的交换位置
+
+### 💥 易错点：
+- 对角线翻转时循环边界错误，导致元素被交换两次回到原位
+- 水平翻转时没有正确计算对称位置索引
+- 忘记更新 `matrixColSize` 数组（虽然本题中未使用）
+</details>
