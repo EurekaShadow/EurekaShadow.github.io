@@ -41,3 +41,47 @@ yarn start --locale en
 `yarn start`默认运行中文的
 :::
 
+## Docusaurus 组件国际化翻译步骤总结
+
+### 操作步骤
+
+#### 1. 创建翻译文件
+在 `i18n/en/code.json` 中添加英文翻译条目：
+```json
+{
+  "unique.translation.id": {
+    "message": "English translation text",
+    "description": "Description for translators"
+  }
+}
+```
+2. 修改组件代码
+使用 `Translate` 组件包装需要翻译的文本：
+```jsx
+import Translate from '@docusaurus/Translate';
+
+// 在组件中使用
+<title>
+  <Translate id="unique.translation.id" description="中文描述">
+    中文默认文本
+  </Translate>
+</title>
+```
+## 预期结果
+
+- **中文页面**：显示 `<Translate>` 标签内的中文默认文本
+- **英文页面**：显示 `i18n/en/code.json` 中对应 `message` 的英文翻译内容
+- **功能实现**：网站能够根据用户选择的语言自动切换显示相应语言的文本
+
+## 工作原理
+
+- **默认语言（中文）**：显示 `<Translate>` 标签内的默认文本
+- **英文页面**：Docusaurus 自动查找翻译文件中对应的 `message` 内容
+- **无需为默认语言创建翻译文件**：只需为其他语言提供翻译
+
+## 注意事项
+
+1. 确保 JSON 文件格式正确（使用在线验证工具检查）
+2. 翻译 ID 需要唯一且具有描述性
+3. 描述信息帮助翻译人员理解上下文
+4. 重启开发服务器使翻译生效
