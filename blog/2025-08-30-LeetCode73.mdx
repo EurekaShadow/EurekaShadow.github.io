@@ -1,0 +1,157 @@
+---
+slug: LeetCode73
+title: 矩阵清零
+authors: eurekaX
+tags: [数组,矩阵,哈希表]
+---
+import { Highlight, Keyword, Light, B1, B2, B3, BH3, B3W, MyColor} from '@site/src/components/ForMDX';
+
+
+### <B2>[力扣面试经典——73题](https://leetcode.cn/problems/set-matrix-zeroes/description/?envType=study-plan-v2&envId=top-interview-150 "力扣")</B2>
+
+<!-- truncate -->
+
+
+### 💡 参考代码：
+
+```c
+/**
+ * 将矩阵中为0的元素所在的行和列都置为0（原地算法）
+ * 
+ * @param matrix 输入的二维矩阵
+ * @param matrixSize 矩阵的行数
+ * @param matrixColSize 矩阵每行的列数数组
+ */
+void setZeroes(int** matrix, int matrixSize, int* matrixColSize) {
+    int m = matrixSize;           // 矩阵行数
+    int n = matrixColSize[0];     // 矩阵列数
+    
+    // 检查第一行是否原本就有0
+    bool firstRowHasZero = false;
+    for (int j = 0; j < n; j++) {
+        if (matrix[0][j] == 0) {
+            firstRowHasZero = true;
+            break;
+        }
+    }
+    
+    // 检查第一列是否原本就有0
+    bool firstColHasZero = false;
+    for (int i = 0; i < m; i++) {
+        if (matrix[i][0] == 0) {
+            firstColHasZero = true;
+            break;
+        }
+    }
+    
+    // 遍历矩阵(除第一行和第一列)，使用第一行和第一列作为标记
+    // 如果matrix[i][j]为0，则将matrix[i][0]和matrix[0][j]标记为0
+    for (int i = 1; i < m; i++) {
+        for (int j = 1; j < n; j++) {
+            if (matrix[i][j] == 0) {
+                matrix[i][0] = 0;  // 标记第i行需要置零
+                matrix[0][j] = 0;  // 标记第j列需要置零
+            }
+        }
+    }
+    
+    // 根据第一行的标记，将对应列置零(除第一行外)
+    for (int j = 1; j < n; j++) {
+        if (matrix[0][j] == 0) {
+            for (int i = 1; i < m; i++) {
+                matrix[i][j] = 0;
+            }
+        }
+    }
+    
+    // 根据第一列的标记，将对应行置零(除第一列外)
+    for (int i = 1; i < m; i++) {
+        if (matrix[i][0] == 0) {
+            for (int j = 1; j < n; j++) {
+                matrix[i][j] = 0;
+            }
+        }
+    }
+    
+    // 最后处理第一行
+    if (firstRowHasZero) {
+        for (int j = 0; j < n; j++) {
+            matrix[0][j] = 0;
+        }
+    }
+    
+    // 最后处理第一列
+    if (firstColHasZero) {
+        for (int i = 0; i < m; i++) {
+            matrix[i][0] = 0;
+        }
+    }
+}
+```
+
+### 📖 总结：
+
+<details>
+<summary>点击展开题目总结</summary>
+# 🤔 矩阵置零
+
+---
+
+## 1️⃣ 题目核心信息
+
+🎯 **功能描述**：给定一个 m x n 的矩阵，如果一个元素为 0，则将其所在行和列的所有元素都设为 0，要求使用原地算法实现。
+
+📥 **输入输出**：
+- **输入**：int** matrix（二维矩阵）, int matrixSize（矩阵行数）, int* matrixColSize（每行列数）
+- **输出**：无返回值，直接修改原矩阵
+
+---
+
+## 2️⃣ 实现原理
+
+💡 **核心思路**：利用矩阵的第一行和第一列作为标记数组，记录需要置零的行列信息，从而实现常量空间复杂度。
+
+📋 **实现步骤**：
+1. 预先检查第一行和第一列是否包含0，用布尔变量记录
+2. 遍历矩阵其余部分，若发现0元素，则在对应的第一行和第一列位置标记0
+3. 根据第一行和第一列的标记信息，将对应行列置零（除第一行和第一列外）
+4. 根据预先记录的信息，最后处理第一行和第一列
+
+---
+
+## 3️⃣ 关键点解析
+
+### 🎯 代码技巧
+- 利用矩阵本身作为标记空间，避免额外的存储开销
+- 分离处理逻辑，先处理内部元素，再处理边界元素
+- 使用布尔变量记录边界初始状态，避免标记信息被误覆盖
+
+## 4️⃣ 使用场景
+
+### ✅ 适用情况：
+- 需要对二维数据进行行列操作的场景
+- 内存受限，要求原地算法的情况
+- 稀疏矩阵处理中需要标记行列的场景
+
+### ⚠️ 前提条件：
+- 矩阵至少有1行1列
+- 矩阵元素可以被修改
+
+## 5️⃣ 复杂度分析
+
+- ⏱️ 时间复杂度：O(m × n)，需要遍历矩阵常数次
+
+- 💾 空间复杂度：O(1)，只使用常数个额外变量
+
+## 6️⃣ 注意事项
+
+### 🚩 边界情况：
+- 矩阵只有1行或1列
+- 矩阵全为0或全不为0
+- 矩阵为空（题目保证不为空）
+
+### 💥 易错点：
+- 处理顺序错误，导致标记信息被提前覆盖
+- 忘记预先记录第一行和第一列的原始状态
+- 边界条件判断错误，导致数组越界
+</details>
