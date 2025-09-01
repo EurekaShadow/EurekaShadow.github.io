@@ -142,3 +142,8 @@ Algolia:
   label: 数字
   permalink: /数字
   description: 关于 数字 的一些题目  
+  
+计数:
+  label: 计数
+  permalink: /计数
+  description: 关于 计数 的一些题目   
