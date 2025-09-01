@@ -225,9 +225,7 @@ int* findSubstring(char* s, char** words, int wordsSize, int* returnSize) {
 
 ## 7️⃣ 补充说明
 
-# 🔍 代码执行过程详解
-
-我们以示例1为例：`s = "barfoothefoobarman"`, `words = ["foo","bar"]`
+以示例1为例：`s = "barfoothefoobarman"`, `words = ["foo","bar"]`
 
 ---
 
@@ -239,7 +237,6 @@ int* findSubstring(char* s, char** words, int wordsSize, int* returnSize) {
 - 总长度 `totalLen = 3 * 2 = 6`
 
 ---
-
 ## 🔧 第一步：构建单词频率映射表
 
 ```c
@@ -248,15 +245,16 @@ int* findSubstring(char* s, char** words, int wordsSize, int* returnSize) {
 uniqueWords = 2
 allWords = ["foo", "bar"]
 allWordsCount = [1, 1]  // 每个单词出现1次
-🔄 第二步：滑动窗口遍历
+```
+## 🔄 第二步：滑动窗口遍历
 📌 start = 0 的情况（起始位置为0，步长为3）
 初始状态：
+- `left = 0, right = 0`
+- `currentWordsCount = [0, 0]`
+- `count = 0`
 
-left = 0, right = 0
-currentWordsCount = [0, 0]
-count = 0
-第1次循环 (right = 0):
-c
+**第1次循环** (right = 0):
+```c
 // 提取单词: s[0..2] = "bar"
 word = "bar"
 wordIndex = 1  // "bar"在allWords中索引为1
@@ -265,8 +263,9 @@ currentWordsCount[1]++  // [0, 1]
 count = 1
 
 // count < wordsSize(2)，不满足条件
-第2次循环 (right = 3):
-c
+```
+**第2次循环** (right = 3):
+```c
 // 提取单词: s[3..5] = "foo"
 word = "foo"
 wordIndex = 0  // "foo"在allWords中索引为0
@@ -277,8 +276,9 @@ count = 2
 // count == wordsSize，满足条件
 // 记录结果: result[0] = left = 0
 *returnSize = 1
-第3次循环 (right = 6):
-c
+```
+**第3次循环** (right = 6):
+```c
 // 提取单词: s[6..8] = "the"
 word = "the"
 wordIndex = -1  // "the"不在words中
@@ -287,32 +287,35 @@ wordIndex = -1  // "the"不在words中
 memset(currentWordsCount, 0, sizeof(int) * uniqueWords)
 count = 0
 left = right = 9
-📌 start = 1 的情况（起始位置为1，步长为3）
+```
+📌 **start = 1 的情况**（起始位置为1，步长为3）
 略过中间无匹配的部分...
 
-📌 start = 2 的情况（起始位置为2，步长为3）
+📌 **start = 2 的情况**（起始位置为2，步长为3）
 略过中间无匹配的部分...
 
-📌 start = 0 的情况继续（找到第二个匹配）
+📌 **start = 0 的情况**  继续（找到第二个匹配）
 当窗口移动到合适位置时：
 
 某次循环状态：
-left = 9
-right = 15
-已处理单词："foo"(s[9..11])和"bar"(s[12..14])
-c
+
+- `left = 9`
+- `right = 15`
+- 已处理单词："foo"(s[9..11])和"bar"(s[12..14])
+
+```c
 currentWordsCount = [1, 1]  // "foo"和"bar"各出现1次
 count = 2  // 匹配了2个单词
 
 // count == wordsSize，满足条件
 // 记录结果: result[1] = left = 9
 *returnSize = 2
-✅ 最终结果
+```
+## ✅ 最终结果
 ```c
 result = [0, 9]
 *returnSize = 2
 ```
 这与题目期望的输出一致：子串"barfoo"(起始位置0)和"foobar"(起始位置9)都是由["foo","bar"]中所有单词连接而成。
-
 
 </details>

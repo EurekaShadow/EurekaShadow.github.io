@@ -123,8 +123,11 @@ int charCount[26] = {0};  // 所有元素初始化为0
 遍历 `magazine = "aab"`:
 
 处理 `'a'`：`charCount['a' - 'a']++` → `charCount[0] = 1`
+
 处理 `'a'`：`charCount['a' - 'a']++` → `charCount[0] = 2`
+
 处理 `'b'`：`charCount['b' - 'a']++` → `charCount[1] = 1`
+
 此时 `charCount` 数组状态：
 ```
 索引:  0  1  2  3  4  5  6  7  8  9  10 ... 25
@@ -137,12 +140,15 @@ int charCount[26] = {0};  // 所有元素初始化为0
 处理第一个 `'a'`：
 
 检查 `charCount['a' - 'a']` 即 `charCount[0]` = 2 > 0，满足条件
+
 将 `charCount[0]--` → `charCount[0] = 1`
 处理第二个 `'a'`：
 
 检查 `charCount['a' - 'a']` 即 `charCount[0]` = 1 > 0，满足条件
+
 将 `charCount[0]--` → `charCount[0] = 0`
-第四步：返回结果
+
+### 第四步：返回结果
 所有字符都满足需求，函数返回 `true`。
 
 这个过程形象地展示了如何通过字符计数来判断一个字符串是否能由另一个字符串构造出来。
