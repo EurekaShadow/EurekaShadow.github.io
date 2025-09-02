@@ -1,0 +1,151 @@
+---
+slug: LeetCode205
+title: 同构字符串
+authors: eurekaX
+tags: [哈希表,字符串]
+---
+import { Highlight, Keyword, Light, B1, B2, B3, BH3, B3W, MyColor} from '@site/src/components/ForMDX';
+
+
+### <B2>[力扣面试经典——205题](https://leetcode.cn/problems/isomorphic-strings/description/?envType=study-plan-v2&envId=top-interview-150 "力扣")</B2>
+
+<!-- truncate -->
+
+
+### 💡 参考代码：
+
+```c
+/**
+ * 判断两个字符串是否同构
+ * 
+ * @param s 字符串s
+ * @param t 字符串t
+ * @return bool true表示同构，false表示不同构
+ * 
+ * 解题思路：
+ * 1. 建立两个映射表，分别记录s->t和t->s的字符映射关系
+ * 2. 遍历字符串，检查映射关系是否一致
+ * 3. 若发现冲突则返回false，遍历完成则返回true
+ * 
+ * 时间复杂度：O(n)，其中n为字符串长度
+ * 空间复杂度：O(1)，使用固定大小的数组作为哈希表
+ */
+bool isIsomorphic(char * s, char * t){
+    // 边界条件检查
+    if (s == NULL || t == NULL) {
+        return false;
+    }
+    
+    int len_s = strlen(s);
+    int len_t = strlen(t);
+    
+    // 长度不等直接返回false
+    if (len_s != len_t) {
+        return false;
+    }
+    
+    // 创建两个映射表，ASCII字符范围为0-127
+    int map_s_to_t[128] = {0};  // 记录s到t的字符映射
+    int map_t_to_s[128] = {0};  // 记录t到s的字符映射
+    
+    // 初始化映射表为-1，表示尚未建立映射关系
+    for (int i = 0; i < 128; i++) {
+        map_s_to_t[i] = -1;
+        map_t_to_s[i] = -1;
+    }
+    
+    // 遍历字符串建立和验证映射关系
+    for (int i = 0; i < len_s; i++) {
+        char char_s = s[i];
+        char char_t = t[i];
+        
+        // 检查s到t的映射
+        if (map_s_to_t[char_s] == -1) {
+            // 尚未建立映射，建立新映射
+            map_s_to_t[char_s] = char_t;
+        } else if (map_s_to_t[char_s] != char_t) {
+            // 已存在映射但与当前字符不匹配，返回false
+            return false;
+        }
+        
+        // 检查t到s的映射
+        if (map_t_to_s[char_t] == -1) {
+            // 尚未建立映射，建立新映射
+            map_t_to_s[char_t] = char_s;
+        } else if (map_t_to_s[char_t] != char_s) {
+            // 已存在映射但与当前字符不匹配，返回false
+            return false;
+        }
+    }
+    
+    // 所有字符映射关系一致，返回true
+    return true;
+}
+```
+
+### 📖 总结：
+
+<details>
+<summary>点击展开题目总结</summary>
+# 🤔 同构字符串
+
+---
+
+## 1️⃣ 题目核心信息
+
+🎯 **功能描述**：判断两个字符串是否同构，即字符串中字符之间能否建立一一对应的映射关系
+
+📥 **输入输出**：
+- **输入**：两个字符串 `s` 和 `t`
+- **输出**：布尔值，表示两个字符串是否同构
+
+---
+
+## 2️⃣ 实现原理
+
+💡 **核心思路**：使用哈希表建立双向字符映射关系，确保映射的一一对应性
+
+📋 **实现步骤**：
+1. 检查输入字符串的有效性和长度一致性
+2. 创建两个哈希表分别记录 s→t 和 t→s 的字符映射关系
+3. 遍历字符串，对每一对字符检查并建立映射关系
+4. 发现映射冲突时返回 false，遍历完成返回 true
+
+---
+
+## 3️⃣ 关键点解析
+
+### 🎯 代码技巧
+- 使用固定大小数组模拟哈希表，提高访问效率
+- 双向映射检查确保一一对应关系
+- 初始化为-1表示未建立映射，避免与ASCII码值0冲突
+
+## 4️⃣ 使用场景
+
+### ✅ 适用情况：
+- 字符串模式匹配问题
+- 字符映射关系验证
+- 密码学中的简单替换密码验证
+
+### ⚠️ 前提条件：
+- 输入为有效的ASCII字符串
+- 两个字符串长度必须相等
+
+## 5️⃣ 复杂度分析
+
+- ⏱️ 时间复杂度：O(n)，其中 n 为字符串长度，只需遍历一次字符串
+
+- 💾 空间复杂度：O(1)，使用固定大小的数组(128个元素)作为哈希表
+
+## 6️⃣ 注意事项
+
+### 🚩 边界情况：
+- 输入为空指针
+- 字符串长度不相等
+- 空字符串情况
+
+### 💥 易错点：
+- 忘记检查双向映射导致映射不唯一
+- 哈希表初始化值与有效ASCII码冲突
+- 没有正确处理字符到数组索引的转换
+</details>
