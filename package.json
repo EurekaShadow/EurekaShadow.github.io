@@ -13,7 +13,7 @@
     "write-translations": "docusaurus write-translations",
     "write-heading-ids": "docusaurus write-heading-ids",
     "add-meta": "node add-metadata.js",
-    "update-posts": "node scripts/update-recent-posts.js",
+    "update-posts": "node scripts/update-recent-posts.js && node scripts/update-recent-posts-en.js",
     "prestart": "yarn update-posts",
     "deploy-site": "node scripts/deploy-site.js site2",
 	"analyze": "node scripts/comprehensive-analysis.js",

@@ -40,3 +40,5 @@ ssh-keygen -t ed25519 -C "2560291241@qq.com" -f ~/.ssh/id_E1H
 This is test text for testing update-recent-posts.js
 
 <p><CardImg src="/img/Gif/gif-example.gif" alt="GIF example" isCenter={true} /></p>
+
+testing `update-recent-posts-en.js`
