@@ -1,27 +1,19 @@
 name: DocSearch Scraper
 
-# 定义工作流触发条件
 on:
-  # 允许手动触发工作流
   workflow_dispatch:
-  # 每天午夜自动运行 (UTC时间)
   schedule:
     - cron: '0 0 * * *'
 
-# 定义工作流任务
 jobs:
   algolia:
-    # 运行环境
     runs-on: ubuntu-latest
     steps:
-      # 检出代码仓库
       - uses: actions/checkout@v3
 
-      # 安装 jq 工具用于处理 JSON
       - name: Install jq
         run: sudo apt-get install jq
 
-      # 验证配置文件是否存在
       - name: Validate docsearch.json exists
         run: |
           if [ ! -f "docsearch.json" ]; then
@@ -29,23 +21,58 @@ jobs:
             exit 1
           fi
 
-      # 读取并设置 Algolia 配置
       - name: Get the content of docsearch.json as config
         id: algolia_config
         run: echo "config=$(cat docsearch.json | jq -r tostring)" >> $GITHUB_OUTPUT
 
-      # 运行 DocSearch 爬虫
       - name: Run algolia/docsearch-scraper image
         env:
-          # 从 secrets 获取 Algolia 凭据
           ALGOLIA_APP_ID: ${{ secrets.ALGOLIA_APP_ID }}
           ALGOLIA_API_KEY: ${{ secrets.ALGOLIA_API_KEY }}
           CONFIG: ${{ steps.algolia_config.outputs.config }}
         run: |
           echo "Starting DocSearch scraper..."
+          # 捕获输出并检查退出码
           docker run \
             --env APPLICATION_ID=${ALGOLIA_APP_ID} \
             --env API_KEY=${ALGOLIA_API_KEY} \
             --env "CONFIG=${CONFIG}" \
-            algolia/docsearch-scraper
-          echo "DocSearch scraper completed successfully."
+            algolia/docsearch-scraper > scraper_output.log 2>&1
+          echo "DocSearch scraper execution finished."
+          
+      - name: Validate scraping results
+        run: |
+          # 显示完整的抓取日志（便于调试）
+          echo "=== SCRAPER OUTPUT ==="
+          cat scraper_output.log
+          echo "=== END OUTPUT ==="
+          
+          # 检查是否有错误信息
+          if grep -q "ERROR\|Exception\|Traceback" scraper_output.log; then
+            echo "ERROR: Scraper encountered errors during execution"
+            exit 1
+          fi
+          
+          # 提取抓取的记录数
+          hits=$(grep "Nb hits:" scraper_output.log | awk '{print $3}')
+          if [ -z "$hits" ]; then
+            echo "ERROR: Could not determine number of hits"
+            exit 1
+          fi
+          
+          echo "Records scraped: $hits"
+          
+          # 验证记录数量是否合理
+          if [ "$hits" -lt 8000 ]; then
+            echo "ERROR: Insufficient records scraped ($hits < 8000). This indicates incomplete scraping."
+            exit 1
+          fi
+          
+          echo "SUCCESS: Adequate records scraped ($hits >= 8000)"
+          
+      - name: Archive scraper logs
+        uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: scraper-logs-${{ github.run_id }}-${{ github.run_attempt }}
+          path: scraper_output.log
