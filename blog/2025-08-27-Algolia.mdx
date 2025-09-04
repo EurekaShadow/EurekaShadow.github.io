@@ -95,6 +95,108 @@ Admin API Key -> ALGOLIA_API_KEY
 * 可以在本地项目根目录下创建 `.github/workflows/docsearch.yml` 文件：
 <p><CardImg src="/img/Blog/Algolia6.jpg" alt="Algolia6" isCenter={true} isBoxed={true} /></p>
 
+以下将提供两个 `docsearch.yml` 配置，分别为原始版本和改进版本。
+
+这是两个版本的对比：
+
+**原始版本**：从参考资料的[文章](https://www.alanwang.site/posts/blog-guides/docusaurus-search#%E5%88%9B%E5%BB%BA-github-actions )中复制修改，功能基础。
+
+**改进版本**：解决实际问题而生——网站有100+记录但只爬取到16条且显示成功。
+
+改进版本新增功能：
+- 输出详细错误信息
+- 爬取记录过少时工作流失败并提示
+
+**配置要点**：根据网站实际记录数调整**高亮行**配置，如网站约100条则配置为100，后续可随内容变化调整。
+
+<Tabs>
+
+  <TabItem value="IV" label="改进">
+```yml title=".github/workflows/docsearch.yml"
+name: DocSearch Scraper
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 0 * * *'
+
+jobs:
+  algolia:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install jq
+        run: sudo apt-get install jq
+
+      - name: Validate docsearch.json exists
+        run: |
+          if [ ! -f "docsearch.json" ]; then
+            echo "docsearch.json not found!"
+            exit 1
+          fi
+
+      - name: Get the content of docsearch.json as config
+        id: algolia_config
+        run: echo "config=$(cat docsearch.json | jq -r tostring)" >> $GITHUB_OUTPUT
+
+      - name: Run algolia/docsearch-scraper image
+        env:
+          ALGOLIA_APP_ID: ${{ secrets.ALGOLIA_APP_ID }}
+          ALGOLIA_API_KEY: ${{ secrets.ALGOLIA_API_KEY }}
+          CONFIG: ${{ steps.algolia_config.outputs.config }}
+        run: |
+          echo "Starting DocSearch scraper..."
+          # 捕获输出并检查退出码
+          docker run \
+            --env APPLICATION_ID=${ALGOLIA_APP_ID} \
+            --env API_KEY=${ALGOLIA_API_KEY} \
+            --env "CONFIG=${CONFIG}" \
+            algolia/docsearch-scraper > scraper_output.log 2>&1
+          echo "DocSearch scraper execution finished."
+          
+      - name: Validate scraping results
+        run: |
+          # 显示完整的抓取日志（便于调试）
+          echo "=== SCRAPER OUTPUT ==="
+          cat scraper_output.log
+          echo "=== END OUTPUT ==="
+          
+          # 检查是否有错误信息
+          if grep -q "ERROR\|Exception\|Traceback" scraper_output.log; then
+            echo "ERROR: Scraper encountered errors during execution"
+            exit 1
+          fi
+          
+          # 提取抓取的记录数
+          hits=$(grep "Nb hits:" scraper_output.log | awk '{print $3}')
+          if [ -z "$hits" ]; then
+            echo "ERROR: Could not determine number of hits"
+            exit 1
+          fi
+          
+          echo "Records scraped: $hits"
+          
+          # 验证记录数量是否合理
+          // highlight-start
+          if [ "$hits" -lt 100 ]; then
+            echo "ERROR: Insufficient records scraped ($hits < 100). This indicates incomplete scraping."
+          // highlight-end  
+            exit 1
+          fi
+          // highlight-next-line
+          echo "SUCCESS: Adequate records scraped ($hits >= 100)"
+          
+      - name: Archive scraper logs
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: scraper-logs-${{ github.run_id }}-${{ github.run_attempt }}
+          path: scraper_output.log
+```
+  </TabItem>
+
+  <TabItem value="OV" label="原始">
 ```yml title=".github/workflows/docsearch.yml"
 name: DocSearch Scraper
 
@@ -148,6 +250,180 @@ jobs:
             algolia/docsearch-scraper
           echo "DocSearch scraper completed successfully."
 ```
+  </TabItem>
+   
+</Tabs>
+
+<details>
+<summary>两个版本的详细比对</summary>
+
+#### 功能完整性对比
+**1. 错误检测和验证机制**
+
+**原始版本（较差）：**
+```yml
+run: |
+  echo "Starting DocSearch scraper..."
+  docker run \
+    --env APPLICATION_ID=${ALGOLIA_APP_ID} \
+    --env API_KEY=${ALGOLIA_API_KEY} \
+    --env "CONFIG=${CONFIG}" \
+    algolia/docsearch-scraper
+  echo "DocSearch scraper completed successfully."  # 总是显示成功
+```
+**改进版本（较好）：**
+```yml
+- name: Validate scraping results
+  run: |
+    # 完整的验证机制
+    # 1. 显示完整日志
+    cat scraper_output.log
+    
+    # 2. 错误检测
+    if grep -q "ERROR|Exception|Traceback" scraper_output.log; then
+      echo "ERROR: Scraper encountered errors"
+      exit 1
+    fi
+    
+    # 3. 结果数量验证
+    if [ "$hits" -lt 100 ]; then
+      echo "ERROR: Insufficient records"
+      exit 1
+    fi
+```
+**2. 日志记录和调试能力**
+
+**原始版本缺陷：**
+
+- 没有捕获详细输出
+- 遇到问题时难以诊断
+- 无法查看实际执行过程
+
+**改进版本优势：**
+```bash
+# 捕获完整输出用于分析
+docker run ... > scraper_output.log 2>&1
+
+# 显示完整日志便于调试
+echo "=== SCRAPER OUTPUT ==="
+cat scraper_output.log
+```
+#### 具体改进点分析
+**1. 真实成功验证**
+```
+原始版本问题：
+❌ 只要程序运行完成就显示成功
+❌ 无法区分"运行完成"和"成功完成"
+❌ 16条记录也会显示成功
+
+改进版本优势：
+✅ 检查实际抓取的记录数量
+✅ 验证是否达到预期标准
+✅ 只有真正成功才标记为成功
+```
+**2. 错误处理机制**
+```
+原始版本问题：
+❌ 没有错误检测
+❌ 静默失败无法发现
+❌ 网络问题或配置错误无法识别
+
+改进版本优势：
+✅ 自动检测错误信息
+✅ 关键词匹配发现异常
+✅ 及时终止并报告错误
+```
+**3. 调试和监控能力**
+```
+原始版本限制：
+❌ 无日志记录
+❌ 无法回溯问题
+❌ 难以优化性能
+
+改进版本功能：
+✅ 完整日志捕获
+✅ 日志归档保存
+✅ 便于问题分析和性能优化
+```
+#### 实际场景对比
+**场景1：网络连接问题**
+```
+原始版本结果：
+- 只抓取了16条记录
+- 工作流显示"成功"
+- 你不知道有问题
+
+改进版本结果：
+- 只抓取了16条记录
+- hits < 100，工作流失败
+- 通过日志可以发现问题原因
+```
+**场景2：配置文件错误**
+```
+原始版本结果：
+- 程序异常退出但仍可能显示成功
+- 无法定位配置问题
+
+改进版本结果：
+- 捕获错误日志
+- grep 检测到 "ERROR" 关键词
+- 工作流正确失败并提示错误
+```
+**场景3：正常运行**
+```
+原始版本：
+- 显示成功但信息有限
+
+改进版本：
+- 显示详细的执行过程
+- 验证记录数量充足
+- 保存完整日志供后续分析
+```
+#### 可靠性和维护性
+**1. 监控能力**
+```
+原始版本：
+- 盲目信任执行结果
+- 无法主动发现问题
+
+改进版本：
+- 主动验证执行质量
+- 设置合理的阈值标准
+- 及早发现潜在问题
+```
+**2. 故障排查**
+```
+原始版本：
+- 出问题时需要手动检查
+- 缺乏诊断信息
+
+改进版本：
+- 自动化的错误检测
+- 完整的日志记录
+- 快速定位问题根源
+```
+**3. 持续改进**
+```
+原始版本：
+- 难以收集运行数据
+- 无法优化性能
+
+改进版本：
+- 积累历史执行日志
+- 分析性能趋势
+- 持续优化工作流
+```
+#### 总结
+改进后的版本在以下方面明显优于原始版本：
+
+1. **准确性**：从表面成功到真实成功验证
+2. **可靠性**：完善的错误检测和处理机制
+3. **可维护性**：详细的日志记录和分析能力
+4. **监控性**：主动的健康检查和预警机制
+5. **透明度**：完整的执行过程可视化
+
+</details>
+
 
 如果想配置成**部署完成后**便触发该工作流，可以参考这篇[文章](https://www.alanwang.site/posts/blog-guides/docusaurus-search#%E5%88%9B%E5%BB%BA-github-actions )。但我觉得手动和定时触发已经完全足够，因此没有尝试其他触发方式。
 
@@ -160,8 +436,8 @@ jobs:
 {
    // highlight-start
   "index_name": "test-site",
-  "start_urls": ["https://www.eurekashadow.xin/"],
-  "sitemap_urls": ["https://www.eurekashadow.xin/sitemap.xml"],
+  "start_urls": ["https://eureka12138github.github.io/"],
+  "sitemap_urls": ["https://eureka12138github.github.io/sitemap.xml"],
   // highlight-end
   // highlight-add-start
   "js_render": true,
@@ -222,6 +498,14 @@ jobs:
 ```
 > 注意：绿色标注的两行配置（js_render 和 js_wait）**非常重要**。没有这两句的话，Algolia可能只能爬取到网站首页的数据。在除首页外的页面点击F12，可能会发现404页面，但此时网页是可以正常显示的。这种显示和源码不一致的情况导致无法爬取到完整数据。加上这两句表示渲染完成后再爬取，如此便能正常获取所有数据。
 
+> 如果后续增加 `i18n` 国际化配置，想要爬取多语言数据，则需要修改`docsearch.json`中的 `sitemap_urls`。以英文站为例：
+```
+"sitemap_urls": [
+    "https://eureka12138github.github.io/sitemap.xml",
+    // highlight-add-line
+  "https://eureka12138github.github.io/en/sitemap.xml"
+],
+```
 
 ## 配置 docusaurus.config.js
 1. 位置示意：
@@ -245,15 +529,15 @@ algolia: {
 
 
 ## 网站部署
-* 将代码 `git push` 到远端仓库中。
+将代码 `git push` 到远端仓库中。
 <p><CardImg src="/img/Blog/Algolia18.jpg" alt="Algolia18" isCenter={true} isBoxed={true} /></p>
 
 ## 手动触发工作流爬取信息
 
-* 在Vercel部署已经完成的情况下，回到GitHub仓库中，点击Actions，选择Docsearch scraper，点击Run workflow，即可触发该工作流，爬取网站信息并生成索引文件用于后续Algolia搜索。
+在GitHub对应仓库中，点击 `Actions`，选择`Docsearch scraper`，点击`Run workflow`，即可触发该工作流，爬取网站信息并生成**索引文件**用于后续Algolia搜索。
 <p><CardImg src="/img/Blog/Algolia19.jpg" alt="Algolia19" isCenter={true} isBoxed={true} /></p>
 
-* 运行完毕：
+运行完毕：
 <p><CardImg src="/img/Blog/Algolia20.jpg" alt="Algolia20" isCenter={true} isBoxed={true} /></p>
 
 ## 查看 Algolia 记录
@@ -262,18 +546,19 @@ algolia: {
 
 2. 点击 `indices`，从下图可知索引文件已经生成，在索引 `test-site` 下一共找到了 `134`个记录。这个记录数量取决于网站内容，如果内容多，记录也多。我这个只是演示网站，只有134记录，正常的索引记录可能会有几千甚至上万个。
 
-> 注意，只有这里出现了和你**网站内容所匹配的记录**时，才表示**配置成功**。如果网站内容很多，结果这里的记录只有寥寥几条，那明显是某个地方出错了。可能是[这里](./Algolia#创建-docsearchjson)的两行没有加？
 <p><CardImg src="/img/Blog/Algolia22.jpg" alt="Algolia22" isCenter={true} isBoxed={true} /></p>
+
+> 注意，只有这里出现了和你**网站内容所匹配的记录**时，才表示**配置成功**。如果网站内容很多，结果这里的记录只有寥寥几条，那明显是某个地方出错了。可能是[这里](./Algolia#创建-docsearchjson)的两行没有加？
 
 ## 将网站部署到GitPages
 > 其实在本地就可以查看结果了，部署再看是为了进一步确认结果是否正确。毕竟有的时候本地运行的好好的，但是部署到GitPages的时候，就出现了问题。（说的就是你！i18n，坑爹的现在闪烁问题还没能解决。。。😑）
 <p><CardImg src="/img/Blog/Algolia23.jpg" alt="Algolia23" isCenter={true} isBoxed={true} /></p>
 
-* 部署完成：
+部署完成：
 <p><CardImg src="/img/Blog/Algolia24.jpg" alt="Algolia24" isCenter={true} isBoxed={true} /></p>
 
 ## 结果
-大功告成！现在网站可以使用搜索功能了！🎉
+大功告成！现在[网站](https://eureka12138github.github.io/ "测试网站")可以使用搜索功能了！🎉
 <p><CardImg src="/img/Gif/gif-example.gif" alt="AlgoliaResult" isCenter={true} isBoxed={true} /></p>
 
 这个过程还挺曲折的，多亏了下面的参考资料，没有他的文章参考，我怕是难以完成这个搜索功能。但即使有参考，也并非一蹴而就的，为了实现这个搜索功能，我花了很多时间，也走了很多弯路，希望这个总结能帮助到有缘之人。（也可能是未来的自己？🥱）
