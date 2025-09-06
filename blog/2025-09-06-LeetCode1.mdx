@@ -181,7 +181,7 @@ int* twoSum(int* nums, int numsSize, int target, int* returnSize) {
 
 ## 3️⃣ 关键点解析
 
-原始思路可能是暴力双重循环，时间复杂度O(n²)。哈希表优化后时间复杂度降为O(n)，但需要额外O(n)空间。
+原始思路是暴力双重循环，时间复杂度O(n²)。哈希表优化后时间复杂度降为O(1)，但需要额外O(n)空间。
 
 ### 🎯 代码技巧
 - 使用哈希表优化查找时间
@@ -202,7 +202,7 @@ int* twoSum(int* nums, int numsSize, int target, int* returnSize) {
 
 ## 5️⃣ 复杂度分析
 
-- ⏱️ 时间复杂度：O(n) - 只需遍历数组一次
+- ⏱️ 时间复杂度：O(1) - 只需遍历数组一次
 - 💾 空间复杂度：O(n) - 哈希表最多存储n个元素
 
 ## 6️⃣ 注意事项
