@@ -147,3 +147,8 @@ Algolia:
   label: 计数
   permalink: /计数
   description: 关于 计数 的一些题目   
+
+并查集:
+  label: 并查集
+  permalink: /并查集
+  description: 关于 并查集 的一些题目    
