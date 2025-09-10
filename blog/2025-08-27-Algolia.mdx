@@ -64,7 +64,7 @@ Admin API Key -> ALGOLIA_API_KEY
 <details>
 <summary>只找到两个 API ?</summary>
 
-如果在查看 `API` 的时候看到**只有两个** `API`，分别是 `Application ID` 和 `Search API Key`，没有 `Admin API Key` ？！那说明刚才没有严格按照这个[步骤](./Algolia#注册-algolia-账户 )走，现在看到的是`Algolia` 默认创建的 Application `Docsearch` 。该 Application 暂时是没有密钥的。（按官方的教程一步步走应该会有，但我没试过。🥱）解决方法是再创建一个 Application，在这里：`Settings/API Keys`
+如果在查看 `API` 的时候看到**只有两个** `API`，分别是 `Application ID` 和 `Search API Key`，没有 `Admin API Key` ？！那说明刚才没有严格按照这个[步骤](./Algolia#注册-algolia-账户 )走，现在看到的是`Algolia` 默认创建的 Application `Docsearch` 。该 Application 暂时是没有 `Admin API Key` 密钥的。（按官方的教程一步步走应该会有，但我没试过。🥱）解决方法是再创建一个 Application，在这里：`Settings/API Keys`
 <p><CardImg src="/img/Blog/Algolia26.jpg" alt="Algolia26" isCenter={true} isBoxed={true} /></p>
 
 填上名称后，其他配置保持默认，直接点击 `Next:Review & Confirm` -> `Create Application`。新Application 的 `API` 获取方式与上面一样。
@@ -107,7 +107,7 @@ Admin API Key -> ALGOLIA_API_KEY
 - 输出详细错误信息
 - 爬取记录过少时工作流失败并提示
 
-**配置要点**：根据网站实际记录数调整**高亮行**配置，如网站约100条则配置为100，后续可随内容变化调整。
+**配置要点**：根据网站实际记录数调整**高亮行**配置，如网站约100条则配置为100，后续可随内容变化调整。如不知道自己的网站记录具体有多少条，可以先值改低一点，比如改为1，这样即使只爬取到一条记录，也会显示执行成功，这时候已经得到具体的记录数了，再修改为具体记录数相近的数值。
 
 <Tabs>
 
@@ -496,7 +496,7 @@ cat scraper_output.log
   }
 }
 ```
-> 注意：绿色标注的两行配置（js_render 和 js_wait）**非常重要**。没有这两句的话，Algolia可能只能爬取到网站首页的数据。在除首页外的页面点击F12，可能会发现404页面，但此时网页是可以正常显示的。这种显示和源码不一致的情况导致无法爬取到完整数据。加上这两句表示渲染完成后再爬取，如此便能正常获取所有数据。
+> 注意：绿色标注的两行配置（`js_render` 和 `js_wait`）**非常重要**。没有这两句的话，Algolia可能只能爬取到网站首页的数据。在除首页外的页面点击F12，可能会发现404页面，但此时网页是可以正常显示的。这种显示和源码不一致的情况导致无法爬取到完整数据。加上这两句表示渲染完成后再爬取，如此便能正常获取所有数据。
 
 > 如果后续增加 `i18n` 国际化配置，想要爬取多语言数据，则需要修改`docsearch.json`中的 `sitemap_urls`。以英文站为例：
 ```
