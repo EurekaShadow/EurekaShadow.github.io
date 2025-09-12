@@ -1,0 +1,194 @@
+---
+slug: LeetCode57
+title: 插入区间
+authors: eurekaX
+tags: [数组]
+---
+import { Highlight, Keyword, Light, B1, B2, B3, BH3, B3W, MyColor} from '@site/src/components/ForMDX';
+
+
+### <B2>[力扣面试经典——57题](https://leetcode.cn/problems/insert-interval/description/?envType=study-plan-v2&envId=top-interview-150 "力扣")</B2>
+
+<!-- truncate -->
+
+
+### 💡 参考代码：
+
+```c
+/**
+ * Return an array of arrays of size *returnSize.
+ * The sizes of the arrays are returned as *returnColumnSizes array.
+ * Note: Both returned array and *columnSizes array must be malloced, assume caller calls free().
+ */
+
+/**
+ * 插入新区间并合并重叠区间
+ * @param intervals 原始区间数组
+ * @param intervalsSize 原始区间数组大小
+ * @param intervalsColSize 原始区间数组列大小
+ * @param newInterval 新插入的区间
+ * @param newIntervalSize 新区间大小
+ * @param returnSize 返回数组的行数
+ * @param returnColumnSizes 返回数组每行列数
+ * @return 合并后的区间数组
+ */
+int** insert(int** intervals, int intervalsSize, int* intervalsColSize, int* newInterval, int newIntervalSize, int* returnSize, int** returnColumnSizes) {
+    // 分配结果数组内存空间
+    int** result = (int**)malloc(sizeof(int*) * (intervalsSize + 1));
+    *returnColumnSizes = (int*)malloc(sizeof(int) * (intervalsSize + 1));
+    *returnSize = 0;
+    
+    int i = 0;
+    int index = 0;
+    
+    // 步骤1: 将所有新区间左边且不重叠的区间添加到结果中
+    // 这些区间满足: intervals[i][1] < newInterval[0]
+    while (i < intervalsSize && intervals[i][1] < newInterval[0]) {
+        result[index] = (int*)malloc(sizeof(int) * 2);
+        result[index][0] = intervals[i][0];
+        result[index][1] = intervals[i][1];
+        (*returnColumnSizes)[index] = 2;
+        index++;
+        i++;
+    }
+    
+    // 步骤2: 合并所有与新区间重叠的区间
+    // 重叠条件: intervals[i][0] <= newInterval[1]
+    while (i < intervalsSize && intervals[i][0] <= newInterval[1]) {
+        // 更新新区间的左端点为最小值
+        newInterval[0] = fmin(newInterval[0], intervals[i][0]);
+        // 更新新区间的右端点为最大值
+        newInterval[1] = fmax(newInterval[1], intervals[i][1]);
+        i++;
+    }
+    
+    // 将合并后的新区间添加到结果中
+    result[index] = (int*)malloc(sizeof(int) * 2);
+    result[index][0] = newInterval[0];
+    result[index][1] = newInterval[1];
+    (*returnColumnSizes)[index] = 2;
+    index++;
+    
+    // 步骤3: 将所有新区间右边且不重叠的区间添加到结果中
+    // 这些区间满足: intervals[i][0] > newInterval[1]
+    while (i < intervalsSize) {
+        result[index] = (int*)malloc(sizeof(int) * 2);
+        result[index][0] = intervals[i][0];
+        result[index][1] = intervals[i][1];
+        (*returnColumnSizes)[index] = 2;
+        index++;
+        i++;
+    }
+    
+    *returnSize = index;
+    return result;
+}
+```
+
+### 📖 总结：
+
+<details>
+<summary>点击展开题目总结</summary>
+# 🤔 插入区间
+
+---
+
+## 1️⃣ 题目核心信息
+
+🎯 **功能描述**：在已排序且无重叠的区间列表中插入新区间，并保持区间有序且无重叠（必要时合并区间）
+
+📥 **输入输出**：
+- **输入**：
+  - `intervals`: 原始区间数组，按起始端点升序排列且无重叠
+  - `newInterval`: 需要插入的新区间
+- **输出**：插入并合并后的新区间数组
+
+---
+
+## 2️⃣ 实现原理
+
+💡 **核心思路**：将区间分为三部分处理——左侧不重叠、中间重叠需要合并、右侧不重叠
+
+📋 **实现步骤**：
+1. 遍历并添加所有在新区间左侧且不重叠的区间
+2. 合并所有与新区间重叠的区间，更新新区间的边界
+3. 添加所有在新区间右侧且不重叠的区间
+4. 返回合并后的结果数组
+
+---
+
+## 3️⃣ 关键点解析
+
+### 🎯 代码技巧
+- 利用区间已排序的特性，通过一次遍历完成处理
+- 通过比较区间端点判断重叠关系：`intervals[i][1] < newInterval[0]`表示不重叠，`intervals[i][0] <= newInterval[1]`表示重叠
+- 使用`fmin`和`fmax`函数优雅地更新合并区间的边界
+
+## 4️⃣ 使用场景
+
+### ✅ 适用情况：
+- 区间调度问题
+- 时间段合并处理
+- 资源分配优化
+
+### ⚠️ 前提条件：
+- 原始区间数组已按起始端点升序排列
+- 区间无重叠
+
+## 5️⃣ 复杂度分析
+
+- ⏱️ 时间复杂度：O(n)，其中n是原始区间数组的长度，只需要遍历一次数组
+- 💾 空间复杂度：O(n)，用于存储结果数组
+
+## 6️⃣ 注意事项
+
+### 🚩 边界情况：
+- 空区间数组
+- 新区间插入在最前面
+- 新区间插入在最后面
+
+### 💥 易错点：
+- 重叠区间的判断条件容易出错
+- 忘记处理剩余的区间
+- 内存分配错误导致的访问越界
+
+## 7️⃣ 补充说明
+
+**示例**: `intervals = [[1,2],[3,5],[6,7],[8,10],[12,16]]`, `newInterval = [4,8]`
+
+#### 1. 初始化：
+- `result`数组用于存储结果
+- `i = 0`（遍历原始数组的指针）
+- `index = 0`（结果数组的索引）
+
+#### 2. 步骤1 - 处理左侧不重叠区间：
+- 检查`intervals[0] = [1,2]`：因为`2 < 4`（`intervals[0][1] < newInterval[0]`），所以不重叠
+- 将`[1,2]`添加到`result[0]`
+- `i = 1`, `index = 1`
+
+#### 3. 步骤2 - 合并重叠区间：
+- 检查`intervals[1] = [3,5]`：因为`3 <= 8`（`intervals[1][0] <= newInterval[1]`），所以重叠
+  - 更新`newInterval[0] = min(4, 3) = 3`
+  - 更新`newInterval[1] = max(8, 5) = 8`
+  - `i = 2`
+- 检查`intervals[2] = [6,7]`：因为`6 <= 8`（`intervals[2][0] <= newInterval[1]`），所以重叠
+  - `newInterval[0] = min(3, 6) = 3`
+  - `newInterval[1] = max(8, 7) = 8`
+  - `i = 3`
+- 检查`intervals[3] = [8,10]`：因为`8 <= 8`（`intervals[3][0] <= newInterval[1]`），所以重叠
+  - `newInterval[0] = min(3, 8) = 3`
+  - `newInterval[1] = max(8, 10) = 10`
+  - `i = 4`
+- 检查`intervals[4] = [12,16]`：因为`12 > 10`（不满足`intervals[4][0] <= newInterval[1]`），跳出循环
+- 将合并后的区间`[3,10]`添加到`result[1]`
+- `index = 2`
+
+#### 4. 步骤3 - 处理右侧不重叠区间：
+- `intervals[4] = [12,16]`：因为`12 > 10`（`intervals[4][0] > newInterval[1]`），不重叠
+- 将`[12,16]`添加到`result[2]`
+- `i = 5`, `index = 3`
+
+#### 5. 最终结果：
+- `result = [[1,2],[3,10],[12,16]]`
+- `returnSize = 3`
+</details>
