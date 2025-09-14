@@ -12,7 +12,7 @@ const config = {
   },
         //https://eurekashadow.github.io/
 		//https://www.eurekashadow.xin/
-  url: 'https://www.eurekax.space/',//网站最终部署的域名
+  url: 'https://eurekashadow.github.io/',//网站最终部署的域名
   baseUrl: '/',
 
   organizationName: 'EurekaShadow',
@@ -74,9 +74,9 @@ const config = {
 		//  Search-Only API Key
 		apiKey: '2732fa24db8a85aaa29ee5c2e96be219',
 		//git-pages-index是 gitpages 的 Algolia 搜索 Index
-		//test-site是 Vercel 的 Algolia 搜索 Index
+		//Eureka-X-Space 是 Vercel 的 Algolia 搜索 Index
 		//切换网站部署的话，还要改docsearch.json文件的前三行
-		indexName: 'Eureka-X-Space',
+		indexName: 'git-pages-index',
 		searchPagePath: 'search',
 		contextualSearch: true
       },
