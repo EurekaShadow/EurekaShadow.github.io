@@ -151,4 +151,9 @@ Algolia:
 并查集:
   label: 并查集
   permalink: /并查集
-  description: 关于 并查集 的一些题目    
+  description: 关于 并查集 的一些题目  
+
+栈:
+  label: 栈
+  permalink: /栈
+  description: 关于 栈 的一些题目   
