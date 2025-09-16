@@ -157,3 +157,8 @@ Algolia:
   label: 栈
   permalink: /栈
   description: 关于 栈 的一些题目   
+
+设计:
+  label: 设计
+  permalink: /设计
+  description: 关于 设计 的一些题目  
