@@ -162,3 +162,13 @@ Algolia:
   label: 设计
   permalink: /设计
   description: 关于 设计 的一些题目  
+
+链表:
+  label: 链表
+  permalink: /链表
+  description: 关于 链表 的一些题目 
+
+递归:
+  label: 递归
+  permalink: /递归
+  description: 关于 递归 的一些题目   
