@@ -158,67 +158,77 @@ function getContentFiles() {
   return files;  // 返回所有找到的内容文件信息
 }
 
-/**
- * 从文件中提取标题、日期和slug信息
- * 优先从frontmatter中提取信息，其次从文件名中提取
- * @param {string} filePath - 文件完整路径
- * @param {string} fileName - 文件名（不含扩展名）
- * @param {object} fileStats - 文件状态信息
- * @returns {object} 包含标题、日期和slug的对象
- */
 function extractFileInfo(filePath, fileName, fileStats) {
   // 初始化默认值
-  let title = formatFileName(fileName);  // 根据文件名生成默认标题
-  let date = fileStats.birthtime;        // 默认使用文件创建时间作为发布日期
-  let slug = fileName;                   // 默认使用文件名作为slug
+  let title = formatFileName(fileName);
+  let date = fileStats.birthtime;
+  let slug = fileName;
+  let hasExplicitTitle = false;
   
   try {
-    // 读取文件内容
     const content = fs.readFileSync(filePath, 'utf8');
     
-    // 尝试从文件名中提取日期信息（格式：YYYY-MM-DD-文件名）
-    const dateInName = fileName.match(/^(\d{4}-\d{2}-\d{2})-/);
-    if (dateInName) {
-      // 如果文件名包含日期，使用该日期作为发布日期
-      date = new Date(dateInName[1]);
-      // 去掉日期前缀后的文件名部分
-      const nameWithoutDate = fileName.replace(/^\d{4}-\d{2}-\d{2}-/, '');
-      // 根据去掉日期的文件名生成标题
-      title = formatFileName(nameWithoutDate);
-      // slug也使用去掉日期的部分
-      slug = nameWithoutDate;
-    }
-    
-    // 尝试从文件的frontmatter中提取信息
+    // 更准确地匹配frontmatter
     const frontmatterMatch = content.match(/^---\s*\n([\s\S]*?)\n---/);
     if (frontmatterMatch) {
-      // 提取frontmatter内容
       const frontmatter = frontmatterMatch[1];
       
-      // 查找title、date、slug字段
-      const titleMatch = frontmatter.match(/title:\s*['"]?(.*?)['"]?\s*$/m);
-      const dateMatch = frontmatter.match(/date:\s*['"]?(\d{4}-\d{2}-\d{2})['"]?\s*$/m);
-      const slugMatch = frontmatter.match(/slug:\s*['"]?(.*?)['"]?\s*$/m);
+      // 优先匹配title，如果没有则匹配sidebar_label
+      // 修复正则表达式，使其能匹配不带引号的值
+      const titleMatch = frontmatter.match(/title:\s*['"]?(.+?)['"]?\s*(?:\n|$)/m);
+      const sidebarLabelMatch = frontmatter.match(/sidebar_label:\s*['"]?(.+?)['"]?\s*(?:\n|$)/m);
+      const dateMatch = frontmatter.match(/date:\s*['"]?(\d{4}-\d{2}-\d{2})['"]?\s*(?:\n|$)/m);
+      const slugMatch = frontmatter.match(/slug:\s*['"]?(.+?)['"]?\s*(?:\n|$)/m);
       
-      // 如果frontmatter中有相应字段，则使用frontmatter中的值
-      if (titleMatch) title = titleMatch[1];
-      if (dateMatch) date = new Date(dateMatch[1]); // 发布日期
+      // 使用title或sidebar_label作为标题
+      if (titleMatch) {
+        title = titleMatch[1].trim();
+        hasExplicitTitle = true;
+      } else if (sidebarLabelMatch) {
+        title = sidebarLabelMatch[1].trim();
+        hasExplicitTitle = true;
+      }
+      
+      if (dateMatch) date = new Date(dateMatch[1]);
       if (slugMatch) slug = slugMatch[1];
     }
+    
+    // 处理博客文件
+    const isBlogFile = filePath.includes('/blog/') || filePath.includes('\\blog\\');
+    if (isBlogFile) {
+      const dateInName = fileName.match(/^(\d{4}-\d{2}-\d{2})-/);
+      if (dateInName) {
+        // 如果文件名包含日期，使用该日期作为发布日期
+        date = new Date(dateInName[1]);
+        // 去掉日期前缀后的文件名部分
+        const nameWithoutDate = fileName.replace(/^\d{4}-\d{2}-\d{2}-/, '');
+        
+        // 仅当frontmatter中没有显式指定title时才使用处理后的文件名作为标题
+        if (!hasExplicitTitle) {
+          title = formatFileName(nameWithoutDate);
+        }
+        // slug也使用去掉日期的部分
+        slug = nameWithoutDate;
+      }
+      // 对于没有日期前缀的博客文件，也确保使用frontmatter标题
+      else if (!hasExplicitTitle) {
+        // 如果没有显式标题且没有日期前缀，使用slug作为标题（如果存在）
+        if (slug && slug !== fileName) {
+          title = formatFileName(slug);
+        }
+      }
+    }
   } catch (error) {
-    // 如果读取文件出错，输出警告信息但不中断程序
     console.warn(`Warning: Could not read file ${filePath}`);
   }
   
-  // 返回提取到的文件信息
   return {
     title: title,
-    date: date,           // 发布日期（来自frontmatter或文件名）
+    date: date,
     slug: slug,
-    publishedDate: date   // 明确标识为发布日期
+    publishedDate: date
   };
 }
-
 /**
  * 格式化文件名，将短横线分隔转换为单词首字母大写
  * 例如: "hello-world" -> "Hello World"
