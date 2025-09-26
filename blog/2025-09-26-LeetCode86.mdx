@@ -1,0 +1,197 @@
+---
+slug: LeetCode86
+title: 分隔链表
+authors: eurekaX
+tags: [链表,双指针]
+---
+import { Highlight, Keyword, Light, B1, B2, B3, BH3, B3W, MyColor} from '@site/src/components/ForMDX';
+
+
+### <B2>[力扣面试经典——86题](https://leetcode.cn/problems/partition-list/description/?envType=study-plan-v2&envId=top-interview-150 "力扣")</B2>
+
+<!-- truncate -->
+
+
+### 💡 参考代码：
+
+```c
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     struct ListNode *next;
+ * };
+ */
+
+/**
+ * 对链表进行分隔，使得所有小于x的节点都出现在大于或等于x的节点之前
+ * 保持两个分区中每个节点的初始相对位置
+ * 
+ * @param head 链表的头节点
+ * @param x 特定分隔值
+ * @return 分隔后的链表头节点
+ */
+struct ListNode* partition(struct ListNode* head, int x) {
+    // 创建两个虚拟头节点，分别用于存储小于x和大于等于x的节点
+    struct ListNode lessHead;   // 小于x的节点链表的虚拟头节点
+    struct ListNode greaterHead; // 大于等于x的节点链表的虚拟头节点
+    
+    // 初始化两个链表的尾指针，用于构建链表
+    struct ListNode* lessTail = &lessHead;
+    struct ListNode* greaterTail = &greaterHead;
+    
+    // 初始化虚拟头节点的next指针为NULL
+    lessHead.next = NULL;
+    greaterHead.next = NULL;
+    
+    // 遍历原链表，根据节点值与x的关系分配到不同链表
+    struct ListNode* current = head;
+    while (current != NULL) {
+        if (current->val < x) {
+            // 当前节点值小于x，添加到less链表
+            lessTail->next = current;
+            lessTail = current;
+        } else {
+            // 当前节点值大于等于x，添加到greater链表
+            greaterTail->next = current;
+            greaterTail = current;
+        }
+        current = current->next;
+    }
+    
+    // 连接两个链表：less链表的末尾连接greater链表的头
+    lessTail->next = greaterHead.next;
+    
+    // 确保新链表末尾为NULL，防止形成环
+    greaterTail->next = NULL;
+    
+    // 返回合并后链表的头节点（跳过虚拟头节点）
+    return lessHead.next;
+}
+```
+
+### 📖 总结：
+
+<details>
+<summary>点击展开题目总结</summary>
+# 🤔 分隔链表
+
+---
+
+## 1️⃣ 题目核心信息
+
+🎯 **功能描述**：对链表进行分隔，使得所有小于 x 的节点都出现在大于或等于 x 的节点之前，并保持两个分区中每个节点的初始相对位置
+
+📥 **输入输出**：
+- **输入**：
+  - `head`: 链表的头节点
+  - `x`: 特定分隔值
+- **输出**：分隔后的新链表头节点
+
+---
+
+## 2️⃣ 实现原理
+
+💡 **核心思路**：使用双链表法，创建两个链表分别存储小于x和大于等于x的节点，最后将两个链表连接
+
+📋 **实现步骤**：
+1. 创建两个虚拟头节点，分别用于存储小于x和大于等于x的节点
+2. 遍历原链表，根据节点值与x的关系将节点分配到对应链表
+3. 连接两个链表，小于x的链表在前，大于等于x的链表在后
+4. 确保链表末尾为NULL，防止形成环
+
+---
+
+## 3️⃣ 关键点解析
+
+### 🎯 代码技巧
+- 使用虚拟头节点简化链表操作，避免对头节点的特殊处理
+- 通过尾指针高效地在链表末尾添加节点
+- 保持原链表节点的相对顺序，不创建新节点而是重新连接
+
+## 4️⃣ 使用场景
+
+### ✅ 适用情况：
+- 链表分区问题
+- 需要保持元素相对顺序的链表重排
+- 按条件分组链表节点
+
+### ⚠️ 前提条件：
+- 链表可以为空
+- 节点值在合理范围内
+
+## 5️⃣ 复杂度分析
+
+- ⏱️ 时间复杂度：O(n)，其中n是链表的长度，只需要遍历链表一次
+- 💾 空间复杂度：O(1)，只使用了常数个额外变量
+
+## 6️⃣ 注意事项
+
+### 🚩 边界情况：
+- 空链表输入
+- 所有节点值都小于x
+- 所有节点值都大于等于x
+
+### 💥 易错点：
+- 忘记将greater链表末尾置为NULL，可能导致环形链表
+- 没有正确连接两个链表
+- 没有保持节点的原始相对位置
+
+## 7️⃣ 补充说明
+
+以示例1为例：`head = [1,4,3,2,5,2], x = 3`
+
+1. **初始化阶段**
+   - 创建两个虚拟头节点：`lessHead` 和 `greaterHead`
+   - 初始化尾指针：`lessTail` 指向 `lessHead`，`greaterTail` 指向 `greaterHead`
+   - 当前节点指针：`current` 指向 `head`（值为1的节点）
+
+2. **遍历处理每个节点**
+   
+   第一步：`current` 指向节点1
+   - 1 < 3，将节点1添加到 `less` 链表
+   - `lessTail->next = current`（节点1）
+   - `lessTail = current`（更新尾指针）
+   - `current = current->next`（移动到节点4）
+   
+   第二步：`current` 指向节点4
+   - 4 ≥ 3，将节点4添加到 `greater` 链表
+   - `greaterTail->next = current`（节点4）
+   - `greaterTail = current`（更新尾指针）
+   - `current = current->next`（移动到节点3）
+   
+   第三步：`current` 指向节点3
+   - 3 ≥ 3，将节点3添加到 `greater` 链表
+   - `greaterTail->next = current`（节点3）
+   - `greaterTail = current`（更新尾指针）
+   - `current = current->next`（移动到节点2）
+   
+   第四步：`current` 指向节点2
+   - 2 < 3，将节点2添加到 `less` 链表
+   - `lessTail->next = current`（节点2）
+   - `lessTail = current`（更新尾指针）
+   - `current = current->next`（移动到节点5）
+   
+   第五步：`current` 指向节点5
+   - 5 ≥ 3，将节点5添加到 `greater` 链表
+   - `greaterTail->next = current`（节点5）
+   - `greaterTail = current`（更新尾指针）
+   - `current = current->next`（移动到节点2）
+   
+   第六步：`current` 指向节点2
+   - 2 < 3，将节点2添加到 `less` 链表
+   - `lessTail->next = current`（节点2）
+   - `lessTail = current`（更新尾指针）
+   - `current = current->next`（变为NULL，结束循环）
+
+3. **连接两个链表**
+   - `lessTail->next = greaterHead.next`（将less链表末尾连接到greater链表头部）
+   - `greaterTail->next = NULL`（确保链表末尾为NULL）
+
+4. **最终结果**
+   - 返回 `lessHead.next`，即值为1的节点
+   - 最终链表为：`[1,2,2,4,3,5]`
+
+通过这个过程，我们成功地将小于3的节点（1,2,2）放在前面，大于等于3的节点（4,3,5）放在后面，并且保持了它们在原链表中的相对顺序。
+
+</details>
