@@ -171,4 +171,9 @@ Algolia:
 递归:
   label: 递归
   permalink: /递归
-  description: 关于 递归 的一些题目   
+  description: 关于 递归 的一些题目 
+
+决定:
+  label: 决定
+  permalink: /决定
+  description: 关于一些决定声明    

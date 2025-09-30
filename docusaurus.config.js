@@ -134,7 +134,7 @@ const config = {
             items: [
               {
                 label: 'Bilibili',
-                href: 'https://space.bilibili.com/283665748',
+                href: 'https://space.bilibili.com/3546860773968305',
               },
               {
                 label: 'Github',

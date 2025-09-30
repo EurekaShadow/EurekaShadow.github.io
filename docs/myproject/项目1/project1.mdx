@@ -5,6 +5,26 @@ description: 这是我的毕业设计，也是我实现的第一个完整的嵌�
 ---
 
 import CardImg from '@site/src/components/CardImg';
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+## 项目背景
+
+### 项目来源
+本项目为本科毕业设计课题，由指导老师提供选题。随着城市化进程加快，建筑工地产生的扬尘和噪音污染已成为影响城市环境质量和居民生活的重要因素。传统的环境监测方式存在实时性差、数据分散等问题，因此设计一套基于物联网的实时监测系统具有重要的现实意义。
+
+### 实际问题解决
+虽然市场上已有一些成熟的环境监测产品，但本项目旨在：
+- 构建一个成本相对较低的监测原型系统
+- 实现数据的实时采集、传输、显示
+- 提供本地和远程双重报警机制
+- 验证基于STM32的嵌入式物联网解决方案的可行性
+
+### 项目定位
+需要说明的是，本项目主要定位于技术验证和学习实践，是一个功能原型而非商业化产品。系统在精度、稳定性、防护等级等方面仍有提升空间，距离实际工程应用还需要进一步优化和完善。
+
+### 社会价值与应用前景
+该项目体现了物联网技术在环境保护领域的应用潜力，为后续相关研究和产品开发提供了技术参考。通过自主设计和实现，加深了对嵌入式系统、传感器技术、无线通信和云平台应用等知识的理解。
 
 ## 项目概览
 
@@ -14,13 +34,348 @@ import CardImg from '@site/src/components/CardImg';
 
 **项目类型**：个人毕业设计项目
 
-**技术栈**：STM32 + C语言 + WiFi + 云平台
+**技术栈**：
+- 主控芯片：STM32F103C8T6
+- 开发语言：C语言
+- 通信模块：ESP8266-01S WiFi模块
+- 传感器：PMS7003（粉尘）、XM7903（噪音）、DHT11（温度、湿度）
+- 本地界面：0.96寸OLED显示屏
+- 远程界面：基于HBuilder X开发的移动端数据展示APP
+- 通信协议：MQTT
+- 云平台：OneNet
 
-> 一句话描述：一个实时监测建筑工地PM2.5、PM10、噪音等环境参数的物联网系统
+> 一句话描述：这是一个实时监测建筑工地PM2.5、PM10、噪音等环境参数的物联网系统
 
-### 实物图
+## 系统设计与实现
+
+### 系统整体架构图
+<p><CardImg src="/img/Docs/project1_3.jpg" alt="架构图" isCenter={true} /></p>
+
+### PCB设计与原理图
+<p><CardImg src="/img/Docs/project1_2.jpg" alt="原理图" isCenter={true} /></p>
+
+### 关键代码
+#### 1. 扬尘检测
+`PMS7003`传感器数据解析模块，负责从串口接收的原始数据包中提取`PM2.5`等关键环境参数。
+<Tabs>
+
+  <TabItem value="PMS7003_c" label="PMS7003.c">
+```c title="PMS7003.c"
+/**
+ * @file    PMS7003.c
+ * @brief   PMS7003粉尘传感器驱动程序
+ * @details 实现PMS7003传感器的数据解析和初始化功能
+ */
+
+#include "PMS7003.h"
+
+/**
+ * @brief   解析16位数据的宏定义
+ * @details 将两个连续字节合并为一个16位无符号整数，高字节在前
+ * @param   packet 指向数据包的指针
+ * @param   index  数据在数据包中的起始索引
+ * @return  uint16_t 解析后的16位数据
+ */
+#define PARSE_DATA(packet, index) \
+    ((uint16_t)((packet[index] << 8) | packet[index + 1]))
+
+// 注：传感器大约每隔1秒通过串口向MCU发送一次数据
+
+/**
+ * @brief   PMS7003数据包中各字段的索引位置枚举
+ * @details 定义PMS7003数据包中各个数据字段在数组中的索引位置
+ */
+typedef enum {
+    PM1_0_CF1    = 4,   ///< PM1.0浓度(CF=1标准)数据索引(高8位)
+    PM2_5_CF1    = 6,   ///< PM2.5浓度(CF=1标准)数据索引(高8位)
+    PM10_CF1     = 8,   ///< PM10浓度(CF=1标准)数据索引(高8位)
+    PM1_0_Env    = 10,  ///< PM1.0浓度(大气环境)数据索引(高8位)
+    PM2_5_Env    = 12,  ///< PM2.5浓度(大气环境)数据索引(高8位)
+    PM10_Env     = 14,  ///< PM10浓度(大气环境)数据索引(高8位)
+    Particles0_3 = 16,  ///< ≥0.3μm颗粒物数量数据索引(高8位)
+    Particles0_5 = 18,  ///< ≥0.5μm颗粒物数量数据索引(高8位)
+    Particles1_0 = 20,  ///< ≥1.0μm颗粒物数量数据索引(高8位)
+    Particles2_5 = 22,  ///< ≥2.5μm颗粒物数量数据索引(高8位)
+    Particles5_0 = 24,  ///< ≥5.0μm颗粒物数量数据索引(高8位)
+    Particles10  = 26   ///< ≥10μm颗粒物数量数据索引(高8位)
+} PM_DataIndex;
+
+/**
+ * @brief   解析PMS7003传感器数据包
+ * @details 从串口接收的原始数据包中提取PM2.5等关键环境参数
+ * @param   packet 指向接收到的数据包指针
+ * @param   packet_len 数据包长度
+ * @retval  PM_SensorData 解析后的传感器数据结构体
+ * @note    数据校验已在串口1中断函数中完成，此处主要进行数据提取
+ */
+PM_SensorData PMS_ParseDataPacket(const uint8_t *packet, size_t packet_len) {
+    PM_SensorData data = {0};           // 初始化数据结构体
+    data.is_valid = false;              // 默认设置为无效数据
+
+    // 基础校验：检查空指针或长度不足
+    // (此处无需进行数据校验，因为在串口1中断函数已经校验过了)
+    if (packet == NULL || packet_len < Particles10 + 2) {
+        return data;
+    }
+    
+    // 解析各字段数据
+    data.pm1_0_cf1    = PARSE_DATA(packet, PM1_0_CF1);      // PM1.0 CF=1标准值
+    data.pm2_5_cf1    = PARSE_DATA(packet, PM2_5_CF1);      // PM2.5 CF=1标准值
+    data.pm10_cf1     = PARSE_DATA(packet, PM10_CF1);       // PM10 CF=1标准值
+    data.pm1_0_env    = PARSE_DATA(packet, PM1_0_Env);      // PM1.0 大气环境值
+    data.pm2_5_env    = PARSE_DATA(packet, PM2_5_Env);      // PM2.5 大气环境值
+    data.pm10_env     = PARSE_DATA(packet, PM10_Env);       // PM10 大气环境值
+    data.particles0_3 = PARSE_DATA(packet, Particles0_3);   // ≥0.3μm颗粒数量
+    data.particles0_5 = PARSE_DATA(packet, Particles0_5);   // ≥0.5μm颗粒数量
+    data.particles1_0 = PARSE_DATA(packet, Particles1_0);   // ≥1.0μm颗粒数量
+    data.particles2_5 = PARSE_DATA(packet, Particles2_5);   // ≥2.5μm颗粒数量
+    data.particles5_0 = PARSE_DATA(packet, Particles5_0);   // ≥5.0μm颗粒数量
+    data.particles10  = PARSE_DATA(packet, Particles10);    // ≥10μm颗粒数量
+    
+    data.is_valid = true;  // 数据解析成功，标记为有效
+    return data;
+}
+
+/**
+ * @brief   初始化PMS7003传感器
+ * @details 配置PMS7003传感器的控制引脚(GPIOB5和GPIOB6)
+ * @param   void
+ * @retval  void
+ * @note    B5引脚控制传感器使能，B6引脚控制传感器复位
+ */
+void PMS7003_Init(void){
+    RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOB, ENABLE);   // 使能GPIOB时钟
+    
+    GPIO_InitTypeDef GPIO_InitStructure;
+    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;        // 推挽输出模式
+    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_5 | GPIO_Pin_6;  // 配置B5和B6引脚
+    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;       // 输出速度50MHz
+    GPIO_Init(GPIOB, &GPIO_InitStructure);                  // 初始化GPIOB
+    
+    // 设置B5、B6引脚为高电平，使传感器处于正常工作状态
+    GPIO_SetBits(GPIOB, GPIO_Pin_5 | GPIO_Pin_6);
+}
+```
+  </TabItem>
+
+  <TabItem value="PMS7003_h" label="PMS7003.h">
+```c title="PMS7003.h"
+#ifndef __PMS7003_H
+#define __PMS7003_H
+#include "stm32f10x.h"                  // Device header
+#include <stdbool.h>
+#include <stddef.h>  // 用于NULL定义
+// 结构体定义（所有需要使用的文件都包含此头文件）
+typedef struct {
+    uint16_t pm1_0_cf1;    			// 数据1: PM1.0 CF=1
+    uint16_t pm2_5_cf1;     		// 数据2: PM2.5 CF=1
+    uint16_t pm10_cf1;      		// 数据3: PM10 CF=1
+    uint16_t pm1_0_env;     		// 数据4: PM1.0 大气环境
+    uint16_t pm2_5_env;     		// 数据5: PM2.5 大气环境
+    uint16_t pm10_env;      		// 数据6: PM10 大气环境
+    uint16_t particles0_3;  		// 数据7: ≥0.3μm颗粒数
+    uint16_t particles0_5;  		// 数据8: ≥0.5μm颗粒数
+    uint16_t particles1_0;  		// 数据9: ≥1.0μm颗粒数
+    uint16_t particles2_5;  		// 数据10: ≥2.5μm颗粒数
+    uint16_t particles5_0;  		// 数据11: ≥5.0μm颗粒数
+    uint16_t particles10;   		// 数据12: ≥10μm颗粒数
+    bool is_valid;          		// 校验通过标志
+} PM_SensorData;
+PM_SensorData PMS_ParseDataPacket(const uint8_t *packet, size_t packet_len);
+void PMS7003_Init(void);
+#endif 
 
 
+//以空行结尾
+
+```
+  </TabItem>
+
+</Tabs>
+
+#### 2. 噪音检测
+`XM7903`传感器数据解析模块，包含`数据包发送`和`数据包解析`两部分代码。
+<Tabs>
+
+  <TabItem value="XM7903_c" label="XM7903.c">
+```c title="XM7903.c"
+/**
+ * @file    XM7903.c
+ * @brief   XM7903噪音传感器驱动程序
+ * @details 实现XM7903传感器的数据读取和解析功能
+ */
+
+#include "XM7903.h"
+
+/**
+ * @brief XM7903读取噪音数据的Modbus RTU命令包
+ * @details 格式为：[地址][功能码][起始地址H][起始地址L][数据长度H][数据长度L][CRC H][CRC L]
+ *          0x01: 设备地址
+ *          0x03: 读保持寄存器功能码
+ *          0x00 0x00: 起始寄存器地址(0x0000)
+ *          0x00 0x01: 读取寄存器数量(1个)
+ *          0x84 0x0A: CRC16校验码
+ */
+u8 Read_Noise_Data[8] = {0x01, 0x03, 0x00, 0x00, 0x00, 0x01, 0x84, 0x0A};    
+
+/**
+ * @brief   向XM7903传感器发送数据读取命令
+ * @details 通过USART3串口发送Modbus RTU读取命令包
+ * @param   None
+ * @retval  None
+ * @note    传感器接收到命令后会返回噪音数据
+ */
+void XM7903_SendPacket(void)
+{
+    Serial_SendArray(USART3, Read_Noise_Data, TxPaket_Length); // 发送Modbus读取命令包     
+}
+
+/**
+ * @brief   解析并获取噪音传感器数据
+ * @details 从USART3接收的数据包中提取噪音值，并进行CRC校验
+ * @param   None
+ * @retval  float - 噪音值(dBA)，解析失败时返回0.0
+ * @note    噪音值需要除以10得到实际的小数数值
+ */
+float Get_Nosie_Data(void)
+{
+    u16 Noise = 0;  // 存储解析出的噪音原始数据
+    
+    // 提取接收数据包中的CRC校验码(第6、7字节)
+    u16 crc = (Usart3_RxPaket[5] << 8) | Usart3_RxPaket[6];
+    
+    // 计算接收数据包前5字节的CRC校验码
+    u16 calcCrc = crc16(Usart3_RxPaket, 5);  
+    
+    // CRC校验对比，确保数据完整性
+    if (crc == calcCrc) {
+        // CRC校验通过，提取噪音数据(第4、5字节)
+        Noise = (Usart3_RxPaket[3] << 8) | Usart3_RxPaket[4];  
+    }	
+    
+    // 将原始数据转换为实际噪音值(原始值除以10得到一位小数的dBA值)
+    return (float)Noise / 10.0;      
+}
+
+```
+  </TabItem>
+
+  <TabItem value="XM7903_h" label="XM7903.h">
+```c title="XM7903.h"
+/**
+ * @file    XM7903.h
+ * @brief   XM7903噪音传感器驱动头文件
+ * @details 声明XM7903传感器相关的函数和宏定义
+ */
+
+#ifndef __XM7903_H
+#define __XM7903_H
+
+#include "stm32f10x.h"    // STM32F10x系列处理器头文件
+#include "CRC16.h"        // CRC16校验算法头文件
+#include "usart.h"        // USART串口通信头文件
+
+#define TxPaket_Length    8    ///< 发送数据包长度(字节)
+
+void XM7903_SendPacket(void);
+
+float Get_Nosie_Data(void);
+
+#endif 
+
+```
+  </TabItem>
+
+</Tabs>
+
+#### 3. 主函数
+#### 主程序流程图
+<img
+  src="/img/Docs/project1_4.jpg"
+  alt="主程序流程图"
+  style={{
+    width: '100%',
+    maxWidth: '200px',
+    height: 'auto',
+    display: 'block',
+    margin: '0 auto'
+  }}
+/>
+
+#### 主程序关键代码
+```c title="main.c"
+int main(){
+	Initialize_Hardware();
+	ReadStoreErrorTime();
+	Check_Reset_Way();//检查复位方式，若是看门狗复位，复位次数加一并储存到FLASH中	    
+	Initialize_System();
+	OLED_UI_Init(&MainMenuPage);//UI初始化
+	MyRTC_Init();//系统时间设置
+	MYIWD_Init(2000);//独立看门狗初始化，喂狗间隔为2000ms
+	PM_Data.pm2_5_env = 100;//静态警报测试
+	decibels = 40;
+	PM2_5_ENV = PM_Data.pm2_5_env;
+	while(1){
+		Get_dBA();//获取噪音数据
+		DMATaskHandler();//获取扬尘数据
+                Handle_Alarm();// 处理报警条件
+                OLED_UI_MainLoop();	//显示刷新
+		TaskHandler();//任务处理（包含数据发送、时间获取、警报处理等事件）
+		Handle_Thresholds();//保存与恢复默认阈值
+		Handle_Network_Data();//接收OneNet数据
+		IWDG_ReloadCounter();//喂狗
+	}
+}
+
+//中断函数
+void TIM4_IRQHandler(void)
+{
+	if (TIM_GetITStatus(TIM4, TIM_IT_Update) == SET)
+	{
+		OLED_UI_InterruptHandler();
+		
+		TIM_ClearITPendingBit(TIM4, TIM_IT_Update);
+	}
+}
+void TIM2_IRQHandler(void)
+{
+    // 检查是否有更新中断发生
+    if (TIM_GetITStatus(TIM2, TIM_IT_Update) == SET)
+    {
+        TaskSchedule();
+        // 清除更新中断的标志位
+        TIM_ClearITPendingBit(TIM2, TIM_IT_Update);
+    }
+
+}
+```
+
+#### 程序执行流程说明
+系统主程序采用**事件驱动的循环架构**，主要包含以下几个核心环节：
+
+1. **系统初始化阶段**
+   - 硬件外设初始化（OLED、传感器、通信模块等）
+   - 网络连接与云平台接入
+   - 系统参数加载与看门狗配置
+
+2. **主循环事件处理**
+   - 传感器数据采集与处理
+   - 环境参数监测与报警判断
+   - 数据上传与远程指令处理
+   - 用户界面刷新与交互响应
+
+3. **任务调度机制**
+   采用基于时间片的**任务调度器**管理多个并发任务：
+   - 数据发送任务（3秒周期）
+   - 传感器读取任务（1秒周期）
+   - 报警处理任务（0.5秒周期）
+   - 网络数据处理任务（事件触发）
+
+4. **异常处理与系统维护**
+   - 看门狗喂狗确保系统稳定运行
+   - 错误检测与自动恢复机制
+   - 数据存储与状态保存
+### 实物展示
 <img
   src="/img/Docs/project1_1.jpg"
   alt="示例图片"
@@ -32,6 +387,57 @@ import CardImg from '@site/src/components/CardImg';
     margin: '0 auto'
   }}
 />
+
 ### 实现功能
+- 实时检测环境中的PM2.5、PM10、噪音等参数。
+- 实时上传环境数据至云平台，供用户在手机端查看。
+- 当扬尘、噪音大于阈值时，发出声光警报。
+- 系统复位与故障记录<sup>[1](#module-explanation)</sup>
+- 可在本地或手机端进行阈值修改
+- OLED UI简洁、易用
+
+### 功能演示
+
+<iframe 
+  width="100%" 
+  height="500" 
+  src="https://www.bilibili.com/video/BV15tn1zWETX/?spm_id_from=333.1387.homepage.video_card.click&vd_source=bc8505b367ad154f03537e6dcbc577d8" 
+  frameborder="0" 
+  allowfullscreen>
+</iframe>
+
+#### 说明
+
+该视频为毕业设计后期制作，主要用于毕设答辩过程的现场演示。需要注意的是：
+
+1. 视频中个别部分在实际答辩时配有现场讲解说明，但未能完全体现在视频中
+2. 演示内容并非项目全貌，未涵盖各个功能模块的详细展示以及数据准确性的验证过程
+3. 以上缺失内容已在毕业论文中有详细阐述
+
+本视频作为项目的简要功能演示，应已足够，如有需要，后续可进行图文补充说明。
 
 以下内容正在施工中。。。🥱
+
+## 项目成果评估
+- 功能实现程度
+- 性能指标（精度、响应时间等）
+- 稳定性测试结果
+
+
+## 开发过程与挑战
+- 遇到的主要技术难题
+- 解决方案和思路
+- 学习心得体会
+
+
+
+## 未来改进方向
+- 当前存在的局限性
+- 可能的优化方案
+- 扩展功能设想
+
+
+## 补充说明
+<div id="module-explanation">
+1. 通过看门狗持续监控系统运行状态。当检测到系统异常时，自动触发系统复位并将错误信息（包括错误类型和发生时间）保存至FLASH存储器，支持通过OLED显示屏查询历史故障记录。
+</div>
