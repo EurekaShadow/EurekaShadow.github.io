@@ -177,3 +177,8 @@ Algolia:
   label: 决定
   permalink: /决定
   description: 关于一些决定声明    
+
+Windows:
+  label: Windows
+  permalink: /Windows
+  description: 这个标签的博客主要记录使用Windows系统时遇到的问题 
