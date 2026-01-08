@@ -182,3 +182,13 @@ Windows:
   label: Windows
   permalink: /Windows
   description: 这个标签的博客主要记录使用Windows系统时遇到的问题 
+
+Job:
+  label: Job
+  permalink: /Job
+  description: 这个标签的博客主要记录找工作的前期准备
+
+工作:
+  label: 工作
+  permalink: /工作
+  description: 这个标签的博客主要记录找工作的前期准备     
