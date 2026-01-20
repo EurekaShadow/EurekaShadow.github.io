@@ -358,6 +358,98 @@ git push -u origin your-branch-name
 git commit --amend
 ```
 
+## 告别混乱提交—— git add -p
+遇到情况：
+> 一天下来改了很多地方，但提交时却说不清具体改了什么，只能模糊地说“优化了一些代码”……
+
+### 🔑 核心原则：小步提交（Small, Atomic Commits）
+- **不要等“一天结束”才提交**
+- **每完成一个逻辑单元（如裁剪一个库、修复一个 bug），就立即提交**
+- 每次提交只做一件事，意图清晰、可追溯、易回滚
+
+---
+
+### 🛠 实战利器：`git add -p`（交互式暂存）
+
+当已经改了一堆内容，`git add -p` 能实现**从混乱中理出多个清晰提交**。
+
+#### 使用步骤：
+
+1. **查看改动**
+   ```bash
+   git status    # 查看哪些文件被修改
+   git diff      # 预览所有变更（通常很乱）
+   ```
+2. 交互式选择要暂存的代码块
+  ```bash
+   git add -p
+  ```   
+Git 会逐块（hunk）询问你是否暂存：
+
+| 按键 | 含义 | 说明 |
+|------|------|------|
+| `y` | yes | ✅ 暂存当前 hunk（推荐常用） |
+| `n` | no | ❌ 跳过当前 hunk，不暂存 |
+| `q` | quit | 🛑 退出交互模式，不再处理剩余 hunks（已选的仍会暂存） |
+| `a` | all | ✅ 暂存当前及所有后续 hunks（不再询问） |
+| `d` | do not stage this hunk and skip the rest | ❌ 不暂存当前 hunk，并跳过文件中所有剩余 hunks |
+| `j` | leave this hunk undecided, see next undecided | ⏭️ 跳到下一个“未决定”的 hunk |
+| `J` | leave this hunk undecided, see next | ⏭️ 暂不决定，先看下一个 hunk（稍后回看） |
+| `g` | select a hunk to go to | 🔍 输入编号直接跳转到指定 hunk |
+| `/` | search for a hunk matching regex | 🔍 用正则表达式搜索 hunk |
+| `s` | split | 🔪 将当前大 hunk 拆分成更小的 hunks（如果可能），便于精细选择 |
+| `e` | edit | ✏️ 手动编辑当前 hunk（高级！可删减行、修改内容） |
+| `p` | print the current hunk | 🖨️ 重新打印当前 hunk（用于确认） |
+| `?` | help | ❓ 显示帮助信息（即当前提示） |
+
+
+
+3. 分主题多次提交
+```bash
+# 第一次：只提交 cJSON 裁剪
+git add -p
+git commit -m "perf(cjson): remove unused print functions to save 8KB Flash"
+
+# 第二次：只提交 OLED 字符优化
+git add -p
+git commit -m "refactor(oled): delete unused ASCII font glyphs"
+
+# 第三次：调整栈大小
+git add -p
+git commit -m "config(stack): reduce Stack_Size to 2KB"
+```
+> 💡 结果：一次“混乱修改” → 多个独立、可读、可测试的提交！
+
+#### ✍️ 用「约定式提交」规范
+格式：
+```
+<type>(<scope>): <subject>
+
+<body>
+```
+| 类型 | 说明 |
+|------|------|
+| `feat` | 新功能 |
+| `fix`  | 修复 bug |
+| `perf` | 性能/体积优化 |
+| `refactor` | 重构（不改变行为） |
+| `chore` | 杂务（配置、依赖更新等） |
+
+✅ 示例：
+```
+perf(cjson): remove unused print functions to save 8KB Flash
+
+- Deleted print_number, cJSON_Print, and related helpers
+- Only JSON parsing retained
+- RO-data reduced from 14KB to 6KB
+```
+#### 🌟 为避免再次陷入混乱
+| 技巧 | 说明 |
+|------|------|
+| 任务前置规划 | 写代码前用 `// TODO: [TASK] ...` 划分逻辑单元 |
+| 使用特性分支 | `git checkout -b feat/xxx` 隔离大改动 |
+| 预览再提交 | `git diff --cached` 确认即将提交的内容 |
+| 善用工具 | VS Code / GitKraken 支持可视化 hunk 选择，但 `git add -p` 最通用 |
 
 
 

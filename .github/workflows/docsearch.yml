@@ -61,12 +61,12 @@ jobs:
           echo "Records scraped: $hits"
           
           # 验证记录数量是否合理
-          if [ "$hits" -lt 8000 ]; then
-            echo "ERROR: Insufficient records scraped ($hits < 8000). This indicates incomplete scraping."
+          if [ "$hits" -lt 12000 ]; then
+            echo "ERROR: Insufficient records scraped ($hits < 12000). This indicates incomplete scraping."
             exit 1
           fi
           
-          echo "SUCCESS: Adequate records scraped ($hits >= 8000)"
+          echo "SUCCESS: Adequate records scraped ($hits >= 12000)"
           
       - name: Archive scraper logs
         uses: actions/upload-artifact@v4

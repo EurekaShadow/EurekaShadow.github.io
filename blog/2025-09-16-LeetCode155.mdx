@@ -1,0 +1,264 @@
+---
+slug: LeetCode155
+title: 最小栈
+authors: eurekaX
+tags: [栈,设计]
+---
+import { Highlight, Keyword, Light, B1, B2, B3, BH3, B3W, MyColor} from '@site/src/components/ForMDX';
+
+
+### <B2>[力扣面试经典——155题](https://leetcode.cn/problems/min-stack/description/?envType=study-plan-v2&envId=top-interview-150 "力扣")</B2>
+
+<!-- truncate -->
+
+
+### 💡 参考代码：
+
+```c
+#include <stdio.h>
+#include <stdlib.h>
+
+/**
+ * 设计一个支持 push, pop, top 操作，并能在常数时间内检索到最小元素的栈。
+ */
+
+// 定义栈节点结构体
+typedef struct Node {
+    int data;       // 存储当前值
+    int min;        // 存储当前栈中的最小值
+    struct Node* next;
+} Node;
+
+// 定义 MinStack 结构体
+typedef struct {
+    Node* top;      // 栈顶指针
+} MinStack;
+
+/**
+ * 初始化堆栈对象
+ */
+MinStack* minStackCreate() {
+    MinStack* stack = (MinStack*)malloc(sizeof(MinStack));
+    stack->top = NULL;
+    return stack;
+}
+
+/**
+ * 将元素 val 推入堆栈
+ * @param obj MinStack 实例
+ * @param val 要压入栈的整数值
+ */
+void minStackPush(MinStack* obj, int val) {
+    Node* newNode = (Node*)malloc(sizeof(Node));
+    newNode->data = val;
+    
+    // 如果栈为空，则当前元素就是最小值
+    if (obj->top == NULL) {
+        newNode->min = val;
+    } else {
+        // 否则比较当前值和栈顶记录的最小值，取较小者作为新的最小值
+        newNode->min = (val < obj->top->min) ? val : obj->top->min;
+    }
+    
+    // 新节点插入到栈顶
+    newNode->next = obj->top;
+    obj->top = newNode;
+}
+
+/**
+ * 删除堆栈顶部的元素
+ * @param obj MinStack 实例
+ */
+void minStackPop(MinStack* obj) {
+    if (obj->top != NULL) {
+        Node* temp = obj->top;
+        obj->top = obj->top->next;
+        free(temp);
+    }
+}
+
+/**
+ * 获取堆栈顶部的元素
+ * @param obj MinStack 实例
+ * @return 栈顶元素的值
+ */
+int minStackTop(MinStack* obj) {
+    if (obj->top != NULL) {
+        return obj->top->data;
+    }
+    return 0; // 此处根据题目保证不会出现空栈调用
+}
+
+/**
+ * 获取堆栈中的最小元素
+ * @param obj MinStack 实例
+ * @return 当前栈中的最小值
+ */
+int minStackGetMin(MinStack* obj) {
+    if (obj->top != NULL) {
+        return obj->top->min;
+    }
+    return 0; // 此处根据题目保证不会出现空栈调用
+}
+
+/**
+ * 释放堆栈内存
+ * @param obj MinStack 实例
+ */
+void minStackFree(MinStack* obj) {
+    while (obj->top != NULL) {
+        Node* temp = obj->top;
+        obj->top = obj->top->next;
+        free(temp);
+    }
+    free(obj);
+}
+```
+
+### 📖 总结：
+
+<details>
+<summary>点击展开题目总结</summary>
+# 🤔 最小栈
+
+---
+
+## 1️⃣ 题目核心信息
+
+🎯 **功能描述**：设计一个支持 push、pop、top 操作，并能在常数时间内检索到最小元素的栈
+
+📥 **输入输出**：
+- **输入**：一系列整数操作序列，包括初始化、push、pop、top 和 getMin
+- **输出**：根据操作返回对应的结果，其中 getMin 需要在常数时间内返回栈中最小元素
+
+---
+
+## 2️⃣ 实现原理
+
+💡 **核心思路**：使用辅助栈或在每个节点中存储当前最小值的方式，在每次操作时维护最小值信息
+
+📋 **实现步骤**：
+1. 创建栈节点结构体，每个节点保存数据和当前栈状态下的最小值
+2. 初始化栈对象，将栈顶指针设为 NULL
+3. Push 操作时，计算当前最小值并保存在新节点中
+4. Pop 操作时，直接移除栈顶节点
+5. Top 操作时，返回栈顶节点的数据值
+6. GetMin 操作时，直接返回栈顶节点记录的最小值
+
+---
+
+## 3️⃣ 关键点解析
+
+最优解是在每个节点中直接存储当前最小值，节省了额外栈的空间开销。
+
+### 🎯 代码技巧
+- 在每个节点中额外存储当前栈状态的最小值
+- Push 时比较新值与当前最小值，更新最小值字段
+- 所有操作均在常数时间内完成
+
+## 4️⃣ 使用场景
+
+### ✅ 适用情况：
+- 需要频繁获取栈中最小元素的场景
+- 对时间复杂度要求严格的应用
+- 实现带有最小值查询功能的栈结构
+
+### ⚠️ 前提条件：
+- 所有操作都在非空栈上调用（题目保证）
+- 最多调用 3 * 10^4 次操作
+
+## 5️⃣ 复杂度分析
+
+- ⏱️ 时间复杂度：O(1) - 所有操作（push、pop、top、getMin）都是常数时间复杂度
+- 💾 空间复杂度：O(n) - 需要为每个元素分配节点空间，n为操作次数
+
+## 6️⃣ 注意事项
+
+### 🚩 边界情况：
+- 空栈操作（题目保证不会出现）
+- 栈中只有一个元素的情况
+- 连续 Push 较小值后 Pop 的情况
+
+### 💥 易错点：
+- 忘记在 Push 时更新最小值
+- Pop 操作后最小值未正确更新
+- 内存泄漏（未正确释放节点内存）
+
+## 7️⃣ 补充说明
+### 📌 示例输入：
+```c
+["MinStack","push","push","push","getMin","pop","top","getMin"]
+[[],[-2],[0],[-3],[],[],[],[]]
+```
+
+### 步骤 1: `MinStack* obj = minStackCreate();`
+- 创建空栈
+- 栈状态：`obj->top = NULL`
+
+### 步骤 2: `minStackPush(obj, -2);`
+- 创建新节点：`data = -2`
+- 因为栈为空，所以 `min = -2`
+- 新节点成为栈顶
+- 栈状态：`top -> {-2, -2}`
+
+### 步骤 3: `minStackPush(obj, 0);`
+- 创建新节点：`data = 0`
+- 比较 `0` 与当前最小值 `-2`，最小值仍为 `-2`
+- 新节点成为栈顶
+- 栈状态：`top -> {0, -2} -> {-2, -2}`
+
+### 步骤 4: `minStackPush(obj, -3);`
+- 创建新节点：`data = -3`
+- 比较 `-3` 与当前最小值 `-2`，更新最小值为 `-3`
+- 新节点成为栈顶
+- 栈状态：`top -> {-3, -3} -> {0, -2} -> {-2, -2}`
+
+### 步骤 5: `minStackGetMin(obj);`
+- 直接返回栈顶节点记录的最小值：`-3`
+- 栈状态保持不变
+
+### 步骤 6: `minStackPop(obj);`
+- 移除栈顶节点 `{-3, -3}`
+- 栈顶变为 `{0, -2}`
+- 栈状态：`top -> {0, -2} -> {-2, -2}`
+
+### 步骤 7: `minStackTop(obj);`
+- 返回栈顶节点的数据值：`0`
+- 栈状态保持不变
+
+### 步骤 8: `minStackGetMin(obj);`
+- 直接返回栈顶节点记录的最小值：`-2`
+- 栈状态保持不变
+
+### ✅ 最终输出：
+```c
+[null,null,null,null,-3,null,0,-2]
+```
+### 📊 栈状态变化图示：
+```
+初始状态:
+NULL
+
+Push(-2)后:
+top -> [-2, -2]
+
+Push(0)后:
+top -> [0, -2]  ->  [-2, -2]
+
+Push(-3)后:
+top -> [-3, -3]  ->  [0, -2]  ->  [-2, -2]
+
+GetMin():
+返回 -3
+
+Pop()后:
+top -> [0, -2]  ->  [-2, -2]
+
+Top():
+返回 0
+
+GetMin():
+返回 -2
+```
+通过这个例子可以看出，每个节点都保存了当前状态下的最小值，这样无论何时调用 `getMin()` 都能立即返回结果，实现了 O(1) 时间复杂度的最小值查询。
+</details>

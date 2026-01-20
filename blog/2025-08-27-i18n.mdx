@@ -10,78 +10,391 @@ import CardImg from '@site/src/components/CardImg';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-本文介绍使用 i18n 的配置方法，是对于 Docusaurus 官方教程的补充。
+本文以 Docusaurus 📚 [官方 i18n 教程](https://docusaurus.io/zh-CN/docs/i18n/tutorial) 为参考，算是一个简化版i18n的教程吧。
+
+
 <!-- truncate -->
 
-# <B2> 配置 i18n 教程 🎬</B2>
+
+## <B2> 配置 i18n 教程 🎬</B2>
+
+## 前言 📝
+
+目前我的多语言支持仍很有限：🧐  
+  
+- 所有博客和文档都需要**手动复制中文文件到英文目录**，再逐字翻译，过程繁琐且容易遗漏📝。
+
+我曾尝试写一个脚本，自动提取中文内容、调用翻译 API 并生成英文文件，但折腾许久未能稳定实现，最终暂时搁置🛠️。  
+于是现在的方案就“将就”着用——能跑就行，但其实还有很多内容没翻译😂。
+
+未来如果找到更高效的方案，我会回来更新这篇笔记💡。
+
+---
+
+## 🛠️ 重走一遍：从零配置英文 → 中文
+
+为了演示完整流程，我们以 **将默认英文站点扩展为支持中文** 为例。假设你刚通过以下命令初始化了一个新项目：
+
+<Tabs>
+
+  <TabItem value="bash_yarn" label="yarn">
+```bash
+yarn create docusaurus@latest temp-i18n classic
+```
+  </TabItem>
+  <TabItem value="bash_npx" label="npx">
+```bash
+npx create-docusaurus@latest temp-i18n classic
+```
+  </TabItem>
+
+</Tabs>
+
+
+### 第一步：启用 i18n 配置
+在 `docusaurus.config.js` 中添加中文支持：
+```
+// ...
+i18n: {
+  defaultLocale: 'en',        // 默认语言保持英文
+  //highlight-add-line
+  locales: ['en', 'zh'],      // 新增 'zh' 支持中文
+},
+// ...
+```
+> 💡 提示：zh 是简体中文的标准 locale 标识。你也可以使用 zh-Hans，但需注意路径和文件夹命名一致性。
+
+### 第二步：添加语言切换器
+为了能切换语言，在导航栏加入 `localeDropdown`：
+```js title="docusaurus.config.js"
+themeConfig: {
+  navbar: {
+    items: [
+      { to: '/blog', label: 'Blog', position: 'left' },
+      //highlight-add-line
+      { type: 'localeDropdown', position: 'right' }, // 👈 新增
+      {
+        href: 'https://github.com/facebook/docusaurus',
+        label: 'GitHub',
+        position: 'right',
+      },
+    ],
+  },
+},
+```
+### 第三步：启动中文开发模式（自动创建目录）
+运行以下命令，Docusaurus 会自动创建 `i18n/zh/` 目录结构：
+<Tabs>
+
+  <TabItem value="bash_yarn" label="yarn">
+```bash
+yarn start --locale zh
+```
+  </TabItem>
+  <TabItem value="bash_npm" label="npm">
+```bash
+npm run start -- --locale zh
+```
+  </TabItem>
+
+</Tabs>
+
+此时访问 `http://localhost:3000/zh/`，你会看到一个**未翻译的中文版页面**（实际仍是英文内容，因为还没提供翻译）。
+## 📁 翻译内容：三大类资源
+Docusaurus 的 i18n 体系将内容分为三类，需分别处理：
+### 1️⃣ 翻译 React 组件中的文本（如首页、自定义组件）
+这类文本通过 `<Translate>` 组件标记，并由 `code.json` 管理。
+#### ✅ 示例：翻译首页 Hero 区域
+修改 `src/pages/index.js`：
+```js
+import clsx from 'clsx';
+import Link from '@docusaurus/Link';
+import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
+import Layout from '@theme/Layout';
+import HomepageFeatures from '@site/src/components/HomepageFeatures';
+import Heading from '@theme/Heading';
+import Translate from '@docusaurus/Translate'; // 引入 Translate 组件
+import styles from './index.module.css';
+
+function HomepageHeader() {
+  return (
+    <header className={clsx('hero hero--primary', styles.heroBanner)}>
+      <div className="container">
+        <Heading as="h1" className="hero__title">
+        <Translate id="homepage.hero.title" description="首页主标题">My Site</Translate>
+        </Heading>
+        <p className="hero__subtitle">
+          <Translate id="homepage.hero.tagline" description="首页副标题（标语）">Dinosaurs are cool</Translate>
+        </p>
+        <div className={styles.buttons}>
+          <Link
+            className="button button--secondary button--lg"
+            to="/docs/intro">
+            <Translate
+              id="homepage.hero.button.tutorial"
+              description="首页引导按钮：指向 Docusaurus 教程">
+              Docusaurus Tutorial - 5min ⏱️
+            </Translate>
+          </Link>
+        </div>
+      </div>
+    </header>
+  );
+}
+
+export default function Home() {
+  return (
+    <Layout>
+      <HomepageHeader />
+      <main>
+        <HomepageFeatures />
+      </main>
+    </Layout>
+  );
+}
 
 ```
-yarn write-translations --locale en
+
+```js title="src/components/HomepageFeatures/index.js"
+import clsx from 'clsx';
+import Heading from '@theme/Heading';
+import Translate from '@docusaurus/Translate';
+import styles from './styles.module.css';
+
+const FeatureList = [
+  {
+    title: (
+      <Translate id="homepage.features.easyToUse.title" description="Feature title for 'Easy to Use'">
+        Easy to Use
+      </Translate>
+    ),
+    Svg: require('@site/static/img/undraw_docusaurus_mountain.svg').default,
+    description: (
+      <Translate
+        id="homepage.features.easyToUse.description"
+        description="Description for the 'Easy to Use' feature">
+        Docusaurus was designed from the ground up to be easily installed and
+        used to get your website up and running quickly.
+      </Translate>
+    ),
+  },
+  {
+    title: (
+      <Translate id="homepage.features.focus.title" description="Feature title for 'Focus on What Matters'">
+        Focus on What Matters
+      </Translate>
+    ),
+    Svg: require('@site/static/img/undraw_docusaurus_tree.svg').default,
+    description: (
+      <Translate
+        id="homepage.features.focus.description"
+        description="Description for the 'Focus on What Matters' feature">
+        Docusaurus lets you focus on your docs, and we&apos;ll do the chores. Go
+        ahead and move your docs into the docs directory.
+      </Translate>
+    ),
+  },
+  {
+    title: (
+      <Translate id="homepage.features.poweredByReact.title" description="Feature title for 'Powered by React'">
+        Powered by React
+      </Translate>
+    ),
+    Svg: require('@site/static/img/undraw_docusaurus_react.svg').default,
+    description: (
+      <Translate
+        id="homepage.features.poweredByReact.description"
+        description="Description for the 'Powered by React' feature">
+        Extend or customize your website layout by reusing React. Docusaurus can
+        be extended while reusing the same header and footer.
+      </Translate>
+    ),
+  },
+];
+
+function Feature({Svg, title, description}) {
+  return (
+    <div className={clsx('col col--4')}>
+      <div className="text--center">
+        <Svg className={styles.featureSvg} role="img" />
+      </div>
+      <div className="text--center padding-horiz--md">
+        <Heading as="h3">{title}</Heading>
+        <p>{description}</p>
+      </div>
+    </div>
+  );
+}
+
+export default function HomepageFeatures() {
+  return (
+    <section className={styles.features}>
+      <div className="container">
+        <div className="row">
+          {FeatureList.map((props, idx) => (
+            <Feature key={idx} {...props} />
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
 ```
 
+#### ✅ 提取翻译条目
+运行命令生成 `code.json`：
+
+<Tabs>
+
+  <TabItem value="bash_yarn" label="yarn">
+```bash
+yarn write-translations --locale zh
 ```
-# 确保英文文档目录存在且有内容
-mkdir -p i18n/en/docusaurus-plugin-content-docs/current
-cp -r docs/* i18n/en/docusaurus-plugin-content-docs/current/
+  </TabItem>
 
-# 确保有英文博客内容（如果有的话）
-mkdir -p i18n/en/docusaurus-plugin-content-blog
-cp -r blog/* i18n/en/docusaurus-plugin-content-blog/ 2>/dev/null || true
+  <TabItem value="bash_npm" label="npm">
+```bash
+npm run write-translations -- --locale zh
 ```
+  </TabItem>
 
-```
-yarn build --locale en && yarn serve
-```
+</Tabs>
 
-```
-yarn start --locale en
-```
-
-:::tip[默认情况]
-`yarn start`默认运行中文的
-:::
-
-## Docusaurus 组件国际化翻译步骤总结
-
-### 操作步骤
-
-#### 1. 创建翻译文件
-在 `i18n/en/code.json` 中添加英文翻译条目：
-```json
+该命令会扫描所有 `<Translate>` 和 `translate()` 调用，生成 `i18n/zh/code.json`。
+#### ✅ 手动翻译 `code.json`
+打开 `i18n/zh/code.json`，将 `message` 字段替换为中文：
+```json title="i18n/zh/code.json"
 {
-  "unique.translation.id": {
-    "message": "English translation text",
-    "description": "Description for translators"
+  "homepage.hero.title": {
+    "message": "我的网站",
+    "description": "首页主标题"
+  },
+  "homepage.hero.tagline": {
+    "message": "恐龙很酷",
+    "description": "首页标语"
   }
 }
 ```
-2. 修改组件代码
-使用 `Translate` 组件包装需要翻译的文本：
-```jsx
-import Translate from '@docusaurus/Translate';
+> ⚠️ 注意：description 是给翻译人员看的上下文说明，不要删除。
 
-// 在组件中使用
-<title>
-  <Translate id="unique.translation.id" description="中文描述">
-    中文默认文本
-  </Translate>
-</title>
+### 2️⃣ 翻译主题内置文本（导航栏、页脚、分页按钮等）
+将以下翻译文件中的 `message` 和 `description` 替换为中文内容。
+* `i18n/zh/docusaurus-theme-classic/options.json`
+* `i18n/zh/docusaurus-theme-classic/current.json`
+* `i18n/zh/docusaurus-theme-classic/footer.json`
+* `i18n/zh/docusaurus-theme-classic/navbar.json`
+* `i18n/zh/docusaurus-theme-classic/code.json`（部分通用标签）
+
+以 `current.json` 为例：
+<p><CardImg src="/img/Blog/i18n1.jpg" alt="示例图1" isCenter={true} /></p>
+
+> 💡 小技巧：首次运行 write-translations 时，这些文件也会自动生成，只需填入中文即可。
+
+### 3️⃣ 翻译 Markdown 内容（文档、博客、页面）
+这是最耗时的部分，因为必须手动复制并翻译每个 .`md` / `.mdx` 文件。
+#### ✅ 文档（Docs）
+```bash
+mkdir -p i18n/zh/docusaurus-plugin-content-docs/current
+cp -r docs/** i18n/zh/docusaurus-plugin-content-docs/current/
 ```
-## 预期结果
+然后逐个编辑 `i18n/zh/docusaurus-plugin-content-docs/current/*.md`，将内容翻译成中文。
+> 📌 注意：Docusaurus 使用 `current` 表示“最新版文档”，即使你没开启版本控制。
+#### ✅ 博客（Blog）
+```bash
+mkdir -p i18n/zh/docusaurus-plugin-content-blog
+cp -r blog/** i18n/zh/docusaurus-plugin-content-blog/
+```
 
-- **中文页面**：显示 `<Translate>` 标签内的中文默认文本
-- **英文页面**：显示 `i18n/en/code.json` 中对应 `message` 的英文翻译内容
-- **功能实现**：网站能够根据用户选择的语言自动切换显示相应语言的文本
+> ⚠️ 重要：只复制 `.md` 和 `.mdx` 文件！React 页面（`.js`/`.tsx`）应通过 code.json 翻译，而非复制。
+## ▶️ 构建与预览
+完成所有翻译后，构建并本地预览：
+```bash
+yarn clear && yarn build && yarn serve
+```
+访问：
+* 英文版：`http://localhost:3000/`
+* 中文版：`http://localhost:3000/zh/`
 
-## 工作原理
+你应该能看到完整的中英文切换效果：
+<p><CardImg src="/img/Gif/i18n.gif" alt="i18n_success" isCenter={true} /></p>
+#### 🧪 开发模式下的注意事项
+* `yarn start` 默认只加载一种语言（通常是默认语言 `en`）。
+* 切换语言下拉菜单后，可能会跳转到 “Page Not Found” —— 这是正常现象，因为其他语言的 SPA 未被加载。
+* 要测试完整多语言切换，请务必先 `build` 再 `serve`。
 
-- **默认语言（中文）**：显示 `<Translate>` 标签内的默认文本
-- **英文页面**：Docusaurus 自动查找翻译文件中对应的 `message` 内容
-- **无需为默认语言创建翻译文件**：只需为其他语言提供翻译
+## 📋 常用命令速查表
+| 场景 | 命令 |
+|------|------|
+| 生成某语言的翻译模板 | `yarn write-translations --locale zh` |
+| 启动某语言的开发服务器 | `yarn start --locale zh` |
+| 构建某语言的静态站点 | `yarn build --locale zh` |
+| 本地预览构建结果 | `yarn serve` |
+> 💡 如果你想默认启动中文，可以在 `package.json` 中修改 `start` 脚本：
+```json
+"scripts": {
+  "start": "docusaurus start --locale zh"
+}
+```
+## 🚧 当前局限与未来方向
+| 问题 | 现状 | 可能的解决方案 |
+|------|------|----------------|
+| Markdown 翻译需手动复制 | ✅ 繁琐易漏 | 编写自动化脚本 + 翻译 API（需处理格式） |
+| 无翻译进度管理 | ❌ 全靠人工检查 | 接入 [Crowdin](https://crowdin.com/) 或 [Weblate](https://weblate.org/) |
+| 动态内容无法翻译 | ⚠️ 如 `items.map(item => <Translate>{item.title}</Translate>)` | 改为静态声明式结构 |
 
-## 注意事项
+## ✅ 总结
+Docusaurus 的 i18n 能力强大但**高度依赖手动维护**。适合内容稳定的文档站，但对于高频更新的博客或动态站点，维护成本较高。
+#### 核心步骤回顾：
+1. 配置 `locales` 和 `localeDropdown`
+2. 用 `<Translate>` 标记 `UI` 文本
+3. 运行 `write-translations` 生成 `JSON` 模板
+4. 手动翻译 `code.json` + 主题 `JSON`
+5. 复制并翻译所有 `Markdown` 文件
+6. 构建并部署
 
-1. 确保 JSON 文件格式正确（使用在线验证工具检查）
-2. 翻译 ID 需要唯一且具有描述性
-3. 描述信息帮助翻译人员理解上下文
-4. 重启开发服务器使翻译生效
+虽然过程略显“原始”，但只要流程清晰，就能稳稳落地。希望这篇笔记能帮你少走弯路！（如果有“你”在看的话。。。）
+
+---
+
+## 📝 后记：关于 i18n 的一点反思
+
+其实我一直对“中英文切换”这件事心存疑虑。  
+说到底，现代浏览器早已内置了相当成熟的网页翻译功能——只需点一下，就能获得即时翻译。那还费这么大劲手动配置 Docusaurus 的 i18n，意义究竟在哪里？
+
+诚然，如果我们认真对待每一篇内容，逐字逐句机翻 + 人工修正，结果**确实可能比单纯机器翻译更准确、更符合语境**。但这几乎就是唯一的优点了。
+
+而代价却很实在：
+- 项目体积直接翻倍（甚至更多）；
+- 构建时间变长，潜在影响加载速度；
+- 最关键的是——**维护成本极高**。每写一篇新文章，就得复制、翻译、校对，过程枯燥又耗时。
+
+我也曾幻想过用脚本自动调用翻译 API 来解决这个问题，但试过几次后发现，自动生成的内容往往格式错乱、语义失真，反而需要花更多时间去修正，得不偿失。
+
+所以坦白讲，**我甚至考虑在未来干脆移除多语言支持**。如果真的需要翻译，就交给浏览器吧——它已经做得足够好了。
+
+---
+
+另外，这大概会是我**很长一段时间内最后一篇关于 Docusaurus 的文章了**。  
+倒不是因为不喜欢它，而是这并非我真正想深耕的方向。写这些，更多是出于“记录”的本能：  
+> 遇到一个难题，卡了很久，终于搞定了——那一刻总忍不住想把过程写下来，以防将来再踩同样的坑。
+
+但每次一“动笔”，才发现“记录”远没那么简单。光是梳理逻辑、调整结构、配图排版，常常就花掉一整天。今天之所以重新整理这篇文章，是因为早上偶然看到**居然有陌生访客点进了这篇 i18n 笔记**。我点进去一看自己之前的版本，实在有些粗糙，于是决定花点时间复盘、重写。
+
+虽然现在的版本依然不够完美，但至少……能看了 😅。
+
+---
+
+也曾羡慕别人炫酷的博客首页——不只是换个主题色，而是彻底重构布局，加上流畅的交互动画，让人眼前一亮。  
+我也一度想动手改造自己的站点。但转念一想：**再漂亮的外壳，若没有扎实的内容支撑，终究只是空壳**。
+
+而目前我的博客，其实已经具备了核心功能：
+- 基础的中英文切换（尽管我正犹豫要不要留着）；
+- 全文搜索；
+- 评论系统；
+- 还算清晰的文档结构。
+
+够用了。那就先这样吧。
+
+接下来，我会把精力更多地投入到**嵌入式系统的学习与实践**中，不定时地在博客上更新相关笔记。技术深度，远比界面花哨更重要——至少对我而言是如此。
+
+等哪天真正闲下来了，或许再回来给这个小站加点“彩蛋”也不迟 ✨。
