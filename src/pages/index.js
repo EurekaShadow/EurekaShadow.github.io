@@ -9,19 +9,15 @@ import Heading from '@theme/Heading';
 import styles from './index.module.css';
 
 function HomepageHeader() {
-  const {siteConfig} = useDocusaurusContext();
+  const { siteConfig } = useDocusaurusContext();
   return (
     <header className={clsx('hero hero--primary', styles.heroBanner)}>
       <div className="container">
         <Heading as="h1" className="hero__title">
-          <Translate id="homepage.hero.title" description="首页标题" values={{siteTitle: siteConfig.title}}>
-            {siteConfig.title}
-          </Translate>
+          {siteConfig.title}  {/* ✅ 直接用，已自动翻译 */}
         </Heading>
         <p className="hero__subtitle">
-          <Translate id="homepage.hero.subtitle" description="首页副标题" values={{siteTagline: siteConfig.tagline}}>
-            {siteConfig.tagline}
-          </Translate>
+          {siteConfig.tagline}  {/* ✅ 直接用，已自动翻译 */}
         </p>
         <div className={styles.buttons}>
           <Link

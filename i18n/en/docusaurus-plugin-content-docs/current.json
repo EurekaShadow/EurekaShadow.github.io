@@ -38,5 +38,13 @@
   "sidebar.DocumentSidebar.category.内嵌目录": {
     "message": "Embedded Table of Contents",
     "description": "The label for category 内嵌目录 in sidebar DocumentSidebar"
+  },
+  "sidebar.DocumentSidebar.category.项目模板": {
+    "message": "项目模板",
+    "description": "The label for category 项目模板 in sidebar DocumentSidebar"
+  },
+  "sidebar.DocumentSidebar.category.博客相关": {
+    "message": "博客相关",
+    "description": "The label for category 博客相关 in sidebar DocumentSidebar"
   }
 }

@@ -455,27 +455,27 @@
   },
   "homepage.feature.about.title": {
     "message": "📖 About My Blog",
-    "description": "Homepage feature area - About my blog title"
+    "description": "首页功能区域 - 关于我的博客标题"
   },
   "homepage.feature.about.description": {
     "message": "Welcome to my blog! This is where I record and reflect on my technical learning journey.",
-    "description": "Homepage feature area - About my blog description"
+    "description": "首页功能区域 - 关于我的博客描述"
   },
   "homepage.feature.share.title": {
     "message": "🔧 Sharing and Summarizing",
-    "description": "Homepage feature area - Sharing and summarizing title"
+    "description": "首页功能区域 - 分享与总结标题"
   },
   "homepage.feature.share.description": {
     "message": "Here, I organize my thoughts and experiences from the learning process, documenting problems encountered and solutions, hoping to provide a clear technical foundation for others or my future self.",
-    "description": "Homepage feature area - Sharing and summarizing description"
+    "description": "首页功能区域 - 分享与总结描述"
   },
   "homepage.feature.growth.title": {
     "message": "🌱 Documenting Growth",
-    "description": "Homepage feature area - Documenting growth title"
+    "description": "首页功能区域 - 记录成长之路标题"
   },
   "homepage.feature.growth.description": {
     "message": "Here will be the witness of my technical growth. Starting from zero, continuously exploring, every step of progress will be recorded as a reference for summary and moving forward.",
-    "description": "Homepage feature area - Documenting growth description"
+    "description": "首页功能区域 - 记录成长之路描述"
   },
   "homepage.title": {
     "message": "Learning Journey - {siteTitle}",
@@ -495,6 +495,6 @@
   },
   "homepage.hero.button": {
     "message": "Reflection Space 🌸",
-    "description": "Homepage hero button text"
-  }  
+    "description": "首页按钮文本"
+  }
 }
