@@ -53,7 +53,7 @@ cp -r blog/* i18n/en/docusaurus-plugin-content-blog/ 2>/dev/null || true
 # 3. 构建并本地预览英文站点
 yarn build --locale en && yarn serve
 ```
-`yarn serve`之后支持中英文切换，但`yarn start --locale en`或`yarn start`不支持，因为这是调试模式，不能用于生产环境。
+
 ```
 # 4. 开发模式启动英文站点
 yarn start --locale en
@@ -110,3 +110,5 @@ import Translate from '@docusaurus/Translate';
 2. 翻译 ID 需要唯一且具有描述性
 3. 描述信息帮助翻译人员理解上下文
 4. 重启开发服务器使翻译生效
+
+theme.* 是 Docusaurus 的“操作系统 API”，你不能删，但可以“调用”和“定制”。而 homepage.*、myapp.* 才是你自己的“应用程序代码”，由你全权负责。

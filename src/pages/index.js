@@ -1,23 +1,25 @@
+import React from 'react';
 import clsx from 'clsx';
 import Link from '@docusaurus/Link';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import Layout from '@theme/Layout';
-import HomepageFeatures from '@site/src/components/HomepageFeatures';
+import Heading from '@theme/Heading'; // 使用 @theme/Heading（推荐）
 import Translate from '@docusaurus/Translate';
 
-import Heading from '@theme/Heading';
+// 本地组件和样式
+import HomepageFeatures from '@site/src/components/HomepageFeatures';
 import styles from './index.module.css';
 
+// 单独提取 Header 组件（可选，保持结构清晰）
 function HomepageHeader() {
-  const { siteConfig } = useDocusaurusContext();
   return (
     <header className={clsx('hero hero--primary', styles.heroBanner)}>
       <div className="container">
         <Heading as="h1" className="hero__title">
-          {siteConfig.title}  {/* ✅ 直接用，已自动翻译 */}
+          <Translate id="homepage.hero.title">我的网站</Translate>
         </Heading>
         <p className="hero__subtitle">
-          {siteConfig.tagline}  {/* ✅ 直接用，已自动翻译 */}
+          <Translate id="homepage.hero.tagline">这是我的个人网站</Translate>
         </p>
         <div className={styles.buttons}>
           <Link
@@ -33,17 +35,17 @@ function HomepageHeader() {
   );
 }
 
+// 主页面组件
 export default function Home() {
-  const {siteConfig} = useDocusaurusContext();
-  
-  // 为标题和描述使用字符串格式，而不是 Translate 组件
+  const { siteConfig } = useDocusaurusContext();
+
+  // 页面 meta 信息（用于 <title> 和 <meta name="description">）
   const title = `学习轨迹 - ${siteConfig.title}`;
-  const description = "这里是我在技术探索和日常学习中的点滴记录，涵盖编程笔记、项目复盘与成长感悟。";
-  
+  const description =
+    '这里是我在技术探索和日常学习中的点滴记录，涵盖编程笔记、项目复盘与成长感悟。';
+
   return (
-    <Layout
-      title={title}
-      description={description}>
+    <Layout title={title} description={description}>
       <HomepageHeader />
       <main>
         <HomepageFeatures />

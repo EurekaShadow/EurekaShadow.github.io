@@ -23,8 +23,8 @@ const config = {
   onBrokenMarkdownLinks: 'warn',
 
   i18n: {
-    defaultLocale: 'zh-Hans',
-    locales: ['zh-Hans', 'en'],
+    defaultLocale: 'zh',
+    locales: ['zh', 'en'],
   },
 
   // 简化 plugins 部分
