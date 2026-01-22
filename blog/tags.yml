@@ -186,4 +186,14 @@ Search:
 决定:
   label: 决定
   permalink: /决定
-  description: 关于技术或学习方向的思考和决定  
+  description: 关于技术或学习方向的思考和决定 
+
+Mqtt:
+  label: Mqtt
+  permalink: /Mqtt
+  description: 关于Mqtt的思考和实践     
+
+OneNET:
+  label: OneNET
+  permalink: /OneNET
+  description: 关于OneNET的思考和实践  
