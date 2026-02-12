@@ -197,3 +197,18 @@ OneNET:
   label: OneNET
   permalink: /OneNET
   description: 关于OneNET的思考和实践  
+
+串口:
+  label: 串口
+  permalink: /串口
+  description: 关于 串口通信 的思考和实践 
+
+环形缓冲区:
+  label: 环形缓冲区
+  permalink: /环形缓冲区
+  description: 关于 环形缓冲区 的思考和实践     
+
+编程:
+  label: 编程
+  permalink: /编程
+  description: 关于 编程 的思考和实践 

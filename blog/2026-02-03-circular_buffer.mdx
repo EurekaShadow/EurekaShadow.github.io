@@ -1,0 +1,404 @@
+---
+slug: circular_buffer
+title: 环形缓冲区实现
+authors: eurekaX
+tags: [环形缓冲区,串口]
+---
+import { Highlight, Keyword, Light, B1, B2, B3, BH3, B3W, MyColor} from '@site/src/components/ForMDX';
+import CardImg from '@site/src/components/CardImg';
+
+
+## <B2>适用于嵌入式开发的环形缓冲区</B2>
+
+> 本文剖析两种经过验证的 C 语言环形缓冲区实现：基于 `full` 标志位的 **flag 版本** 与牺牲一个 slot 的 **slot 版本**，并给出明确的选型指南。
+
+<!-- truncate -->
+
+在嵌入式开发中，环形缓冲区（Circular Buffer）几乎是每个项目都会用到的基础数据结构。无论是串口通信、传感器数据采集，还是日志缓存，它都能以极低的开销实现高效的数据暂存与传递。
+
+然而，很多初学者甚至经验丰富的开发者，在实现环形缓冲区时常常踩坑：空/满状态判断混淆、指针越界、内存泄漏、线程不安全……今天，我将剖析一段**已在实际项目中验证的 C 语言环形缓冲区实现**。它不仅功能完整，还兼顾了开发期调试、生产期健壮性与嵌入式平台性能优化，值得你直接复用或作为团队基础组件。
+
+---
+
+## 设计亮点速览
+
+这段代码有四大核心优势：
+
+1. **结构体隐藏（Opaque Pointer）**  
+   用户只能通过句柄操作，无法直接访问内部字段，提升封装性与未来可扩展性。
+
+2. **静态实例池管理**  
+   所有缓冲区实例从预分配的静态数组中获取，**完全避免动态内存分配**，适合无 heap 或实时性要求高的系统。
+
+3. **双写入模式支持**  
+   - `circular_buf_put()`：非覆盖模式，满则失败（保数据完整性）  
+   - `circular_buf_put_overwrite()`：覆盖最旧数据（保最新数据，适用于日志/采样）
+
+4. **灵活容量策略**  
+   - Flag 版本：100% 利用缓冲区（引入 `full` 标志）；
+   - Slot 版本：节省 1 字节元数据（牺牲 1 个 slot）。
+
+---
+
+## 核心结构解析
+
+首先看内部结构定义（通常放在 `.c` 文件中，对外不可见）：
+
+```c
+struct circular_buf_t {
+    uint8_t* buffer;      // 用户提供的存储区（不归本库管理）
+    size_t write_index;   // 下一个写入位置
+    size_t read_index;    // 下一个读取位置
+    size_t max;           // 缓冲区容量（字节数）
+    bool full;            // 关键！用于区分空/满状态
+};
+```
+* `buffer` 由用户分配并传入，库只负责逻辑控制 → 零拷贝、零动态分配。
+* `max` 表示元素个数（因是 `uint8_t`，即字节流），容量恒定。
+* `full` 是解决经典“空/满歧义”问题的关键。
+> **💡 为什么需要 `full` 标志？**
+传统方法中，当 `read == write` 时，无法判断是“空”还是“满”。常见解法是牺牲一个 slot（容量 = N-1）。而本实现通过额外一个 `bool` 字段，实现了 **100% 容量利用率**，且逻辑清晰。
+
+<details>
+<summary>命名规范：为什么我不用 head/tail？</summary>
+
+#### 环形缓冲区代码中head/tail
+容易引起初学者混淆
+> “写入后 `head` 前移，`tail` 留在原地”
+> —— 这个想象非常自然！尤其当你把缓冲区看作一条“正在被填充的管道”时。
+但问题在于：
+* head/tail 是从“队列抽象”（FIFO）角度命名的；
+* 而新手往往从“内存布局”或“数据流向”角度理解。
+这就造成了**认知错位**。
+
+虽然我现在知道了，`head`是读，`tail`是写，因为在理解队列的概念后，这似乎就理所当然了。但后续我的代码中，为了避免误解，我还是考虑用`read_index`替代`head`，`write_index`替代`tail`。
+
+#### 关于 `head`/`tail` 命名的总结
+
+- **存在两种相反约定**：
+  - **队列抽象派（较主流）**：`head` = 读指针，`tail` = 写指针（如 Linux、FreeRTOS）。
+  - **数据流填充派**：`head` = 写指针，`tail` = 读指针（如 [Embedded Artistry](https://embeddedartistry.com/blog/2017/05/17/creating-a-circular-buffer-in-c-and-c/) 等）。
+
+- **问题根源**：  
+  “Head/Tail” 源于队列模型，但与“缓冲区填充”的直觉冲突，**极易引起混淆**，尤其对新手。
+
+- **关键事实**：  
+  两种定义在逻辑上都可自洽，**无绝对对错**，但命名本身存在歧义风险。
+
+- **最佳实践**：  
+  **避免使用 `head`/`tail`**，改用明确命名如 `read_index` / `write_index`，  
+  以实现**自解释、无歧义、跨团队友好**的代码。
+
+- **结论**：  
+  清晰性 > 行业惯例。真正的工程专业性在于**消除误解，而非遵循模糊传统**。
+
+</details>
+
+---
+
+## 关键算法详解
+### 1. 空/满判断
+```c
+bool circular_buf_empty(cbuf_handle_t me) {
+    return (!me->full && (me->read_index == me->write_index));
+}
+
+bool circular_buf_full(cbuf_handle_t me) {
+    return me->full;
+}
+```
+* 空：未满 + 指针相等
+* 满：`full == true`（此时指针也相等，但语义不同）
+
+
+### 2. 深入解析三个核心内部函数
+
+>—— `circular_buf_size`、`advance_pointer` 与 `retreat_pointer`
+
+环形缓冲区的正确性高度依赖于对读写指针和状态标志的精确维护。以下三个函数虽不直接暴露给用户，却是整个实现的“心脏”——它们分别负责**状态查询**、**写入后状态更新**和**读取后状态更新**。下面我将逐个剖析其设计逻辑与工程考量。
+
+---
+
+#### 1. `circular_buf_size()`：精准计算当前数据量
+
+```c
+size_t circular_buf_size(cbuf_handle_t me) {
+    CBUF_ASSERT(me);
+    size_t size = me->max;  // 默认：满状态
+
+    if (!me->full) {
+        if (me->write_index >= me->read_index) {
+            size = me->write_index - me->read_index;           // 连续区域
+        } else {
+            size = me->max + me->write_index - me->read_index; // 绕回区域
+        }
+    }
+    return size;
+}
+```
+#### ✅ 设计要点：
+* 满状态优先判断：若 `full == true`，直接返回 `max`，避免复杂计算。
+* 分两种情况处理非满状态：
+    *连续写入（`write ≥ read`）：有效数据在 `[read, write)` 区间，数量为 `write - read`。
+    * 绕回写入（`write < read`）：数据分为两段 `[read, max)` 和 `[0, write)`，总长度为 `(max - read) + write = max + write - read`。
+* 无副作用：仅读取状态，不修改任何字段，适合用于调试或流量控制。
+#### ⚠️ 注意事项：
+* 非原子操作：在多任务环境中，调用此函数后结果可能立即失效（例如被 ISR 修改）。如需稳定值，应在临界区内调用。
+* 时间复杂度 O(1)：无论缓冲区多大，计算恒为常数时间，适合高频调用。
+
+---
+
+#### 2. `advance_pointer()`：写入后的状态推进（支持覆盖）
+```c
+static void advance_pointer(cbuf_handle_t me) {
+    CBUF_ASSERT(me);
+    if (me->full) {
+        if (++(me->read_index) == me->max) {
+            me->read_index = 0;
+        }
+    }
+    if (++(me->write_index) == me->max) {
+        me->write_index = 0;
+    }
+    me->full = (me->write_index == me->read_index);
+}
+```
+```
+开始写入
+   │
+   ▼
+调用 advance_pointer()
+   │
+   ├── 如果 full == true → read_index++
+   │
+   ├── write_index 总是 ++
+   │
+   └── 设置 full = (write_index == read_index)
+```
+
+#### ✅ 设计要点：
+* 覆盖语义支持：当缓冲区已满（`full == true`）时，先推进 `read_index`，相当于丢弃最旧的一个字节，为新数据腾出空间。
+* 统一指针更新逻辑：无论是否覆盖，`write_index` 总是前移。
+* 高效指针回绕：使用 `if (++index == max) index = 0;` 替代 `index = (index + 1) % max;`，避免除法/取模运算，在无硬件除法器的 MCU 上性能显著提升。
+* 满标志更新：最后根据新指针位置设置 `full` —— 当 `write == read` 且刚写入后，说明已满。
+#### 🔄 执行流程示例（容量=4）：
+| **步骤** | **read** | **write** | **full** | 操作               |
+|:--------:|:--------:|:---------:|:--------:|:------------------|
+| 初始 | 0    | 0     | F    |                    |
+| 写3次| 0    | 3     | F    |                    |
+| 写第4次| 0  | 0     | T    | `full` 变为 true   |
+| 再写 | 1    | 1     | T    | 覆盖 oldest，read 前移 |
+
+> 💡 正是这个函数让 put_overwrite 具备了“无限写入、自动丢弃最旧”的能力。
+
+---
+
+#### 3. retreat_pointer()：读取后的状态回退
+```c
+static void retreat_pointer(cbuf_handle_t me) {
+    CBUF_ASSERT(me);
+    me->full = false;
+    if (++(me->read_index) == me->max) {
+        me->read_index = 0;
+    }
+}
+```
+#### ✅ 设计要点：
+* 清除满标志：只要成功读出一个字节，缓冲区必然不再满，故 `full = false`。
+* 推进读指针：指向下一个待读位置。
+* 同样使用条件重置：保持与 `advance_pointer` 一致的高效风格。
+#### 🔄 为什么叫 “retreat”？
+尽管函数名含“retreat”（撤退），但实际是**向前移动读指针**。更准确的命名或许是 `consume_pointer`，但考虑到这是内部函数且逻辑清晰，命名影响不大。重点在于：**它只在 `circular_buf_get` 成功读取后调用，且前提是缓冲区非空。**
+
+---
+
+#### 总结：三者协同工作流程
+1. 写入时 → 调用 `advance_pointer`
+* 若满，先丢弃最旧数据（`read++`）
+* `write++`
+* 更新 `full`
+2. 读取时 → 调用 `retreat_pointer`
+* `full = false`
+* `read++`
+3. 查询时 → 调用 `circular_buf_size`
+* 根据 `full` 和指针关系快速计算数据量
+
+这三者共同构成了一个**状态一致、高效可靠**的环形缓冲区内核，是本实现能同时支持“保序”与“保新”两种场景的关键所在。
+
+
+
+### 3. 覆盖写入 vs 非覆盖写入
+#### 非覆盖写入（保数据）：
+```c
+int8_t circular_buf_put(cbuf_handle_t me, uint8_t data) {
+    if (!me || circular_buf_full(me)) return -1;
+    me->buffer[me->write_index] = data;
+    advance_pointer(me);
+    return 0;
+}
+```
+#### 覆盖写入（保最新）：
+```c
+int8_t circular_buf_put_overwrite(cbuf_handle_t me, uint8_t data) {
+    if (!me) return -1;
+    me->buffer[me->write_index] = data;
+    advance_pointer(me); // 内部会处理满时的 read_index 前移
+    return 0;
+}
+```
+其中 `advance_pointer` 在缓冲区满时会自动前移 `read_index`，实现“丢弃最旧数据”的语义。
+### 4. 防御性编程：断言 + 运行时检查
+```c
+CBUF_ASSERT(me && me->buffer);  // 开发期快速失败
+if (!me || ...) return -1;      // 生产期优雅降级
+```
+这种“**Debug 时 Fail Fast，Release 时 Fail Safe**”的策略，极大提升了代码鲁棒性。
+## 使用示例
+```c
+#include "cbuf_flag.h"
+
+uint8_t rx_buffer[128];
+cbuf_handle_t cbuf = circular_buf_init(rx_buffer, sizeof(rx_buffer));
+
+if (cbuf == NULL) {
+    // 初始化失败（buffer 为 NULL、size 为 0 或实例池满）
+    return -1;
+}
+
+// 安全写入（满则失败）
+if (circular_buf_put(cbuf, 0xAA) != 0) {
+    // 处理写入失败
+}
+
+// 覆盖写入（始终成功）
+circular_buf_put_overwrite(cbuf, 0xBB);
+
+// 读取数据
+uint8_t data;
+if (circular_buf_get(cbuf, &data) == 0) {
+    printf("Received: 0x%02X\n", data);
+}
+```
+> ⚠️ 注意：用户必须保证 rx_buffer 在整个生命周期内有效，且多任务/中断共享时需自行加锁。
+
+## 限制与注意事项
+* ❗ 非线程安全：若在 ISR 与任务间共享，需关中断或使用互斥机制。
+* ❗ 不支持动态释放：实例从静态池分配，生命周期为整个程序运行期。
+* ❗ 仅支持单字节操作：如需多字节，建议在外层封装批量读写函数。
+* ❗ 最大实例数由 `CBUF_MAX_INSTANCES` 宏控制，请根据项目需求调整。
+
+---
+
+## slot 版本实现详解
+
+在前文，我详细解析了基于 **`full` 标志位**（flag 版本）的环形缓冲区实现。而本节要介绍的，则是另一种经典且广泛使用的方案——**“牺牲一个存储单元”**（slot 版本）。这两种实现都能正确工作，但在**内存利用率、状态判断逻辑和功能扩展性**上存在显著差异。
+
+---
+
+### 1. 空/满状态判断：依赖指针关系
+
+slot 版本的核心思想是：**通过保留一个空闲 slot 来消除“空”与“满”的歧义**。其判断逻辑如下：
+
+```c
+bool circular_buf_empty(cbuf_handle_t me) {
+    CBUF_ASSERT(me);
+    return (me->write_index == me->read_index);
+}
+
+bool circular_buf_full(cbuf_handle_t me) {
+    CBUF_ASSERT(me);
+    size_t head = me->write_index + 1;
+    if (head == me->max) {
+        head = 0; 
+    } 
+    return head == me->read_index;
+}
+```
+* 空状态：当 `write_index == read_index` 时，表示没有数据。
+* 满状态：当 `(write_index + 1) % max == read_index` 时，表示缓冲区已满（下一个写入位置会追上读指针）。
+> 💡 注意：这里使用条件判断 `if (head == me->max) head = 0;` 而非取模运算 %，是为了在嵌入式平台上避免低效的除法操作。
+
+### 2. 容量限制：实际可用空间为 N−1
+
+由于必须保留一个 slot 用于状态区分，**用户传入大小为 N 的缓冲区，实际只能存储 N−1 个字节**：
+```c
+size_t circular_buf_capacity(cbuf_handle_t me) {
+    CBUF_ASSERT(me);
+    return me->max - 1;  // 实际最大容量
+}
+```
+> ⚠️ 这是一个容易被忽视但至关重要的细节！例如，若你分配 `uint8_t buf[64]` 并初始化缓冲区，**最多只能写入 63 字节**。第 64 个字节永远不能使用，否则将导致空/满状态无法区分，引发逻辑错误甚至数据覆盖。
+### 3. 数据量计算：必须特殊处理“满”状态
+在 slot 版本中，`write_index == read_index` 仅表示空状态。满时 `write_index != read_index`，因此通用计算公式（如 `write - read` 或绕回计算）**在数学上是正确的**。然而，由于满状态的语义特殊（容量为 `max - 1`），显式调用 `circular_buf_full()` 并返回 `max - 1` 能使代码意图更清晰，并防止未来因指针更新逻辑变更而引入错误。
+
+```C
+size_t circular_buf_size(cbuf_handle_t me) {
+    CBUF_ASSERT(me);
+    // highlight-start
+    if (circular_buf_full(me)) {
+        return me->max - 1;  // 显式处理满状态
+    }
+    // highlight-end
+    if (me->write_index >= me->read_index) {
+        return me->write_index - me->read_index;
+    } else {
+        // 绕回情况：[read, max) + [0, write)
+        return (me->max - me->read_index) + me->write_index;
+    }
+}
+```
+### 4. 核心读写接口
+slot 版本提供标准的 `circular_buf_put()` 和 `circular_buf_get()` 接口：
+* `put` 为非覆盖模式：缓冲区满时返回 `-1`，确保数据不丢失；
+* `get` 从头部读取并推进读指针，空时返回 `-1`；
+* 两者均采用防御性编程，兼顾开发调试与生产健壮性；
+* 注意：所有操作均非线程安全，多任务环境下需外部同步。
+
+### 5. slot 版本的取舍
+* ✅ 优点：结构体更紧凑（无需 `full` 字段），适合对内存极度敏感的超小系统。
+* ❌ 缺点：
+    * 浪费 1 个存储单元（容量利用率 `<` 100%）；
+    * 无法原生支持覆盖写入（如日志场景）；
+    * 状态判断逻辑稍显隐晦，易出错。
+
+---
+
+## 版本对比
+| 场景 | 推荐版本 | 理由 |
+|------|----------|------|
+| 内存极度受限（如 8-bit MCU，RAM < 2KB） | slot 版本 | 节省每个实例 1 字节（`bool full`） |
+| 需要 100% 容量利用率 | flag 版本 | 不浪费任何 buffer 空间 |
+| 需要覆盖写入（如日志、采样） | flag 版本 | 原生支持 `put_overwrite` |
+| 追求代码简洁与可读性 | flag 版本 | 状态判断逻辑更直观 |
+| 已有大量基于 slot 的 legacy 代码 | slot 版本 | 保持一致性 |
+
+#### 如何选择？
+* 如果你需要覆盖写入（如日志、传感器采样），选 flag 版本。
+* 如果你在 8-bit MCU 上开发，RAM 极其紧张，且数据不能丢，选 slot 版本。
+* 在绝大多数现代嵌入式项目（Cortex-M、ESP32 等）中，flag 版本是更优选择——多出的 1 字节开销微不足道，换来的是更高的可用性和可维护性。
+
+---
+
+## <B2>详细代码</B2>
+
+- **[cbuf_flag.c](https://github.com/EurekaShadow/wheels/blob/main/wheels/cbuf_flag.c)**  
+  👉 基于 `full` 标志位的环形缓冲区实现。**推荐用于需要 100% 缓冲区利用率或支持覆盖写入（如日志、实时采样）的场景**。例如：当新数据比旧数据更重要，希望自动丢弃最旧数据以保证最新数据不丢失时，应选用此版本。
+
+- **[cbuf_slot.c](https://github.com/EurekaShadow/wheels/blob/main/wheels/cbuf_slot.c)**  
+  👉 经典“牺牲一个 slot”的实现，结构更紧凑，无需额外状态位。**适用于内存极度受限、且不需要覆盖写入的场景**（如通信协议解析、命令队列等），此时数据完整性优先，满时拒绝写入可避免意外覆盖。
+
+---
+
+## 💣 新手常见误区
+
+- ❌ 用 `head/tail` 命名却不注明约定，导致团队协作混乱；
+- ❌ 在 slot 版本中试图写入第 N 个字节，引发状态判断错误；
+- ❌ 在中断和主循环中共享缓冲区却未加锁（即使 slot 版本也需注意 ISR 与任务的原子性）；
+- ❌ 忘记用户 buffer 生命周期管理，导致悬空指针。
+
+---
+
+## 📚 参考资料
+* [Creating a Circular Buffer in C and C++ ——Phillip Johnston](https://embeddedartistry.com/blog/2017/05/17/creating-a-circular-buffer-in-c-and-c/)
+
+
