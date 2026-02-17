@@ -80,7 +80,7 @@ struct circular_buf_t {
   - **数据流填充派**：`head` = 写指针，`tail` = 读指针（如 [Embedded Artistry](https://embeddedartistry.com/blog/2017/05/17/creating-a-circular-buffer-in-c-and-c/) 等）。
 
 - **问题根源**：  
-  “Head/Tail” 源于队列模型，但与“缓冲区填充”的直觉冲突，**极易引起混淆**，尤其对新手。
+  “head/tail” 源于队列模型，但与“缓冲区填充”的直觉冲突，**极易引起混淆**，尤其对新手。
 
 - **关键事实**：  
   两种定义在逻辑上都可自洽，**无绝对对错**，但命名本身存在歧义风险。
@@ -139,7 +139,7 @@ size_t circular_buf_size(cbuf_handle_t me) {
 #### ✅ 设计要点：
 * 满状态优先判断：若 `full == true`，直接返回 `max`，避免复杂计算。
 * 分两种情况处理非满状态：
-    *连续写入（`write ≥ read`）：有效数据在 `[read, write)` 区间，数量为 `write - read`。
+    * 连续写入（`write ≥ read`）：有效数据在 `[read, write)` 区间，数量为 `write - read`。
     * 绕回写入（`write < read`）：数据分为两段 `[read, max)` 和 `[0, write)`，总长度为 `(max - read) + write = max + write - read`。
 * 无副作用：仅读取状态，不修改任何字段，适合用于调试或流量控制。
 #### ⚠️ 注意事项：

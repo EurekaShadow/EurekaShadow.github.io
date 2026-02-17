@@ -212,3 +212,26 @@ OneNET:
   label: 编程
   permalink: /编程
   description: 关于 编程 的思考和实践 
+
+AT:
+  label: AT
+  permalink: /AT
+  description: 关于 AT 指令的思考和实践 
+
+esp8266:
+  label: esp8266
+  permalink: /esp8266
+  description: 关于 esp8266 的思考和实践 
+
+C语言:
+  label: C语言
+  permalink: /C语言
+  description: 关于 C语言 的思考和实践  
+
+错误处理:
+  label: 错误处理
+  permalink: /错误处理
+  description: 关于 错误处理 的思考和实践
+
+  
+
