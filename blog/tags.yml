@@ -233,5 +233,25 @@ C语言:
   permalink: /错误处理
   description: 关于 错误处理 的思考和实践
 
+速记:
+  label: 速记
+  permalink: /速记
+  description: 关于 速记 的思考和实践  
+
+写作:
+  label: 写作
+  permalink: /写作
+  description: 关于 写作 的思考和实践  
+
+工程思维:
+  label: 工程思维
+  permalink: /工程思维
+  description: 关于 工程思维 的思考和实践  
+
+学习方法:
+  label: 学习方法
+  permalink: /学习方法
+  description: 关于 学习方法 的思考和实践   
+
   
 
