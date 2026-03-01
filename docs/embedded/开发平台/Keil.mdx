@@ -82,9 +82,57 @@ import CardImg from '@site/src/components/CardImg';
 - 避免 `malloc`，优先静态缓冲区
 - 定期检查 `.map` 文件，确认无 `_sys_open`、`_printf_fp` 等 full lib 符号
 
+---
+
+### Keil 编辑器“假报错”：头文件明明存在却提示 not found？
+> 描述：
+> - 项目 **无错误**
+> - 能 **右键跳转** 到头文件 
+ 
+但编辑器仍报 **`fatal error: 'xxxx.h' file not found`**？
+
+像这样：
+<p><CardImg src="/img/Docs/keil/问题描述.jpg" alt="Keil 错误" isCenter={true} /></p>
+这是 **Keil 编辑器的感知系统**（非编译器）找不到头文件所致，**根本原因常是 Include Paths 顺序错误**。
+
+例如项目结构：
+```
+Drivers/
+└── Display/
+├── OLED.h
+└── Fonts/
+└── font.h
+```
+若路径配置为：
+```
+.\Drivers\Display\Fonts ← 子目录在前 ❌
+.\Drivers\Display ← 父目录在后
+```
+编辑器会先查 `Fonts`，找不到 `OLED.h` 就会报错。
+
+✅ **正确顺序**：
+```
+.\Drivers\Display
+.\Drivers\Display\Fonts
+```
+- `.\Drivers\Display` ← 父目录在前 ✅
+
+- `.\Drivers\Display\Fonts` ← 子目录在后
+
+调整后，**关闭并重开源文件**，红色波浪线通常立即消失。
+
+💡 **经验总结**：
+- 编译器不敏感路径顺序，**编辑器敏感**
+- 遵循 **“广路径在前，窄路径在后”**
+- 若仍报错，删除工程目录下的 `.browse` 和 `.idx` 缓存强制重建
+
+---
+
 ## 杂记
 >1. 若误删`*.c`中代码无法恢复，用`备份的*.c`直接覆盖原文件后Keil报`Undefined symbol`：
 > * Remove项目中的*.c及对应的*.h
 > * 重新添加文件
 > * 编译即可解决
+
+
 
