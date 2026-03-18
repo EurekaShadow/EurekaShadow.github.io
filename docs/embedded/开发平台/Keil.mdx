@@ -128,6 +128,21 @@ Drivers/
 
 ---
 
+### FLYMCU烧录Keil生成的hex文件
+部分图片截自江协科技[STM32教程](https://www.bilibili.com/video/BV1th411z7sn?p=30&vd_source=b4214df97d0339f3dd034be3a9fd34d9 "9-6")。此处总结是为忘记时快速上手。
+1. 接线
+<p><CardImg src="/img/Docs/keil/FLYMCU1.jpg" alt="FLYMCU step 1" isCenter={true} /></p>
+2. 使keil生成hex文件
+<p><CardImg src="/img/Docs/keil/FLYMCU2.jpg" alt="FLYMCU step 2" isCenter={true} /></p>
+3. hex文件位置
+<p><CardImg src="/img/Docs/keil/FLYMCU3.jpg" alt="FLYMCU step 3" isCenter={true} /></p>
+4. 修改BOOT0电平
+<p><CardImg src="/img/Docs/keil/FLYMCU4.jpg" alt="FLYMCU step 4" isCenter={true} /></p>
+5. 烧录
+<p><CardImg src="/img/Docs/keil/FLYMCU5.jpg" alt="FLYMCU step 5" isCenter={true} /></p>
+
+---
+
 ## 杂记
 >1. 若误删`*.c`中代码无法恢复，用`备份的*.c`直接覆盖原文件后Keil报`Undefined symbol`：
 > * Remove项目中的*.c及对应的*.h
