@@ -39,6 +39,20 @@
     "message": "Older post",
     "description": "The blog post button label to navigate to the older/next post"
   },
+  "homepage.hero.title": {
+    "message": "Logbook · Tech Constellations"
+  },
+  "homepage.hero.tagline": {
+    "message": "Tracking my journey through the digital cosmos"
+  },
+  "homepage.hero.button.reflection": {
+    "message": "🌸 Reflection Space",
+    "description": "Homepage button - Reflection Space"
+  },
+  "homepage.hero.button.blog": {
+    "message": "📝 Latest Blog",
+    "description": "Homepage button - Latest Blog"
+  },
   "theme.tags.tagsPageLink": {
     "message": "View all tags",
     "description": "The label of the link targeting the tag list page"

@@ -5,9 +5,13 @@
   "homepage.hero.tagline": {
     "message": "记录我在数字宇宙中的探索轨迹"
   },
-  "homepage.hero.button": {
-    "message": "进入回想空间 🌸",
-    "description": "首页按钮文本"
+  "homepage.hero.button.reflection": {
+    "message": "🌸 回想空间",
+    "description": "首页按钮 - 回想空间"
+  },
+  "homepage.hero.button.blog": {
+    "message": "📝 最新博客",
+    "description": "首页按钮 - 最新博客"
   },
   "homepage.feature.about.title": {
     "message": "📖 关于我的博客",

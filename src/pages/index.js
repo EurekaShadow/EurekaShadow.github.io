@@ -15,18 +15,37 @@ function HomepageHeader() {
   return (
     <header className={clsx('hero hero--primary', styles.heroBanner)}>
       <div className="container">
+        {/* 添加动态背景元素 */}
+        <div className={styles.animatedBackground}>
+          <div className={styles.floatingElement}></div>
+          <div className={styles.floatingElement}></div>
+        </div>
+        
         <Heading as="h1" className="hero__title">
-          <Translate id="homepage.hero.title">我的网站</Translate>
+          <Translate id="homepage.hero.title">航行日志 · 技术星图</Translate>
         </Heading>
-        <p className="hero__subtitle">
-          <Translate id="homepage.hero.tagline">这是我的个人网站</Translate>
+        
+        {/* 副标题增加打字机效果 */}
+        <p className={clsx("hero__subtitle", styles.typewriter)}>
+          <Translate id="homepage.hero.tagline">
+            记录我在数字宇宙中的探索轨迹
+          </Translate>
         </p>
+        
+        {/* 多个 CTA 按钮 */}
         <div className={styles.buttons}>
           <Link
-            className="button button--secondary button--lg"
+            className="button button--primary button--lg"
             to="/docs/reflection-space">
-            <Translate id="homepage.hero.button" description="首页按钮文本">
-              回想空间 🌸
+            <Translate id="homepage.hero.button.reflection" description="首页按钮 - 回想空间">
+              🌸 回想空间
+            </Translate>
+          </Link>
+          <Link
+            className="button button--secondary button--lg"
+            to="/blog">
+            <Translate id="homepage.hero.button.blog" description="首页按钮 - 最新博客">
+              📝 最新博客
             </Translate>
           </Link>
         </div>

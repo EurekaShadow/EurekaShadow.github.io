@@ -138,4 +138,131 @@ html[data-theme='dark'] .code-block-error-line {
   background-color: rgba(255, 0, 0, 0.2);
 }
 
+/* ========== 首页按钮流光效果 + 组合 B：3D 按压 ========== */
+/* 主按钮 - 回想空间 */
+.hero .button.button--primary {
+  position: relative !important;
+  overflow: hidden !important;
+  background: linear-gradient(135deg, #a81850, #c21869) !important;
+  border: 2px solid transparent !important; /* 添加透明边框，与次按钮保持一致 */
+  color: #fff !important;
+  font-weight: 600;
+  padding: 12px 32px !important; /* 强制统一 padding */
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 0 4px 15px rgba(194, 24, 105, 0.3),
+              0 5px 0 rgba(0, 0, 0, 0.15);
+  transform: translateY(0);
+}
+
+/* 渐变流动动画 - 增强版 */
+@keyframes gradientFlow {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+/* 主按钮流光效果 */
+.hero .button.button--primary::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.9),
+    transparent
+  );
+  transition: left 0.5s ease;
+  z-index: 1;
+}
+
+.hero .button.button--primary:hover::before {
+  left: 100%;
+}
+
+.hero .button.button--primary:hover {
+  /* 组合 B：3D 按压 - 悬停时阴影变化 */
+  box-shadow: 0 8px 25px rgba(207, 144, 175, 0.5),
+              0 7px 0 rgba(0, 0, 0, 0.15) !important;
+  transform: translateY(-2px) !important;
+}
+
+/* 次按钮 - 最新博客 */
+.hero .button.button--secondary {
+  position: relative !important;
+  overflow: hidden !important;
+  background: linear-gradient(135deg, #e8e8e8, #ffffff) !important;
+  border: 2px solid #e0e0e0 !important;
+  color: #333 !important;
+  font-weight: 600;
+  padding: 12px 32px !important; /* 强制统一 padding */
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1),
+              0 5px 0 rgba(0, 0, 0, 0.15);
+  transform: translateY(0);
+}
+
+/* 次按钮流光效果 */
+.hero .button.button--secondary::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(135, 206, 250, 0.8),
+    transparent
+  );
+  transition: left 0.5s ease;
+  z-index: 1;
+}
+
+.hero .button.button--secondary:hover::before {
+  left: 100%;
+}
+
+.hero .button.button--secondary:hover {
+  /* 组合 B：3D 按压 - 悬停时阴影变化 */
+  box-shadow: 0 8px 25px rgba(135, 206, 250, 0.4),
+              0 7px 0 rgba(0, 0, 0, 0.15) !important;
+  transform: translateY(-2px) !important;
+  border-color: #87CEFA !important;
+  color: #1a1a1a !important;
+}
+
+/* 深色模式适配 */
+[data-theme='dark'] .hero .button.button--primary {
+  background: linear-gradient(135deg, #c21869, #ff4a9e) !important;
+  box-shadow: 0 4px 15px rgba(255, 74, 158, 0.4),
+              0 5px 0 rgba(0, 0, 0, 0.3);
+}
+
+[data-theme='dark'] .hero .button.button--primary:hover {
+  box-shadow: 0 8px 25px rgba(255, 74, 158, 0.6),
+              0 7px 0 rgba(0, 0, 0, 0.3) !important;
+}
+
+[data-theme='dark'] .hero .button.button--secondary {
+  background: linear-gradient(135deg, #2a2a2a, #3a3a3a) !important;
+  border-color: #444 !important;
+  color: #fff !important;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3),
+              0 5px 0 rgba(0, 0, 0, 0.3);
+}
+
+[data-theme='dark'] .hero .button.button--secondary:hover {
+  border-color: #87CEFA !important;
+  box-shadow: 0 8px 25px rgba(135, 206, 250, 0.5),
+              0 7px 0 rgba(0, 0, 0, 0.3) !important;
+}
+
 
