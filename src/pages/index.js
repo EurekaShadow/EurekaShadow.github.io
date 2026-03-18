@@ -15,11 +15,15 @@ function HomepageHeader() {
   return (
     <header className={clsx('hero hero--primary', styles.heroBanner)}>
       <div className="container">
-        {/* 添加动态背景元素 */}
-        <div className={styles.animatedBackground}>
-          <div className={styles.floatingElement}></div>
-          <div className={styles.floatingElement}></div>
+        {/* 宇宙飞船舷窗效果 - 多层星空背景（黑夜模式） */}
+        <div className={styles.starlayerMid}></div>
+        <div className={styles.starlayerFast}></div>
+        <div className={styles.brightStars}>  {/* 亮星闪烁层（含主星和环绕星）*/}
+          <div className={styles.starPink}></div>  {/* 粉色星独立层 */}
         </div>
+        <div className={styles.cosmicDust}></div>
+        
+        {/* 浮动装饰物已移除 */}
         
         <Heading as="h1" className="hero__title">
           <Translate id="homepage.hero.title">航行日志 · 技术星图</Translate>
