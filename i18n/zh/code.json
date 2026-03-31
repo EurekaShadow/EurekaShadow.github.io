@@ -37,6 +37,26 @@
     "message": "不出意外，这里将成为我技术成长的见证。从零开始，不断探索，每一步进步都会被记录下来，作为总结与前行的参考。",
     "description": "首页功能区域 - 记录成长之路描述"
   },
+  "docs.about.title": {
+    "message": "关于我",
+    "description": "关于我页面标题"
+  },
+  "docs.about.job_intent": {
+    "message": "求职意向：嵌入式软件开发工程师",
+    "description": "关于我页面 - 求职意向"
+  },
+  "docs.about.skills_title": {
+    "message": "技术技能清单",
+    "description": "关于我页面 - 技能标题"
+  },
+  "docs.about.projects_title": {
+    "message": "项目经历",
+    "description": "关于我页面 - 项目标题"
+  },
+  "docs.about.contact_title": {
+    "message": "联系我",
+    "description": "关于我页面 - 联系标题"
+  },
   "theme.ErrorPageContent.title": {
     "message": "页面已崩溃。",
     "description": "The title of the fallback page when the page crashed"

@@ -21,6 +21,7 @@ import { Highlight, Keyword, Light, B1, B2 } from '@site/src/components/ForMDX';
 #标签1 #标签2
 -->
 
+
 ## [MQTT] 解析主题时误判非法字符
 **现象**：合法 topic 被拒绝，返回 255  
 **根因**：传入 `strchr(topic)` 而非 `strchr(*topic)`，扫描了栈地址  
@@ -88,4 +89,124 @@ import { Highlight, Keyword, Light, B1, B2 } from '@site/src/components/ForMDX';
 2. **架构优化**：将 UI 刷新等耗时操作改为非阻塞式（分时切片）或降低刷新频率，避免主循环长时间阻塞影响其他软实时任务的调度时序。
 
 #嵌入式开发 #编码器测速 #中断冲突 #静态变量陷阱 #实时系统
+
+
+## [vsprintf] Newlib-Nano 下不支持浮点格式化
+
+**现象**：OLED 显示 "T_Kp:" 后无数值，串口输出 `Serial_Printf: Value =` 后无浮点数值。
+
+**根因**：Newlib-Nano 的 vsnprintf/vsprintf 调用 `_vsfmt_r` 函数（只有整数版本），库中根本不存在 `_vsfmt_f` 浮点版本函数。即使添加 `-Wl,-u,_printf_float` 链接标志也无效，因为该标志只强制链接 printf 相关的 `_printf_f`，不影响 vsprintf 系列的 `_vsfmt_r` 实现路径。符号表验证显示：只有 `_vsfmt_r`（08002678 T），没有 `_vsfmt_f`。
+
+**解法**：采用手动格式化方案 - 将浮点数拆分为整数部分 + 小数部分，使用 snprintf 拼接。优点：100% 可靠、Flash 仅增加 ~200B、执行速度快 3-5 倍；缺点：代码稍繁琐，需要处理负数和精度。
+
+#Newlib-Nano #vsprintf #浮点格式化 #嵌入式限制
+
+---
+
+## [printf] PlatformIO + CMSIS 重定向失败与救援
+
+**现象**：初始时 printf 完全无输出（连整数都没有），串口助手收不到任何 printf 内容。
+
+**根因**：PlatformIO (GCC + Newlib) 环境下，printf 底层调用 `_write()` 系统调用而非 `fputc()`。Keil MDK 使用 ARM C Library/MicroLib 调用 `fputc()`，但 GCC 的 Newlib 使用 `_write()`。最初实现了 `fputc()` 但未被调用，导致 printf 无法输出。添加 `-Wl,-u,fputc` 链接标志试图强制链接也失败，因为 Newlib 优先使用内部的 `__sfputc_r`。
+
+**解法**：在 usart.c 中添加 `_write()` 函数实现批量发送。实现后整数 printf 成功输出（"Value = 42"），但浮点仍失败（"Value = "）因为 Newlib-Nano 没有 `_printf_f` 函数。最终状态："活了，但没完全活" - 整数 OK，浮点无解。
+
+#printf #重定向 #_write #PlatformIO #CMSIS
+
+---
+
+## [手动格式化] 浮点数显示的可靠替代方案
+
+**现象**：在 vsprintf/printf 都无法格式化浮点数的情况下，需要一种不依赖 C 标准库的解决方案。
+
+**根因**：Newlib-Nano 为优化体积（节省约 40% Flash）移除了浮点格式化代码。完整 Newlib 需要额外 8-10KB Flash 和 1.4KB RAM，对于 64KB Flash 的 STM32F103C8T6 代价过高（占 12.5-15.6%）。
+
+**解法**：在 menu.c 中实现手动格式化：
+```c
+float value = *item->float_Value;
+int integer_part = (int)value;
+int decimal_part = (int)((value - integer_part) * 1000 + 0.5f);
+if (decimal_part < 0) decimal_part = -decimal_part;
+snprintf(buffer, sizeof(buffer), "%s%d.%03d", prefix, integer_part, decimal_part);
+```
+
+*   **优点**：
+    1.  **已验证 100% 可靠**：不依赖任何库函数实现，彻底规避工具链差异。
+    2.  **资源占用极低**：仅增加约 **200 Bytes** Flash 代码量（相比完整库的 15KB+）。
+    3.  **性能优秀**：完全无浮点运算开销（在无 FPU 的 M0/M3 内核上速度提升显著）。
+    4.  **可移植性强**：纯 C 逻辑，任意平台（Keil, GCC, IAR, ESP-IDF）通用。
+*   **缺点**：
+    *   需要手动处理精度缩放、四舍五入及负号逻辑。
+    *   代码重复度稍高（建议封装为通用 `utils.c` 模块）。
+
+> **标签**: `#手动格式化` `#浮点数显示` `#实用主义` `#资源优化`
+
+---
+
+## 🧹 [配置清理] platformio.ini 无效链接标志移除
+
+### 现象
+配置文件中包含多个尝试启用浮点支持的链接标志，但实验证明全部无效，且造成配置冗余。
+
+### 根因分析
+基于错误的技术假设：认为通过链接标志可以“启用”浮点支持。
+*   **事实**：Newlib-Nano 在**编译阶段**就彻底剔除了浮点格式化代码。
+*   **机制**：链接标志 `-u _printf_float` 的作用是“强制链接**已有**符号”，而非“生成新符号”。
+*   **比喻**：就像拿着购物清单去一家**空超市**，无论你怎么强调要买苹果，店里没有就是没有。
+
+### 解法
+删除以下无效配置（共 9 行），保持配置文件简洁：
+
+```ini
+; ❌ 以下配置在 Newlib-Nano 环境下对 vsprintf/vfprintf 无效，请删除
+
+-Wl,-u,_printf_float      ; printf 浮点链接标志 (仅对部分 printf 有效，vsprintf 无效)
+-Wl,-u,fputc              ; fputc 强制链接标志 (通常不需要，除非重定向失败)
+-Wl,-u,vfprintf           ; vfprintf 实验标志 (库中无浮点实现，链接无效)
+--specs=nano.specs        ; nano 规格说明 (默认已启用，无需显式声明，且正是它限制了浮点)
+```
+ 🧹 **清理后策略**
+ 
+只保留真正有效的编译选项（如 include 路径、必要的宏定义、优化等级等），移除所有试图“强制开启”Newlib-Nano 不支持功能的链接标志。
+
+> **标签**: `#配置清理` `#去冗余` `#Newlib-Nano` `#实用主义`
+
+---
+
+## ⚖️ [技术对比] Keil MDK vs PlatformIO 浮点支持机制
+
+### 🔍 现象
+同一份代码在 **Keil MDK** 中可以正常显示浮点数，而在 **PlatformIO (GCC)** 中失败（通常显示 `0.00`、乱码或直接忽略小数部分）。
+
+### 🕵️ 根因深度解析
+两者使用完全不同的 C 标准库和底层实现机制，导致默认行为差异巨大：
+
+| 特性 | Keil MDK (ARM Compiler / MicroLib) | PlatformIO (GCC + Newlib-Nano) |
+| :--- | :--- | :--- |
+| **C 标准库** | ARM C Library / MicroLib | **Newlib-Nano** (极致裁剪版) |
+| **printf 调用链** | `printf` → `vfprintf` → `fputc` | `printf` → `vfprintf` → `_write()` |
+| **vsprintf 实现** | 包含完整 `_vsfmt_f` (浮点格式器) | **仅包含 `_vsfmt_r`** (整数/字符串格式器) |
+| **浮点支持策略** | ✅ **自动包含**<br/>(默认策略：功能优先，保运行) | ❌ **被精简剔除**<br/>(默认策略：体积优先，保空间) |
+| **重定向函数** | `fputc()` ✅ | `_write()` ✅ |
+
+### 💡 核心结论与解法
+**不要盲目相信网上“添加链接标志成功率 99%”的通用答案**，必须区分编译器环境。在 Newlib-Nano 中，浮点代码是**物理缺失**的，链接标志无法无中生有。
+
+**在 PlatformIO + Newlib-Nano 环境下的最佳实践**：
+
+1.  **底层输出**：正确实现 `_write()` 用于串口/日志重定向（仅需处理整数/字符流）。
+2.  **浮点显示**：**放弃**对标准库 `printf` / `vsprintf` 原生浮点功能的执念。
+3.  **替代方案**（二选一）：
+    *   **方案 A (推荐)**：使用**手动定点数格式化**（将 float × 100 转为 int 处理），零依赖，体积极小。
+    *   **方案 B**：引入轻量级专用库（如 `tfp_printf`），专门处理浮点转换，体积可控（~2KB）。
+
+> **标签**: `#Keil` `#PlatformIO` `#技术对比` `#C标准库
+
+## [Git 分支] 误删实验分支后的紧急救援
+
+**现象**：删除实验分支 `experiment/vsprintf-float-test` 后，发现 dev 分支缺少关键修改（`_write()` 函数、清理后的 platformio.ini、测试文件），意识到删除前未合并分支，担心所有实验成果丢失。
+
+**根因**：Git 分支删除只是删除了"分支指针"（引用），不是删除"提交对象"。提交到 Git 对象数据库的内容会永久保存（直到执行 `git gc` 垃圾回收）。Reflog（引用日志）记录了所有 HEAD 移动操作，包括已删除分支的提交历史（默认保留 90 天）。关键提交 `6c88c1b` 虽然在分支删除后变成"悬空提交"，但仍然可以通过哈希值或 reflog 访问。这是因为 Git 的设计哲学是"数据安全第一"，删除操作不会立即销毁数据。
+
+**解法**：使用提交哈希从已删除分支恢复文件：
 

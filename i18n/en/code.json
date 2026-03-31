@@ -53,6 +53,26 @@
     "message": "📝 Latest Blog",
     "description": "Homepage button - Latest Blog"
   },
+  "docs.about.title": {
+    "message": "About Me",
+    "description": "About page title"
+  },
+  "docs.about.job_intent": {
+    "message": "Job Intent: Embedded Software Engineer",
+    "description": "About page - Job intent"
+  },
+  "docs.about.skills_title": {
+    "message": "Technical Skills",
+    "description": "About page - Skills title"
+  },
+  "docs.about.projects_title": {
+    "message": "Project Experience",
+    "description": "About page - Project title"
+  },
+  "docs.about.contact_title": {
+    "message": "Contact Me",
+    "description": "About page - Contact title"
+  },
   "theme.tags.tagsPageLink": {
     "message": "View all tags",
     "description": "The label of the link targeting the tag list page"
@@ -468,28 +488,28 @@
     "description": "The title of the tag list page"
   },
   "homepage.feature.about.title": {
-    "message": "📖 About My Blog",
-    "description": "首页功能区域 - 关于我的博客标题"
+    "message": "💼 About Me",
+    "description": "Homepage feature - About title"
   },
   "homepage.feature.about.description": {
-    "message": "Welcome to my blog! This is where I record and reflect on my technical learning journey.",
-    "description": "首页功能区域 - 关于我的博客描述"
+    "message": "Embedded Software Engineer candidate, specializing in STM32/C/Embedded Linux. 50+ technical blogs showcase my growth trajectory.",
+    "description": "Homepage feature - About description"
   },
   "homepage.feature.share.title": {
-    "message": "🔧 Sharing and Summarizing",
-    "description": "首页功能区域 - 分享与总结标题"
+    "message": "🚀 Projects",
+    "description": "Homepage feature - Projects title"
   },
   "homepage.feature.share.description": {
-    "message": "Here, I organize my thoughts and experiences from the learning process, documenting problems encountered and solutions, hoping to provide a clear technical foundation for others or my future self.",
-    "description": "首页功能区域 - 分享与总结描述"
+    "message": "Self-balancing robot, ESP8266 IoT node, smart home system — complete post-mortems from problem symptoms to root cause analysis.",
+    "description": "Homepage feature - Projects description"
   },
   "homepage.feature.growth.title": {
-    "message": "🌱 Documenting Growth",
-    "description": "首页功能区域 - 记录成长之路标题"
+    "message": "📚 Tech Blog",
+    "description": "Homepage feature - Blog title"
   },
   "homepage.feature.growth.description": {
-    "message": "Here will be the witness of my technical growth. Starting from zero, continuously exploring, every step of progress will be recorded as a reference for summary and moving forward.",
-    "description": "首页功能区域 - 记录成长之路描述"
+    "message": "LeetCode algorithm training, embedded debugging techniques, engineering practices — systematically building knowledge frameworks.",
+    "description": "Homepage feature - Blog description"
   },
   "homepage.hero.title": {
     "message": "Logbook · Tech Constellations"

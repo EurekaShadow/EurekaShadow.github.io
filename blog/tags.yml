@@ -251,7 +251,12 @@ C语言:
 学习方法:
   label: 学习方法
   permalink: /学习方法
-  description: 关于 学习方法 的思考和实践   
+  description: 关于 学习方法 的思考和实践
+
+LeetCode:
+  label: LeetCode
+  permalink: /LeetCode
+  description: 力扣算法题目练习与题解   
 
   
 
