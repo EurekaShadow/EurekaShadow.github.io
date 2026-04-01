@@ -2,19 +2,49 @@
 slug: /reflection-space
 title: Reflection Space
 sidebar_position: 1
-description: Learning, recording, and沉淀 —— This is an archive of my growth trajectory.
-last_updated: Sunday, July 6, 2025
+description: Technical Learning, Project Practice, Growth Trajectory — A Knowledge Map for Embedded Software Developers
+last_updated: March 31, 2026
 ---
 
-# Reflection Space - Growth Trajectory 🧭
+# 🧭 Reflection Space - Technical Growth Journey
 
-This is a collection of notes written for my future self, documenting my learning content, thought processes, and practical summaries at different stages. It's not a tutorial or portfolio, but a continuously updated knowledge map to help me retrace the paths I've taken.
+> 💡 **This is**: My systematic archive of technical learning, covering embedded development, algorithm training, and engineering practice  
+> 🎯 **For whom**: Future self, HR/hiring managers interested in my technical depth and learning ability, and fellow developers  
+> 👉 **Quick Access**: [About Me](/docs/about) | [Blog Posts](/blog)
 
 ---
 
-## 📌 Description
+## 🔥 Technical Highlights
 
-This page is used to organize entry links for various learning content, facilitating quick search and review later. The content covers technical exploration, tool usage, thinking methods, and more.
+### Embedded Practice
+
+- **[STM32F103C8T6 Memory Layout Deep Dive](/docs/embedded/STM32/STM32F103C8T6)**  
+  👉 In-depth analysis of Cortex-M3 memory mapping, .data/.bss/stack/heap layout and variable storage rules
+
+- **[Encoder Speed Measurement Pitfalls: Quantization Noise & Sampling Period Selection](/blog/quick-notes#编码器测速-读取频率过高反而降低速度测量精度)**  
+  👉 Engineering experience distilled from practice: Why does high-frequency reading reduce accuracy? How to choose the right sampling period?
+
+- **[Embedded Debugging Techniques: Zero-Overhead Conditional Logging](/blog/embedded-conditional-logging)**  
+  👉 Achieve seamless release/debug mode switching through macro encapsulation, retaining debugging capability without increasing firmware size
+
+- **[Closed-Loop Control Oscillation Problem Resolution](/blog/quick-notes)**  
+  👉 Troubleshooting and resolution approach for positive feedback caused by dual motor mirror installation
+
+### Project Practice
+
+- **[Real-Time Environmental Monitoring Terminal](/docs/myproject/项目1/project1)**  
+  👉 STM32+ESP8266+PMS7003+XM7903, implementation of an IoT system for real-time monitoring of construction site PM2.5, PM10, noise, and other environmental parameters
+
+- **[Self-Balancing Robot](/docs/myproject/项目2/project2)**  
+  👉 STM32+MPU6050+TB6612, achieving incremental PID closed-loop control, stable standing for 30+ seconds
+
+### Algorithms & Engineering Fundamentals
+
+- **[Blog Tags](/blog/tags)**  
+  👉 90+ blog posts, including LeetCode solution summaries, embedded development experience, and learning notes
+
+- **[Git Learning Summary](/blog/LearnGit)**  
+  👉 Master Git workflow, branch management, conflict resolution for daily development
 
 ---
 
@@ -29,63 +59,99 @@ This page is used to organize entry links for various learning content, facilita
 
 ---
 
-## 📁 Content Categories
+## 📁 Content Category Navigation
 
-### Technical Learning
+### 💻 Technical Learning
 
-- Programming Language Fundamentals
-- Development Tools and Processes
-- Framework/Library Usage Insights
+#### Programming Language Fundamentals
 
-### Practice Records
+- **LeetCode** - **60+** Algorithm Solutions with detailed explanations and insights
+- **Algorithm Training** - Core algorithm专题笔记
 
-- [My Projects](/docs/category/我的项目)
-- Hands-on Experiment Logs
-- Bug Analysis and Solution Approaches
+#### Embedded Technology Stack
 
-### Thinking and Methods
+- **[STM32 Column](/docs/embedded/STM32/STM32F103C8T6)** - MCU Development Notes
+- **[Development Platform](/docs/embedded/开发平台/Keil)** - Keil MDK Configuration and Usage Tips
+- **[Resource Index](/docs/embedded/阅读/embedded-resources)** - Selected Technical Articles
 
-- Learning Technique Summaries
-- Time Management Attempts
-- Problem Analysis Method Inductions
+#### Tools & Engineering
 
----
-
-## 🔍 Featured Recommendations
-
-- [Git Learning Summary](/blog/LearnGit)
-- [English Summary](/blog/LearnEng)
-- [Algorithm Summary](/blog/Algorithm)
+- **[i18n Internationalization](/blog/i18n)** - Docusaurus Multi-language Implementation
+- **[Deployment Solutions](/blog/VercelBlog)** - Vercel + GitHub Pages Automated Deployment
 
 ---
 
-## 📁 Future Plans
+### 🛠️ Practice Records
 
-### Priority
+#### Experiment Logs
 
-- [ ] Summarize graduation project
-- [ ] Improve resume
-- [ ] Complete STM32 HAL learning, fully implement previously standard library implemented functions with HAL library
-- [ ] Learn FreeRTOS
-- [ ] Complete balance car production
-- [ ] Learn ESP32-S3 from [project](https://github.com/78/xiaozhi-esp32 '小智')
-- [ ] Learn embedded Linux related basics
-- [x] Try batch image compression
-- [x] Check why `build` folder is too large
+- **[Technical Quick Notes](/blog/quick-notes)** - Minimalist Problem Troubleshooting Handbook
+- **[Debug Case Analysis](/blog/embedded-conditional-logging)** - In-depth Review Articles
+
+#### Bug Analysis & Resolution
+
+- **[Common Issues Summary](/docs/Issues)** - Development Environment Configuration & Error Resolution
+- **[Undefined Behavior Trap](/blog/quick-notes)** - Newlib-Nano Floating Point Formatting Issue
 
 ---
 
-### Secondary
+## 📈 Growth Trajectory
 
-- [x] Add [search](https://www.alanwang.site/posts/blog-guides/docusaurus-search 'reference') functionality to website
-- [ ] Learn python briefly
-- [ ] Create a game using Ren'py
-- [ ] Translate website to enable English switching
-- [ ] Implement docusaurus deploy myself
-- [ ] Deploy website on [cloud service](https://help.aliyun.com/zh/ecs/support/ecs-free-trial?spm=a2c4g.11186623.help-menu-25365.d_8_1_0.1f1630183ZuMk1) to achieve smooth domestic access
-- [ ] Use OSS + CDN to achieve smooth domestic website access
-  > (Even if no one reads my blog, I still want to achieve smooth domestic access because I think it's COOL!~😎)
-- [ ] Complete domain name registration
-- [x] Write script to implement ssh ID switching
+### Completed ✅
 
-This document will not deliberately pursue completeness or systematicity, only hoping to provide some clues and references for my future self at a certain point in time.
+| Time          | Milestone                              | Output                                                    |
+| ------------- | -------------------------------------- | --------------------------------------------------------- |
+| April 2025    | Dust/Noise Project Completion          | Real-time construction site environmental data monitoring |
+| June 2025     | Started Technical Blog Writing         | First article published                                   |
+| August 2025   | Website Internationalization           | Chinese-English bilingual support                         |
+| December 2025 | Launched Self-Balancing Robot Project  | Completed open-loop control                               |
+| January 2026  | Resolved Closed-Loop Oscillation Issue | PID parameter tuning completed                            |
+| February 2026 | STM32 Deep Summary                     | Memory Layout Long Article                                |
+
+### In Progress 🔥
+
+- **FreeRTOS Learning**: Task scheduling mechanism, message queue practice
+- **ESP32-S3 Exploration**: IoT application development referencing [XiaoZhi AI Project](https://github.com/78/xiaozhi-esp32)
+- **HAL Library Migration**: Rewriting self-balancing robot project with HAL library, comparing differences with Standard Library
+
+### Planned 📖
+
+- Embedded Linux Driver Development Introduction
+- GD32 Domestic MCU Porting (Graduation Project)
+- RT-Thread RTOS Source Code Analysis & Porting
+
+---
+
+<details>
+<summary>🌐 Website Development Progress</summary>
+
+This small site is my experimental field for learning web technologies, recording the entire process from zero to full functionality:
+
+#### Implemented Features ✅
+
+- ✅ Algolia Search Integration
+- ✅ Giscus Comment System
+- ✅ Chinese-English Language Switching (i18n)
+- ✅ Image Lazy Loading & Zooming
+- ✅ Code Block Syntax Highlighting Enhancement
+- ✅ Batch Image Compression Script
+
+#### Optimizing 🔧
+
+- 🔧 CDN Acceleration Configuration (OSS + CDN)
+- 🔧 Domestic Access Optimization (Alibaba Cloud ECS Deployment)
+- 🔧 ICP Filing Process
+
+#### Technical Highlights
+
+- Custom deployment script enabling Vercel/GitHub Pages dual-platform switching
+- CSS Animation Effects: Homepage starfield background typewriter effect
+
+</details>
+
+---
+
+## ✨ Notes
+
+> This document does not deliberately pursue completeness or systematicity, but only seeks to provide some clues and references for the future me at a certain point in time.  
+> At the same time, it is also open to HR and hiring managers—if you want to understand my technical depth and learning ability, every article here is proof.
