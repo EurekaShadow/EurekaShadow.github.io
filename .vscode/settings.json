@@ -1,29 +1,35 @@
 {
-    // Markdown PDF 配置 - 使用本地 Chrome 避免重复下载
-    "markdown-pdf.executablePath": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
-    
-    // 基本输出设置
-    "markdown-pdf.type": [
-        "pdf"
-    ],
-    "markdown-pdf.format": "A4",
-    "markdown-pdf.displayHeaderFooter": false,
-    "markdown-pdf.printBackground": true,
-    "markdown-pdf.emoji": true,
-    "markdown-pdf.highlight": true,
-    "markdown-pdf.highlightStyle": "github.css",
-    
-    // 自定义样式文件
-    "markdown-pdf.styles": [
-        "resume-style.css"
-    ],
-    "markdown-pdf.includeDefaultStyles": true,
-    
-    // 页边距设置 - 符合专业简历规范（可读性优先）
-    "markdown-pdf.margin.top": "1.2cm",      // ✅ 规范：上下 1.2-1.5cm，预留打印/装订空间
-    "markdown-pdf.margin.bottom": "1.2cm",
-    "markdown-pdf.margin.left": "1.5cm",     // ✅ 规范：左右 1.5-2cm，中文阅读舒适区
-    "markdown-pdf.margin.right": "1.5cm",
-    
-    
+  "markdown-pdf.executablePath": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+  "markdown-pdf.type": ["pdf"],
+  "markdown-pdf.format": "A4",
+  "markdown-pdf.displayHeaderFooter": false,
+  "markdown-pdf.printBackground": true,
+  "markdown-pdf.emoji": true,
+  "markdown-pdf.highlight": true,
+  "markdown-pdf.highlightStyle": "github.css",
+  "markdown-pdf.styles": ["resume-style.css"],
+  "markdown-pdf.includeDefaultStyles": true,
+  "markdown-pdf.margin.top": "1.2cm",
+  "markdown-pdf.margin.bottom": "1.2cm",
+  "markdown-pdf.margin.left": "1.5cm",
+  "markdown-pdf.margin.right": "1.5cm",
+
+  "eslint.validate": ["javascript", "javascriptreact", "typescript", "typescriptreact", "mdx"],
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit"
+  },
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.formatOnSave": true,
+  "editor.codeActionsOnSaveTimeout": 3000,
+  "eslint.timeBudget": {
+    "onValidation": 2000,
+    "onFixes": 2000
+  },
+  "eslint.alwaysShowStatus": true,
+
+  // Markdownlint 配置 - 禁用过于严格的规则
+  "markdownlint.config": {
+    "MD031": false, // 允许代码块周围不需要空行
+    "MD040": false // 允许代码块不指定语言
+  }
 }

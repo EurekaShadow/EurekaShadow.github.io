@@ -10,10 +10,9 @@ import { QuickNoteCard, NoteSectionTitle } from '@site/src/components/ForMDX';
 > 💡 本页用于存放 **极简技术记录**：每个条目仅用 1–3 行说明问题现象、根因与解法，不求完整，但求可检索、可复用。  
 > 目标：未来遇到同类问题时，30 秒内唤醒记忆。
 
-<!-- truncate -->
+{/* truncate */}
 
-
-### <NoteSectionTitle variant="default">[STM32 闭环] 双轮小车电机高速飞车/震荡</NoteSectionTitle>
+### <NoteSectionTitle variant="default" id="stm32-闭环 - 双轮小车电机高速飞车震荡">[STM32 闭环] 双轮小车电机高速飞车/震荡</NoteSectionTitle>
 <QuickNoteCard 
   phenomenon="开环运行平稳，开启速度闭环后电机瞬间饱和、高速乱转或剧烈震荡"
   cause="双电机镜像安装导致物理旋转方向相反，编码器计数一正一负；若未统一逻辑极性，系统形成正反馈（误差越大输出越大）"
@@ -44,7 +43,7 @@ import { QuickNoteCard, NoteSectionTitle } from '@site/src/components/ForMDX';
   tags={['#编码器', '#运动控制', '#嵌入式', '#PID', '#信号处理']}
 />
 
-### <NoteSectionTitle variant="default">[编码器测速] 读取频率过高反而降低速度测量精度</NoteSectionTitle>
+### <NoteSectionTitle variant="default" id="编码器测速 - 读取频率过高反而降低速度测量精度">[编码器测速] 读取频率过高反而降低速度测量精度</NoteSectionTitle>
 <QuickNoteCard 
   phenomenon="在定时器中断中高频读取编码器增量（如 1ms 周期），低速时速度值剧烈跳变（0 与极大值交替），控制不稳定"
   cause='采用 M 法（固定时间测速）时，采样周期越短，捕获的脉冲数越少；当脉冲数接近 0 或 1 时，±1 量化误差导致相对误差极大，形成"量化噪声"，并非电气干扰'
