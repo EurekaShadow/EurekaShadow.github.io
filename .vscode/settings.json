@@ -19,7 +19,7 @@
 
   // 保存时自动修复 ESLint 问题
   "editor.codeActionsOnSave": {
-    "source.fixAll.eslint": true
+    "source.fixAll.eslint": "explicit"
   },
 
   // 默认格式化程序

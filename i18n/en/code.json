@@ -488,28 +488,28 @@
     "description": "The title of the tag list page"
   },
   "homepage.feature.about.title": {
-    "message": "💼 About Me",
+    "message": "📖 About My Blog",
     "description": "Homepage feature - About title"
   },
   "homepage.feature.about.description": {
-    "message": "Embedded Software Engineer candidate, specializing in STM32/C/Embedded Linux. 50+ technical blogs showcase my growth trajectory.",
+    "message": "Welcome to my blog! This is a record of my thoughts and insights accumulated during the journey of technical learning.",
     "description": "Homepage feature - About description"
   },
   "homepage.feature.share.title": {
-    "message": "🚀 Projects",
-    "description": "Homepage feature - Projects title"
+    "message": "🔧 Sharing & Summarizing",
+    "description": "Homepage feature - Share title"
   },
   "homepage.feature.share.description": {
-    "message": "Self-balancing robot, ESP8266 IoT node, smart home system — complete post-mortems from problem symptoms to root cause analysis.",
-    "description": "Homepage feature - Projects description"
+    "message": "Here, I organize my thoughts and experiences from learning, document problems encountered and solutions found, hoping to provide clear technical reference for others and my future self.",
+    "description": "Homepage feature - Share description"
   },
   "homepage.feature.growth.title": {
-    "message": "📚 Tech Blog",
-    "description": "Homepage feature - Blog title"
+    "message": "🌱 Recording Growth Journey",
+    "description": "Homepage feature - Growth title"
   },
   "homepage.feature.growth.description": {
-    "message": "LeetCode algorithm training, embedded debugging techniques, engineering practices — systematically building knowledge frameworks.",
-    "description": "Homepage feature - Blog description"
+    "message": "Inevitably, this will become a witness to my technical growth. Starting from zero, constantly exploring, every step of progress will be recorded as a summary and reference for moving forward.",
+    "description": "Homepage feature - Growth description"
   },
   "homepage.hero.title": {
     "message": "Logbook · Tech Constellations"

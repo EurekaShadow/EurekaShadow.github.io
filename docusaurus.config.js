@@ -1,5 +1,5 @@
 // @ts-check
-import {themes as prismThemes} from 'prism-react-renderer';
+import { themes as prismThemes } from 'prism-react-renderer';
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
@@ -10,9 +10,9 @@ const config = {
   future: {
     v4: true,
   },
-        //https://eurekashadow.github.io/
-		//https://www.eurekashadow.xin/
-  url: 'https://www.eurekax.space/',//网站最终部署的域名
+  //https://eurekashadow.github.io/
+  //https://www.eurekashadow.xin/
+  url: 'https://www.eurekax.space/', //网站最终部署的域名
   baseUrl: '/',
 
   organizationName: 'EurekaShadow',
@@ -39,10 +39,9 @@ const config = {
       ({
         docs: {
           sidebarPath: './sidebars.js',
-          editUrl:
-            'https://github.com/EurekaShadow/EurekaShadow.github.io/tree/master',
+          editUrl: 'https://github.com/EurekaShadow/EurekaShadow.github.io/tree/master',
           showLastUpdateTime: true,
-          showLastUpdateAuthor: true
+          showLastUpdateAuthor: true,
         },
         blog: {
           showReadingTime: true,
@@ -50,12 +49,11 @@ const config = {
             type: ['rss', 'atom'],
             xslt: true,
           },
-          editUrl:
-            'https://github.com/EurekaShadow/EurekaShadow.github.io/tree/master',
+          editUrl: 'https://github.com/EurekaShadow/EurekaShadow.github.io/tree/master',
           onInlineTags: 'warn',
           onInlineAuthors: 'warn',
           onUntruncatedBlogPosts: 'warn',
-          showLastUpdateTime: true
+          showLastUpdateTime: true,
         },
         theme: {
           customCss: './src/css/custom.css',
@@ -67,29 +65,29 @@ const config = {
   themeConfig:
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
-	  //添加Algolia搜索
-	  algolia: {
-		// Application ID
-		appId: 'AFEW9ZLEC6',
-		//  Search-Only API Key
-		apiKey: '2732fa24db8a85aaa29ee5c2e96be219',
-		//git-pages-index是 gitpages 的 Algolia 搜索 Index
-		//test-site是 Vercel 的 Algolia 搜索 Index
-		//切换网站部署的话，还要改docsearch.json文件的前三行
-		indexName: 'Eureka-X-Space',
-		searchPagePath: 'search',
-		contextualSearch: true
+      //添加Algolia搜索
+      algolia: {
+        // Application ID
+        appId: 'AFEW9ZLEC6',
+        //  Search-Only API Key
+        apiKey: '2732fa24db8a85aaa29ee5c2e96be219',
+        //git-pages-index是 gitpages 的 Algolia 搜索 Index
+        //test-site是 Vercel 的 Algolia 搜索 Index
+        //切换网站部署的话，还要改docsearch.json文件的前三行
+        indexName: 'Eureka-X-Space',
+        searchPagePath: 'search',
+        contextualSearch: true,
       },
-	  //添加giscus评论
+      //添加giscus评论
       giscus: {
         repo: 'eurekashadow/eurekashadow.github.io',
         repoId: 'R_kgDOO5sA8w',
         category: 'General',
         categoryId: 'DIC_kwDOO5sA884CuZHY',
-		inputPosition: 'top',
+        inputPosition: 'top',
         lang: 'zh-CN',
       },
-      
+
       image: 'img/docusaurus-social-card.jpg',
       navbar: {
         title: '我的网站',
@@ -102,14 +100,14 @@ const config = {
             type: 'localeDropdown',
             position: 'right',
             // 确保没有添加会干扰的属性
-          },         
+          },
           {
             type: 'docSidebar',
             sidebarId: 'DocumentSidebar',
             position: 'left',
             label: '记录',
           },
-          {to: '/blog', label: '博客', position: 'left'},
+          { to: '/blog', label: '博客', position: 'left' },
           {
             href: 'https://github.com/EurekaShadow/EurekaShadow.github.io/tree/master',
             label: 'GitHub',
@@ -148,44 +146,41 @@ const config = {
               {
                 label: '博客',
                 to: '/blog',
-              },        
+              },
             ],
           },
         ],
-        copyright: `Copyright © ${new Date().getFullYear()} My Project, Inc. Built with Docusaurus.`,
+        copyright: `Copyright © ${new Date().getFullYear()} EurekaShadow. Licensed under CC BY-NC-SA 4.0.`,
       },
-    
-    prism: {
-      theme: prismThemes.github,
-      darkTheme: prismThemes.dracula,
-      magicComments: [
-        {
-          className: 'code-block-highlighted-line',
-          line: 'highlight-next-line',
-          block: { start: 'highlight-start', end: 'highlight-end' }
-        },
-        {
-          className: 'code-block-add-line',
-          line: 'highlight-add-line',
-          block: { start: 'highlight-add-start', end: 'highlight-add-end' }
-        },
-        {
-          className: 'code-block-update-line',
-          line: 'highlight-update-line',
-          block: { start: 'highlight-update-start', end: 'highlight-update-end' }
-        },
-        {
-          className: 'code-block-error-line',
-          line: 'highlight-error-line',
-          block: { start: 'highlight-error-start', end: 'highlight-error-end' }
-        },
-      ],
-      additionalLanguages: [
-        'java',
-        'c',
-      ],
-    },
-  }),
+
+      prism: {
+        theme: prismThemes.github,
+        darkTheme: prismThemes.dracula,
+        magicComments: [
+          {
+            className: 'code-block-highlighted-line',
+            line: 'highlight-next-line',
+            block: { start: 'highlight-start', end: 'highlight-end' },
+          },
+          {
+            className: 'code-block-add-line',
+            line: 'highlight-add-line',
+            block: { start: 'highlight-add-start', end: 'highlight-add-end' },
+          },
+          {
+            className: 'code-block-update-line',
+            line: 'highlight-update-line',
+            block: { start: 'highlight-update-start', end: 'highlight-update-end' },
+          },
+          {
+            className: 'code-block-error-line',
+            line: 'highlight-error-line',
+            block: { start: 'highlight-error-start', end: 'highlight-error-end' },
+          },
+        ],
+        additionalLanguages: ['java', 'c'],
+      },
+    }),
 };
 
 export default config;
