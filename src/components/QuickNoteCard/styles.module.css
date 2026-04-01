@@ -1,0 +1,262 @@
+/*************************************************************************************
+ * QuickNoteCard 组件样式
+ * 功能：为技术速记卡片提供视觉样式
+ * 支持：亮色/暗色模式、多种变体（default/warning/error/tip）
+ *************************************************************************************/
+
+/* 卡片主容器 */
+.card {
+  border-radius: 10px;
+  padding: 1.25rem;
+  margin: 1.5rem 0;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
+  border-left: 5px solid var(--card-border-color);
+  background: var(--card-bg);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+/* 悬停效果：上浮 + 阴影加深 */
+.card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+}
+
+/*---------------------------------------------
+  卡片变体 - 不同颜色主题
+------------------------------------------------*/
+
+/* 默认 variant (蓝色系) */
+.default {
+  --card-bg: linear-gradient(135deg, rgba(135, 206, 250, 0.08), rgba(255, 255, 255, 0.02));
+  --card-border-color: #87CEFA;
+  --phenomenon-label-bg: rgba(135, 206, 250, 0.15);
+  --phenomenon-label-text: #87CEFA;
+  --cause-label-bg: rgba(242, 187, 224, 0.15);
+  --cause-label-text: #F2BBE0;
+  --solution-label-bg: rgba(106, 190, 48, 0.15);
+  --solution-label-text: #6abe30;
+}
+
+/* 警告 variant (橙色系) */
+.warning {
+  --card-bg: linear-gradient(135deg, rgba(255, 165, 0, 0.08), rgba(255, 255, 255, 0.02));
+  --card-border-color: #ffa500;
+  --phenomenon-label-bg: rgba(255, 165, 0, 0.15);
+  --phenomenon-label-text: #ffa500;
+  --cause-label-bg: rgba(255, 140, 0, 0.15);
+  --cause-label-text: #ff8c00;
+  --solution-label-bg: rgba(255, 215, 0, 0.15);
+  --solution-label-text: #ffd700;
+}
+
+/* 错误 variant (红色系) */
+.error {
+  --card-bg: linear-gradient(135deg, rgba(240, 60, 70, 0.08), rgba(255, 255, 255, 0.02));
+  --card-border-color: #f03c46;
+  --phenomenon-label-bg: rgba(240, 60, 70, 0.15);
+  --phenomenon-label-text: #f03c46;
+  --cause-label-bg: rgba(220, 20, 60, 0.15);
+  --cause-label-text: #dc143c;
+  --solution-label-bg: rgba(255, 99, 71, 0.15);
+  --solution-label-text: #ff6347;
+}
+
+/* 提示 variant (绿色系) */
+.tip {
+  --card-bg: linear-gradient(135deg, rgba(106, 190, 48, 0.08), rgba(255, 255, 255, 0.02));
+  --card-border-color: #6abe30;
+  --phenomenon-label-bg: rgba(106, 190, 48, 0.15);
+  --phenomenon-label-text: #6abe30;
+  --cause-label-bg: rgba(135, 206, 250, 0.15);
+  --cause-label-text: #87CEFA;
+  --solution-label-bg: rgba(106, 190, 48, 0.2);
+  --solution-label-text: #6abe30;
+}
+
+/*---------------------------------------------
+  标题区域
+------------------------------------------------*/
+.cardTitle {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--ifm-heading-color);
+  margin-bottom: 1rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 2px solid var(--card-border-color);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* 标题前的小装饰 */
+.cardTitle::before {
+  content: '📝';
+  font-size: 1.2em;
+}
+
+/*---------------------------------------------
+  内容区域
+------------------------------------------------*/
+.cardContent {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+/* 每个小节（现象/根因/解法） */
+.section {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  line-height: 1.7;
+}
+
+/* 标签（现象/根因/解法） */
+.label {
+  display: inline-block;
+  padding: 0.2rem 0.6rem;
+  border-radius: 6px;
+  font-weight: 700;
+  font-size: 0.85rem;
+  white-space: nowrap;
+  flex-shrink: 0;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+}
+
+/* 现象标签样式 */
+.phenomenonLabel {
+  background: var(--phenomenon-label-bg);
+  color: var(--phenomenon-label-text);
+}
+
+/* 根因标签样式 */
+.causeLabel {
+  background: var(--cause-label-bg);
+  color: var(--cause-label-text);
+}
+
+/* 解法标签样式 */
+.solutionLabel {
+  background: var(--solution-label-bg);
+  color: var(--solution-label-text);
+}
+
+/* 文本内容 */
+.text {
+  color: var(--ifm-font-color-base);
+  flex: 1;
+  font-size: 0.95rem;
+  line-height: 1.7;
+}
+
+/* 支持代码块显示 */
+.text pre {
+  background: var(--ifm-pre-background);
+  border-radius: 6px;
+  padding: 1rem;
+  margin: 0.75rem 0;
+  overflow-x: auto;
+  font-size: 0.85rem;
+  line-height: 1.5;
+  border: 1px solid var(--ifm-color-emphasis-200);
+}
+
+.text code {
+  background: var(--ifm-code-background);
+  padding: 0.2rem 0.4rem;
+  border-radius: 4px;
+  font-size: 0.9em;
+  color: var(--ifm-color-primary);
+  font-family: var(--ifm-font-family-monospace);
+}
+
+.text pre code {
+  background: transparent;
+  padding: 0;
+  color: inherit;
+  font-size: inherit;
+}
+
+/* 支持列表 */
+.text ul,
+.text ol {
+  margin: 0.5rem 0;
+  padding-left: 1.5rem;
+}
+
+.text li {
+  margin: 0.3rem 0;
+}
+
+/* 支持链接 */
+.text a {
+  color: var(--ifm-link-color);
+  text-decoration: underline;
+}
+
+.text a:hover {
+  text-decoration: none;
+}
+
+/*---------------------------------------------
+  标签区域
+------------------------------------------------*/
+.cardTags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 1rem;
+  padding-top: 0.75rem;
+  border-top: 1px dashed var(--ifm-color-emphasis-200);
+}
+
+/* 单个标签 */
+.tag {
+  display: inline-block;
+  padding: 0.25rem 0.6rem;
+  background: var(--ifm-color-secondary-lightest);
+  color: var(--ifm-color-content-secondary);
+  border-radius: 16px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.tag:hover {
+  background: var(--card-border-color);
+  color: white;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+/*---------------------------------------------
+  暗色模式适配 - 使用粉色主题 (#F2BBE0)
+------------------------------------------------*/
+[data-theme='dark'] .card {
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* 暗色模式下默认 variant 使用粉色装饰线 */
+[data-theme='dark'] .default {
+  --card-border-color: #F2BBE0; /* 粉色左侧装饰线 */
+}
+
+[data-theme='dark'] .card:hover {
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+}
+
+[data-theme='dark'] .label {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+[data-theme='dark'] .tag {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--ifm-color-gray-400);
+}
+
+[data-theme='dark'] .tag:hover {
+  background: var(--card-border-color);
+  color: white;
+}

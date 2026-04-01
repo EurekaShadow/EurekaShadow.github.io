@@ -23,5 +23,7 @@
     "markdown-pdf.margin.top": "1.2cm",      // ✅ 规范：上下 1.2-1.5cm，预留打印/装订空间
     "markdown-pdf.margin.bottom": "1.2cm",
     "markdown-pdf.margin.left": "1.5cm",     // ✅ 规范：左右 1.5-2cm，中文阅读舒适区
-    "markdown-pdf.margin.right": "1.5cm"
+    "markdown-pdf.margin.right": "1.5cm",
+    
+    
 }

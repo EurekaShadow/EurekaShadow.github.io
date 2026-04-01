@@ -1,0 +1,92 @@
+/*************************************************************************************
+ * NoteSectionTitle 组件样式
+ * 功能：为速记笔记的章节标题提供样式，与 QuickNoteCard 风格统一
+ * 支持：亮色/暗色模式、多种变体（default/warning/error/tip）
+ *************************************************************************************/
+
+/* 标题主容器 */
+.noteSectionTitle {
+  position: relative;
+  margin: 2rem 0 0.25rem 0; /* 底部间距从 0.5rem 减小到 0.25rem，更紧凑 */
+  padding: 0.75rem 1rem 0.5rem 1rem; /* 底部 padding 减小，为装饰线预留空间 */
+  border-radius: 8px 8px 0 0; /* 底部圆角移除，装饰线直达边缘 */
+  border-left: 4px solid var(--title-border-color);
+  background: var(--title-bg);
+  transition: box-shadow 0.3s ease;
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  
+  /* 文字样式 */
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--ifm-heading-color);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* 底部装饰线伪元素 - 两侧留白，与卡片内部风格一致 */
+.noteSectionTitle::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 1rem; /* 左侧留白 */
+  right: 1rem; /* 右侧留白 */
+  height: 2px;
+  background: var(--title-border-color);
+  border-radius: 1px;
+}
+
+/* 标题前的小装饰 */
+.noteSectionTitle::before {
+  content: '📑';
+  font-size: 1.2em;
+}
+
+/*---------------------------------------------
+  标题变体 - 不同颜色主题
+------------------------------------------------*/
+
+/* 默认 variant (蓝色系) */
+.default {
+  --title-bg: linear-gradient(135deg, rgba(135, 206, 250, 0.1), rgba(255, 255, 255, 0.02));
+  --title-border-color: #87CEFA;
+}
+
+/* 警告 variant (橙色系) */
+.warning {
+  --title-bg: linear-gradient(135deg, rgba(255, 165, 0, 0.1), rgba(255, 255, 255, 0.02));
+  --title-border-color: #ffa500;
+}
+
+/* 错误 variant (红色系) */
+.error {
+  --title-bg: linear-gradient(135deg, rgba(240, 60, 70, 0.1), rgba(255, 255, 255, 0.02));
+  --title-border-color: #f03c46;
+}
+
+/* 提示 variant (绿色系) */
+.tip {
+  --title-bg: linear-gradient(135deg, rgba(106, 190, 48, 0.1), rgba(255, 255, 255, 0.02));
+  --title-border-color: #6abe30;
+}
+
+/*---------------------------------------------
+  悬停效果（仅阴影变化，与卡片区分）
+------------------------------------------------*/
+.noteSectionTitle:hover {
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+}
+
+/*---------------------------------------------
+  暗色模式适配 - 使用粉色主题 (#F2BBE0)
+------------------------------------------------*/
+[data-theme='dark'] .noteSectionTitle {
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  --title-border-color: #F2BBE0; /* 粉色装饰线 */
+}
+
+[data-theme='dark'] .noteSectionTitle:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}

@@ -30,6 +30,15 @@
   --docusaurus-highlighted-code-line-bg: rgba(255, 38, 130, 0.2);
 }
 
+/*----------------------------------------------------
+  全局禁用 Markdown 标题的悬停锚点（#符号）
+  原因：解决 NoteSectionTitle 宽度与卡片对齐问题
+  影响：仅禁用视觉锚点，不影响 TOC 导航和 URL 哈希跳转
+------------------------------------------------------*/
+.anchor > .hash-link {
+  display: none !important; /* 完全隐藏锚点链接 */
+}
+
 /* 下载按钮样式 */
 .source_download_button {
   display: inline-block;      /* 行内块元素，可设置宽高 */

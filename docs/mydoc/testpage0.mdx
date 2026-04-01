@@ -4,7 +4,7 @@ sidebar_position: 1
 description: 测试页0，包含常用组件与跳转示例。
 ---
 
-import { Highlight, Keyword, Light, B1, B2, B3, BH3, B3W,Button, MyColor, Card} from '@site/src/components/ForMDX';
+import { Highlight, Keyword, Light, B1, B2, B3, BH3, B3W, Button, MyColor, Card, QuickNoteCard, NoteSectionTitle } from '@site/src/components/ForMDX';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import CardImg from '@site/src/components/CardImg';
@@ -12,9 +12,10 @@ import CardImg from '@site/src/components/CardImg';
 
 ## 本文档全部import：
 ```
-import { Highlight, Keyword, Light, B1, B2, B3, BH3, B3W,Button, MyColor, Card} from '@site/src/components/ForMDX';
+import { Highlight, Keyword, Light, B1, B2, B3, BH3, B3W, Button, MyColor, Card, QuickNoteCard, NoteSectionTitle } from '@site/src/components/ForMDX';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
+import CardImg from '@site/src/components/CardImg';
 ```
 
 ## 🔗 按钮链接
@@ -726,6 +727,143 @@ int main(){
 
 ---
 
+## 技术速记组件
+
+### 标题内置（无右侧导航栏）
+#### default
+<QuickNoteCard 
+  title="[UART] 串口接收数据丢失"
+  phenomenon="高速率（115200）下接收数据偶尔丢失，缓冲区出现空洞"
+  cause="未启用 NVIC 中断优先级抢占，导致高优先级任务阻塞 UART 中断响应"
+  solution="将 UART 中断优先级设为最高（NVIC_SetPriority(USART1_IRQn, 0)），并启用中断嵌套"
+  tags={['#串口通信', '#中断丢失', '#NVIC', '#STM32']}
+/>
+
+**代码：**（需 `import { QuickNoteCard } from '@site/src/components/ForMDX';`）
+```js
+<QuickNoteCard 
+  title="[UART] 串口接收数据丢失"
+  phenomenon="高速率（115200）下接收数据偶尔丢失，缓冲区出现空洞"
+  cause="未启用 NVIC 中断优先级抢占，导致高优先级任务阻塞 UART 中断响应"
+  solution="将 UART 中断优先级设为最高（NVIC_SetPriority(USART1_IRQn, 0)），并启用中断嵌套"
+  tags={['#串口通信', '#中断丢失', '#NVIC', '#STM32']}
+/>
+```
+
+#### warning
+<QuickNoteCard 
+  variant="warning"
+  title="警告变体示例"
+  phenomenon="Flash 擦写操作后系统偶发死机"
+  cause="在 Flash 扇区擦除期间触发了中断，中断服务程序试图从 Flash 取指令导致总线冲突"
+  solution="执行 Flash 操作前关闭全局中断（__disable_irq()），操作完成后恢复（__enable_irq()）"
+  tags={['#Flash', '#死机', '#中断冲突']}
+/>
+
+**代码：**（需 `import { QuickNoteCard } from '@site/src/components/ForMDX';`）
+```js
+<QuickNoteCard 
+  variant="warning"
+  title="警告变体示例"
+  phenomenon="Flash 擦写操作后系统偶发死机"
+  cause="在 Flash 扇区擦除期间触发了中断，中断服务程序试图从 Flash 取指令导致总线冲突"
+  solution="执行 Flash 操作前关闭全局中断（__disable_irq()），操作完成后恢复（__enable_irq()）"
+  tags={['#Flash', '#死机', '#中断冲突']}
+/>
+```
+
+#### error
+<QuickNoteCard 
+  variant="error"
+  title="错误变体示例"
+  phenomenon="系统运行中随机复位，无规律可循"
+  cause="看门狗未及时喂狗，原因是主循环中存在长时间阻塞（如 I2C 超时等待）"
+  solution={<>1. 将耗时操作移至独立线程或状态机<br/>2. 使用独立看门狗（IWDG）替代窗口看门狗（WWDG）<br/>3. 增加喂狗监控线程，检测主线程心跳</>}
+  tags={['#看门狗', '#随机复位', '#IWDG']}
+/>
+
+**代码：**（需 `import { QuickNoteCard } from '@site/src/components/ForMDX';`）
+```js
+<QuickNoteCard 
+  variant="error"
+  title="错误变体示例"
+  phenomenon="系统运行中随机复位，无规律可循"
+  cause="看门狗未及时喂狗，原因是主循环中存在长时间阻塞（如 I2C 超时等待）"
+  solution={<>1. 将耗时操作移至独立线程或状态机<br/>2. 使用独立看门狗（IWDG）替代窗口看门狗（WWDG）<br/>3. 增加喂狗监控线程，检测主线程心跳</>}
+  tags={['#看门狗', '#随机复位', '#IWDG']}
+/>
+```
+
+#### tip
+<QuickNoteCard 
+  variant="tip"
+  title="提示变体示例"
+  phenomenon="需要一种轻量级的调试日志方案"
+  cause="printf 重定向过于繁琐，且 Newlib-Nano 不支持浮点格式化"
+  solution="使用 ITM_SendChar() 配合 SWO 输出，无需重定向，支持 Segger SystemView 实时查看"
+  tags={['#调试技巧', '#ITM', '#SWO', '#SystemView']}
+/>
+
+**代码：**（需 `import { QuickNoteCard } from '@site/src/components/ForMDX';`）
+```js
+<QuickNoteCard 
+  variant="tip"
+  title="提示变体示例"
+  phenomenon="需要一种轻量级的调试日志方案"
+  cause="printf 重定向过于繁琐，且 Newlib-Nano 不支持浮点格式化"
+  solution="使用 ITM_SendChar() 配合 SWO 输出，无需重定向，支持 Segger SystemView 实时查看"
+  tags={['#调试技巧', '#ITM', '#SWO', '#SystemView']}
+/>
+```
+
+### 标题外置
+
+#### <NoteSectionTitle variant="default">[PID 调参] 速度环高频震荡</NoteSectionTitle>
+
+<QuickNoteCard 
+  phenomenon="小车直线行驶时电机输出高频波动，伴随明显啸叫声"
+  cause={<>1. 速度反馈量化噪声过大（M 法测速周期过短）<br/>2. 微分项 D 系数过大，放大高频噪声<br/>3. 编码器信号线未屏蔽，引入电磁干扰</>}
+  solution={<>1. 增加速度低通滤波（一阶滞后：v_filtered = 0.8 * v_raw + 0.2 * v_prev）<br/>2. 减小 Kd 或改用增量式 PID<br/>3. 编码器线换用双绞屏蔽线，单端接地</>}
+  tags={['#PID 震荡', '#速度环', '#编码器干扰', '#滤波']}
+/>
+
+**代码：**（需 `import { QuickNoteCard, NoteSectionTitle } from '@site/src/components/ForMDX';`）
+```js
+#### <NoteSectionTitle variant="default">[PID 调参] 速度环高频震荡</NoteSectionTitle>
+
+<QuickNoteCard 
+  phenomenon="小车直线行驶时电机输出高频波动，伴随明显啸叫声"
+  cause={<>1. 速度反馈量化噪声过大（M 法测速周期过短）<br/>2. 微分项 D 系数过大，放大高频噪声<br/>3. 编码器信号线未屏蔽，引入电磁干扰</>}
+  solution={<>1. 增加速度低通滤波（一阶滞后：v_filtered = 0.8 * v_raw + 0.2 * v_prev）<br/>2. 减小 Kd 或改用增量式 PID<br/>3. 编码器线换用双绞屏蔽线，单端接地</>}
+  tags={['#PID 震荡', '#速度环', '#编码器干扰', '#滤波']}
+/>
+```
+
+<details>
+<summary>卡片组件说明</summary>
+
+#### 属性说明
+
+| 属性 | 类型 | 必填 | 默认值 | 说明 |
+|------|------|------|--------|------|
+| `title` | string | 否 | - | 卡片标题（为空时不渲染标题区域） |
+| `phenomenon` | string \| ReactNode | 是 | - | 问题现象描述 |
+| `cause` | string \| ReactNode | 是 | - | 根因分析 |
+| `solution` | string \| ReactNode | 是 | - | 解决方案 |
+| `tags` | Array&lt;string&gt; | 否 | [] | 标签列表 |
+| `variant` | `'default' \| 'warning' \| 'error' \| 'tip'` | 否 | `'default'` | 卡片/标题变体 |
+
+**注意事项**：
+- `phenomenon`、`cause`、`solution` 均支持 MDX 语法（可嵌套 JSX，如 `<>...</>` 包裹的 HTML）
+- 使用标题外置模式时，`title` 留空或不传即可
+- 变体颜色会自动适配深色模式（粉色系主题）
+
+</details>
+
+
+---
+
+
 ## 📚 参考资料
 
 [1]. [波特律动](https://github.com/BaudDance/docs/blob/main/docs/stm32/getting-started/getting-started.mdx "按键链接跳转")
@@ -737,6 +875,9 @@ int main(){
 [4]. [roc的技术笔记](https://imroc.cc/note/category/docusaurus "学习")
 
 [5]. [AlanWang's Blog](https://www.alanwang.site/posts/blog-guides/docusaurus-search "学习")
+
+
+
 
 
 
