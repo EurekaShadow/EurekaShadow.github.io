@@ -258,5 +258,38 @@ LeetCode:
   permalink: /LeetCode
   description: 力扣算法题目练习与题解   
 
-  
+工具配置:
+  label: 工具配置
+  permalink: /工具配置
+  description: 开发工具和环境的配置教程（如 ESLint、Prettier、VS Code 等）
+
+代码质量:
+  label: 代码质量
+  permalink: /代码质量
+  description: 关于提升代码质量的方法和实践
+
+开发效率:
+  label: 开发效率
+  permalink: /开发效率
+  description: 提升开发效率的工具和技巧
+
+VS Code:
+  label: VS Code
+  permalink: /VS-Code
+  description: VS Code 编辑器的使用技巧和扩展推荐
+
+ESLint:
+  label: ESLint
+  permalink: /ESLint
+  description: ESLint 代码检查工具的配置和使用
+
+Prettier:
+  label: Prettier
+  permalink: /Prettier
+  description: Prettier 代码格式化工具的配置和使用
+
+Docusaurus:
+  label: Docusaurus
+  permalink: /Docusaurus
+  description: Docusaurus 文档网站的搭建、配置和使用
 

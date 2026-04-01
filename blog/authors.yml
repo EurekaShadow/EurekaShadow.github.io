@@ -1,14 +1,3 @@
-"25602":
-  name: "25602"
-  title: 嵌入式开发工程师
-  url: https://github.com/25602
-  image_url: https://github.com/25602.png
-  page:
-    # customize the url of the author page at /blog/authors/<permalink>
-    permalink: '/all-25602-articles'
-  socials:
-    github: "25602"
-
 eurekaX:
   name: Eureka X
   title: Mr.Nobody

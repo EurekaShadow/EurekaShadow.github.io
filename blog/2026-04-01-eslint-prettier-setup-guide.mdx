@@ -1,8 +1,8 @@
 ---
 title: Docusaurus 项目 ESLint + Prettier 超完整配置指南
 slug: eslint-prettier-setup-guide
-authors: [25602]
-tags: [工具配置，代码质量，开发效率，VS Code, Docusaurus, ESLint, Prettier]
+authors: [eurekaX]
+tags: [工具配置, 代码质量, 开发效率, VS Code, Docusaurus, ESLint, Prettier]
 date: 2026-04-01
 ---
 
@@ -20,7 +20,7 @@ date: 2026-04-01
 ✅ 保存时自动格式化代码  
 ✅ 自动修复常见代码问题  
 ✅ 统一团队代码风格  
-✅ 提升代码质量  
+✅ 提升代码质量
 
 {/* truncate */}
 
@@ -33,15 +33,17 @@ date: 2026-04-01
 **职责：** 检查代码中的问题和潜在 bug
 
 **能发现什么：**
+
 - ❌ 未使用的变量
 - ❌ 语法错误
 - ❌ React Hooks 使用不当
 - ❌ 不符合最佳实践的写法
 
 **示例：**
+
 ```javascript
 // ❌ 会被 ESLint 标记
-var count = 0;  // 应该用 const/let
+var count = 0; // 应该用 const/let
 console.log(x); // x 未定义
 
 // ✅ 正确的写法
@@ -53,6 +55,7 @@ const count = 0;
 **职责：** 统一代码格式，让所有代码看起来像一个人写的
 
 **能做什么：**
+
 - 📏 自动调整缩进（2 空格）
 - 💬 统一引号风格（单引号优先）
 - ⏎ 控制行尾分号（必须加分号）
@@ -62,7 +65,9 @@ const count = 0;
 
 ```javascript
 // 格式化前乱七八糟
-function test( ){console.log( "hello" )}
+function test() {
+  console.log('hello');
+}
 
 // 格式化后整整齐齐
 function test() {
@@ -80,6 +85,7 @@ function test() {
 - **Prettier** 专注于代码**样式**（好不好看、是否统一）
 
 就像做饭一样：
+
 - ESLint 是食品安全检查员（确保菜没坏、能吃）
 - Prettier 是摆盘厨师（确保菜品好看、整齐）
 
@@ -103,6 +109,7 @@ yarn add --dev \
 ```
 
 **依赖说明：**
+
 - `eslint` - 核心工具
 - `@docusaurus/eslint-plugin` - Docusaurus 专用规则
 - `eslint-plugin-react` - React 规则
@@ -166,34 +173,38 @@ module.exports = [
 
   // 推荐规则
   js.configs.recommended,
-  
+
   // React Hooks 规则
   {
     rules: {
       ...reactHooksPlugin.configs.recommended.rules,
     },
   },
-  
+
   // React 规则（简化版）
   {
     files: ['**/*.{js,jsx,ts,tsx}'],
     rules: {
       // React 基本规则
       'react/react-in-jsx-scope': 'off', // React 17+ 不需要
-      
+
       // 代码质量相关
       'no-console': 'warn', // 警告 console.log
       'no-unused-vars': ['warn', { vars: 'all', args: 'none' }], // 未使用的变量
       'prefer-const': 'error', // 能用 const 就不用 let
       'no-var': 'error', // 禁止使用 var
-      
+
       // 代码风格（大部分交给 Prettier 处理）
-      'quotes': ['warn', 'single', { 
-        'avoidEscape': true,
-        'allowTemplateLiterals': true
-      }],
-      'semi': ['error', 'always'], // 必须分号
-      'indent': 'off', // 缩进交给 Prettier
+      quotes: [
+        'warn',
+        'single',
+        {
+          avoidEscape: true,
+          allowTemplateLiterals: true,
+        },
+      ],
+      semi: ['error', 'always'], // 必须分号
+      indent: 'off', // 缩进交给 Prettier
       'comma-dangle': ['warn', 'only-multiline'], // 多行时允许尾随逗号
     },
   },
@@ -243,6 +254,7 @@ module.exports = [
 ```
 
 **配置解读：**
+
 - `printWidth: 100` - 每行最多 100 个字符
 - `tabWidth: 2` - 2 空格缩进
 - `singleQuote: true` - 优先使用单引号
@@ -280,14 +292,8 @@ module.exports = [
   "markdown-pdf.margin.bottom": "1.2cm",
   "markdown-pdf.margin.left": "1.5cm",
   "markdown-pdf.margin.right": "1.5cm",
-  
-  "eslint.validate": [
-    "javascript",
-    "javascriptreact",
-    "typescript",
-    "typescriptreact",
-    "mdx"
-  ],
+
+  "eslint.validate": ["javascript", "javascriptreact", "typescript", "typescriptreact", "mdx"],
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": "explicit"
   },
@@ -343,8 +349,10 @@ module.exports = [
 
 ```javascript
 // 保存前：乱七八糟
-var unused="test";
-function test( ){console.log( "hello" )}
+var unused = 'test';
+function test() {
+  console.log('hello');
+}
 ```
 
 按 `Ctrl+S` 保存后，自动变成：
@@ -364,10 +372,12 @@ function test() {
 如果忘记保存，可以手动触发：
 
 **快捷键：**
+
 - Windows: `Shift + Alt + F`
 - Mac: `Shift + Option + F`
 
 **菜单操作：**
+
 ```
 按 F1 → 输入 "Format Document" → 回车
 ```
@@ -388,6 +398,7 @@ npx eslint src/components/*.js
 ```
 
 **输出示例：**
+
 ```
 D:\Docusaurus\test-site\src\components\ForMDX.js
   1:8  warning  'React' is defined but never used     no-unused-vars
@@ -478,7 +489,7 @@ prettierConfig,
 ```json
 {
   "eslint.timeBudget": {
-    "onValidation": 3000,  // 增加到 3 秒
+    "onValidation": 3000, // 增加到 3 秒
     "onFixes": 3000
   }
 }
@@ -551,7 +562,7 @@ git commit -m "feat: 添加新功能"
 ✅ **自动格式化** - 保存时自动美化代码  
 ✅ **质量保障** - 自动发现并修复常见问题  
 ✅ **团队统一** - 所有人的代码风格一致  
-✅ **效率提升** - 不再浪费时间手动调整格式  
+✅ **效率提升** - 不再浪费时间手动调整格式
 
 **配置虽然一次性，但收益是长期的！** 🚀
 
