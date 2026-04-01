@@ -1,6 +1,8 @@
 import React, { useMemo } from 'react';
 import Styles from '@site/src/css/MyCss.module.css';
 import BrowserOnly from '@docusaurus/BrowserOnly';
+import { QuickNoteCard, QuickNoteCardSimple } from '@site/src/components/QuickNoteCard';
+import { NoteSectionTitle, NoteTitle } from '@site/src/components/NoteSectionTitle';
 
 
 export const MyColor = 
@@ -98,42 +100,66 @@ export function B2({children}) {
 /* end */
 
 /*************************************************************************************
-* 功能：三级标题样式
+* 功能：三级标题样式（支持右侧目录导航）
 * B3：为无数字的设置，左边加一小块背景色
 * BH3：为有数字的设置，为文字加背景色
 * B3W：设置文字颜色为 docusaurusGreen
 * 其他：H3 是标签的关键字，所以改成了 B3
+* 
+* 重要说明：
+* - 这些组件是纯装饰性的 <span>，必须配合 Markdown 标题语法使用
+* - 正确用法：### <B3>标题文字</B3>
+* - Docusaurus TOC 只识别 Markdown 的 ### 语法，不识别 React 组件
 *************************************************************************************/
-export function B3({children}) {
+
+/**
+ * B3 组件 - 带左侧装饰块的三级标题（纯装饰性 span）
+ * @param {string} children - 标题文字
+ */
+export function B3({ children, ...props }) {
   return (
-    <span className={Styles.B3}>{children}</span>
+    <span className={Styles.B3} {...props}>
+      {children}
+    </span>
   );
 }
 
-export function BH3({children}) {
+/**
+ * BH3 组件 - 带背景高亮的三级标题（纯装饰性 span）
+ * @param {string} children - 标题文字
+ */
+export function BH3({ children, ...props }) {
   return (
     <span 
       className={Styles.BH3}
       style={{        
         padding: '0.2rem',
-        marginRight: '0.5rem', // 添加右边距
-      }}>
+        marginRight: '0.5rem',
+      }}
+      {...props}
+    >
       {children}
     </span>
-  )
+  );
 }
 
-export function B3W({children}) {
+/**
+ * B3W 组件 - 绿色文字的三级标题（纯装饰性 span）
+ * @param {string} children - 标题文字
+ */
+export function B3W({ children, ...props }) {
   return (
     <span
       style={{
         borderRadius: '4px',
         color: MyColor.docusaurusGreen,
         padding: '0.2rem',
-      }}>
+      }}
+      {...props}
+    >
       {children}
     </span>
-  )
+  );
 }
 /* end */
 
@@ -238,3 +264,9 @@ export const Button = ({
     </Component>
   );
 };
+
+// 导出速记卡片组件
+export { QuickNoteCard, QuickNoteCardSimple };
+
+// 导出速记章节标题组件
+export { NoteSectionTitle, NoteTitle };

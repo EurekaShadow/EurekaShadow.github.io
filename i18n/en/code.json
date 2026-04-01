@@ -39,6 +39,40 @@
     "message": "Older post",
     "description": "The blog post button label to navigate to the older/next post"
   },
+  "homepage.hero.title": {
+    "message": "Logbook · Tech Constellations"
+  },
+  "homepage.hero.tagline": {
+    "message": "Tracking my journey through the digital cosmos"
+  },
+  "homepage.hero.button.reflection": {
+    "message": "🌸 Reflection Space",
+    "description": "Homepage button - Reflection Space"
+  },
+  "homepage.hero.button.blog": {
+    "message": "📝 Latest Blog",
+    "description": "Homepage button - Latest Blog"
+  },
+  "docs.about.title": {
+    "message": "About Me",
+    "description": "About page title"
+  },
+  "docs.about.job_intent": {
+    "message": "Job Intent: Embedded Software Engineer",
+    "description": "About page - Job intent"
+  },
+  "docs.about.skills_title": {
+    "message": "Technical Skills",
+    "description": "About page - Skills title"
+  },
+  "docs.about.projects_title": {
+    "message": "Project Experience",
+    "description": "About page - Project title"
+  },
+  "docs.about.contact_title": {
+    "message": "Contact Me",
+    "description": "About page - Contact title"
+  },
   "theme.tags.tagsPageLink": {
     "message": "View all tags",
     "description": "The label of the link targeting the tag list page"
@@ -455,27 +489,27 @@
   },
   "homepage.feature.about.title": {
     "message": "📖 About My Blog",
-    "description": "首页功能区域 - 关于我的博客标题"
+    "description": "Homepage feature - About title"
   },
   "homepage.feature.about.description": {
-    "message": "Welcome to my blog! This is where I record and reflect on my technical learning journey.",
-    "description": "首页功能区域 - 关于我的博客描述"
+    "message": "Welcome to my blog! This is a record of my thoughts and insights accumulated during the journey of technical learning.",
+    "description": "Homepage feature - About description"
   },
   "homepage.feature.share.title": {
-    "message": "🔧 Sharing and Summarizing",
-    "description": "首页功能区域 - 分享与总结标题"
+    "message": "🔧 Sharing & Summarizing",
+    "description": "Homepage feature - Share title"
   },
   "homepage.feature.share.description": {
-    "message": "Here, I organize my thoughts and experiences from the learning process, documenting problems encountered and solutions, hoping to provide a clear technical foundation for others or my future self.",
-    "description": "首页功能区域 - 分享与总结描述"
+    "message": "Here, I organize my thoughts and experiences from learning, document problems encountered and solutions found, hoping to provide clear technical reference for others and my future self.",
+    "description": "Homepage feature - Share description"
   },
   "homepage.feature.growth.title": {
-    "message": "🌱 Documenting Growth",
-    "description": "首页功能区域 - 记录成长之路标题"
+    "message": "🌱 Recording Growth Journey",
+    "description": "Homepage feature - Growth title"
   },
   "homepage.feature.growth.description": {
-    "message": "Here will be the witness of my technical growth. Starting from zero, continuously exploring, every step of progress will be recorded as a reference for summary and moving forward.",
-    "description": "首页功能区域 - 记录成长之路描述"
+    "message": "Inevitably, this will become a witness to my technical growth. Starting from zero, constantly exploring, every step of progress will be recorded as a summary and reference for moving forward.",
+    "description": "Homepage feature - Growth description"
   },
   "homepage.hero.title": {
     "message": "Logbook · Tech Constellations"

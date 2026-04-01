@@ -1,0 +1,48 @@
+{
+  "markdown-pdf.executablePath": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+  "markdown-pdf.type": ["pdf"],
+  "markdown-pdf.format": "A4",
+  "markdown-pdf.displayHeaderFooter": false,
+  "markdown-pdf.printBackground": true,
+  "markdown-pdf.emoji": true,
+  "markdown-pdf.highlight": true,
+  "markdown-pdf.highlightStyle": "github.css",
+  "markdown-pdf.styles": ["resume-style.css"],
+  "markdown-pdf.includeDefaultStyles": true,
+  "markdown-pdf.margin.top": "1.2cm",
+  "markdown-pdf.margin.bottom": "1.2cm",
+  "markdown-pdf.margin.left": "1.5cm",
+  "markdown-pdf.margin.right": "1.5cm",
+
+  // ESLint 验证的文件类型
+  "eslint.validate": ["javascript", "typescript", "mdx"],
+
+  // 保存时自动修复 ESLint 问题
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit"
+  },
+
+  // 默认格式化程序
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+
+  // 保存时自动格式化（推荐开启）
+  "editor.formatOnSave": true,
+
+  // ESLint 执行时机 - 改为输入时运行，降低资源占用
+  "eslint.run": "onType",
+
+  // ESLint 时间预算 - 避免卡顿
+  "eslint.timeBudget": {
+    "onValidation": 1500,
+    "onFixes": 1500
+  },
+
+  // 不在状态栏始终显示（减少视觉干扰）
+  "eslint.alwaysShowStatus": false,
+
+  // Markdownlint 配置 - 禁用过于严格的规则
+  "markdownlint.config": {
+    "MD031": false, // 允许代码块周围不需要空行
+    "MD040": false // 允许代码块不指定语言
+  }
+}

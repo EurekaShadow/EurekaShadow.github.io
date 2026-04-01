@@ -5,29 +5,29 @@ import Translate from '@docusaurus/Translate';
 
 const FeatureList = [
   {
-    title: <Translate id="homepage.feature.about.title" description="首页功能区域 - 关于我的博客标题">📖 关于我的博客</Translate>,
+    title: <Translate id="homepage.feature.about.title" description="首页功能区域 - 关于我的博客标题">💼 关于我</Translate>,
     Svg: require('@site/static/img/Sherry1.svg').default,
     description: (
       <Translate id="homepage.feature.about.description" description="首页功能区域 - 关于我的博客描述">
-        欢迎来到我的博客！这里是我在技术学习过程中点滴积累的记录与思考。
+        嵌入式软件开发候选人，专注 STM32/C 语言/嵌入式 Linux，50+ 篇技术博客见证成长轨迹。
       </Translate>
     ),
   },
   {
-    title: <Translate id="homepage.feature.share.title" description="首页功能区域 - 分享与总结标题">🔧 分享与总结</Translate>,
+    title: <Translate id="homepage.feature.share.title" description="首页功能区域 - 分享与总结标题">🚀 项目实战</Translate>,
     Svg: require('@site/static/img/Sherry2.svg').default,
     description: (
       <Translate id="homepage.feature.share.description" description="首页功能区域 - 分享与总结描述">
-        在这里，我会整理学习过程中的思考与经验，记录遇到的问题与解决思路，希望能为他人或未来的自己提供一份清晰的技术沉淀。
+        平衡小车闭环控制、ESP8266 IoT 节点、智能家居系统——从问题现象到根因分析的完整复盘。
       </Translate>
     ),
   },
   {
-    title: <Translate id="homepage.feature.growth.title" description="首页功能区域 - 记录成长之路标题">🌱 记录成长之路</Translate>,
+    title: <Translate id="homepage.feature.growth.title" description="首页功能区域 - 记录成长之路标题">📚 技术博客</Translate>,
     Svg: require('@site/static/img/Sherry3.svg').default,
     description: (
       <Translate id="homepage.feature.growth.description" description="首页功能区域 - 记录成长之路描述">
-        不出意外，这里将成为我技术成长的见证。从零开始，不断探索，每一步进步都会被记录下来，作为总结与前行的参考。
+        LeetCode 算法训练、嵌入式调试技巧、工程化实践，系统性构建知识体系。
       </Translate>
     ),
   },

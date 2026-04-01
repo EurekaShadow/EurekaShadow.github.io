@@ -5,6 +5,7 @@
   "scripts": {
     "docusaurus": "docusaurus",
     "start": "docusaurus start",
+    "start-en": "docusaurus start -- --locale en",
     "build": "docusaurus build",
     "swizzle": "docusaurus swizzle",
     "deploy": "docusaurus deploy",
@@ -16,9 +17,9 @@
     "update-posts": "node scripts/update-recent-posts.js && node scripts/update-recent-posts-en.js",
     "prestart": "yarn update-posts",
     "deploy-site": "node scripts/deploy-site.js site2",
-	"analyze": "node scripts/comprehensive-analysis.js",
-	"process-img": "node scripts/process-images.js",
-	"switch-ssh": "node ./scripts/ssh-config-manager.js switch site2"
+    "analyze": "node scripts/comprehensive-analysis.js",
+    "process-img": "node scripts/process-images.js",
+    "switch-ssh": "node ./scripts/ssh-config-manager.js switch site2"
   },
   "dependencies": {
     "@docusaurus/core": "3.8.1",
@@ -43,8 +44,16 @@
     "simple-git": "^3.28.0"
   },
   "devDependencies": {
+    "@docusaurus/eslint-plugin": "^3.9.2",
     "@docusaurus/module-type-aliases": "3.8.1",
     "@docusaurus/types": "3.8.1",
+    "@eslint/js": "^10.0.1",
+    "eslint": "^10.1.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-react": "^7.37.5",
+    "eslint-plugin-react-hooks": "^7.0.1",
+    "globals": "^17.4.0",
+    "prettier": "^3.8.1",
     "webpack-bundle-analyzer": "^4.10.2"
   },
   "browserslist": {

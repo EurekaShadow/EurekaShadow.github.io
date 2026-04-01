@@ -1,0 +1,153 @@
+---
+sidebar_label: 'Keil'
+title: Keil
+sidebar_position: 1.0
+description: 这里主要记录Keil开发环境相关的知识。
+---
+
+import CardImg from '@site/src/components/CardImg';
+
+## 关于Keil的使用
+
+### Keil内存映射配置
+这里的配置
+
+<p><CardImg src="/img/Docs/STM32F103C8T6/STM32_1.jpg" alt="内存映射配置" isCenter={true} /></p>
+#### 🔹 ROM（Flash，64KB）
+- **物理范围**：`0x08000000 ～ 0x08010000`（共 64KB）  
+- **Keil ROM Size**： 默认设为 `0x10000`（65536 字节）    
+- **ROM用途**：存放代码（`.text`）、常量（`.rodata`）、中断向量表
+- **可改为 `0xFC00`**，后续的空间给用户数据存储（如掉电保存参数），储存范围是`0x0800FC00 ～ 0x08010000`    
+- ✅ **建议**：若使用 Flash 存储功能，则将Size改为 `0xFC00`；否则可改满为0x10000。
+
+#### 🔹 RAM（SRAM，20KB）
+- **物理范围**：`0x20000000 ～ 0x20005000`（共 20KB）  
+- **Keil 可调小 Size（如 18KB）**  
+  → 仅在需要预留 RAM 给 DMA、USB 缓冲区等特殊用途时才缩小  
+- **日常开发应保持 `0x5000`（20KB）**，以充分利用资源、避免意外溢出  
+- ✅ **建议**：无特殊需求？不要调小 RAM！
+
+#### 🧠 核心原则
+- 配置不是“能不能”，而是“为什么”  
+- Flash/RAM 的起止地址和大小，是硬件与软件协同设计的关键边界  
+- 预留空间 = 主动规划，不是浪费
+
+---
+
+### Keil 中 Use MicroLIB
+> ——嵌入式 Flash 优化的关键技巧
+
+在 STM32 裸机开发中，**勾选 `Use MicroLIB` 可能会将 Flash 占用从 60KB 直接降至 52KB**！
+<p><CardImg src="/img/Docs/STM32F103C8T6/STM32_3.jpg" alt="Use MicroLIB" isCenter={true} /></p>
+#### 🔥 一句话总结
+> 当做 **无 OS 的裸机开发**，且 **不使用文件 I/O、浮点 `printf`、多线程** 时，**务必启用 MicroLIB**。它用极简 C 运行时库替代默认庞大标准库，大幅减小体积。
+
+#### ✅ MicroLIB vs 默认 C 库
+
+| 特性 | 默认 ARM C Library | MicroLIB |
+|------|-------------------|--------|
+| 体积 | `>10 KB` | `<2 KB` |
+| 功能 | 完整（`fopen`, `%f`, `errno`, 多线程安全） | 仅基础（`memcpy`, `sprintf` 整数版） |
+| 重入性 | 可重入（支持 RTOS） | **不可重入**（仅单线程安全） |
+| 浮点 `printf` | 支持 `%f`（但占 5–8KB） | ❌ 不支持（输出 `???`） |
+| 文件 I/O | 支持 | ❌ 不支持 |
+
+#### ✅ 何时使用？
+- **✅ 推荐**：STM32 裸机项目（如传感器 + OLED + 串口通信）
+- **❌ 禁止**：
+  - 使用 FreeRTOS 且多任务调用 `printf`/`malloc`
+  - 必须使用 `printf("%f", val)`
+
+> 💡 替代浮点打印：
+> ```c
+> float v = 3.1415;
+> printf("%d.%02d", (int)v, (int)(v*100) % 100); // 输出 "3.14"
+> ```
+
+#### ⚙️ 如何启用？
+1. **Options for Target → Target**
+2. 勾选 **✅ Use MicroLIB**
+3. 确保代码中 **无 `%f`、无 `fopen`、无 `errno`**
+
+> 启动文件通常已提供 `__user_setup_stackheap()`，无需额外实现。
+
+#### 📊 为何节省 8KB+？
+默认库为“通用性”链接了大量未用功能：
+- 浮点 `printf`：5–8 KB → MicroLIB 仅 0.5 KB
+- `malloc`/`exit`/`locale`/文件 stubs：共 ～3 KB → 全移除
+
+#### ✅ 最佳实践
+- 所有裸机项目 **默认开启 MicroLIB**
+- **禁止使用 `%f`**（建立代码规范）
+- 避免 `malloc`，优先静态缓冲区
+- 定期检查 `.map` 文件，确认无 `_sys_open`、`_printf_fp` 等 full lib 符号
+
+---
+
+### Keil 编辑器“假报错”：头文件明明存在却提示 not found？
+> 描述：
+> - 项目 **无错误**
+> - 能 **右键跳转** 到头文件 
+ 
+但编辑器仍报 **`fatal error: 'xxxx.h' file not found`**？
+
+像这样：
+<p><CardImg src="/img/Docs/keil/问题描述.jpg" alt="Keil 错误" isCenter={true} /></p>
+这是 **Keil 编辑器的感知系统**（非编译器）找不到头文件所致，**根本原因常是 Include Paths 顺序错误**。
+
+例如项目结构：
+```
+Drivers/
+└── Display/
+├── OLED.h
+└── Fonts/
+└── font.h
+```
+若路径配置为：
+```
+.\Drivers\Display\Fonts ← 子目录在前 ❌
+.\Drivers\Display ← 父目录在后
+```
+编辑器会先查 `Fonts`，找不到 `OLED.h` 就会报错。
+
+✅ **正确顺序**：
+```
+.\Drivers\Display
+.\Drivers\Display\Fonts
+```
+- `.\Drivers\Display` ← 父目录在前 ✅
+
+- `.\Drivers\Display\Fonts` ← 子目录在后
+
+调整后，**关闭并重开源文件**，红色波浪线通常立即消失。
+
+💡 **经验总结**：
+- 编译器不敏感路径顺序，**编辑器敏感**
+- 遵循 **“广路径在前，窄路径在后”**
+- 若仍报错，删除工程目录下的 `.browse` 和 `.idx` 缓存强制重建
+
+---
+
+### FLYMCU烧录Keil生成的hex文件
+部分图片截自江协科技[STM32教程](https://www.bilibili.com/video/BV1th411z7sn?p=30&vd_source=b4214df97d0339f3dd034be3a9fd34d9 "9-6")。此处总结是为忘记时快速上手。
+1. 接线
+<p><CardImg src="/img/Docs/keil/FLYMCU1.jpg" alt="FLYMCU step 1" isCenter={true} /></p>
+2. 使keil生成hex文件
+<p><CardImg src="/img/Docs/keil/FLYMCU2.jpg" alt="FLYMCU step 2" isCenter={true} /></p>
+3. hex文件位置
+<p><CardImg src="/img/Docs/keil/FLYMCU3.jpg" alt="FLYMCU step 3" isCenter={true} /></p>
+4. 修改BOOT0电平
+<p><CardImg src="/img/Docs/keil/FLYMCU4.jpg" alt="FLYMCU step 4" isCenter={true} /></p>
+5. 烧录
+<p><CardImg src="/img/Docs/keil/FLYMCU5.jpg" alt="FLYMCU step 5" isCenter={true} /></p>
+
+---
+
+## 杂记
+>1. 若误删`*.c`中代码无法恢复，用`备份的*.c`直接覆盖原文件后Keil报`Undefined symbol`：
+> * Remove项目中的*.c及对应的*.h
+> * 重新添加文件
+> * 编译即可解决
+
+
+

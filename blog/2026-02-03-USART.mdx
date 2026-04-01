@@ -1,0 +1,385 @@
+---
+slug: USART
+title: 串口通信
+authors: eurekaX
+tags: [串口]
+---
+import { Highlight, Keyword, Light, B1, B2, B3, BH3, B3W, MyColor} from '@site/src/components/ForMDX';
+import CardImg from '@site/src/components/CardImg';
+
+
+### <B2>不同串口收发方式的区别</B2>
+
+本文介绍串口通信相关理解，总结。
+
+{/* truncate */}
+
+## 串口发送的三种方式对比
+
+| **应用场景** | **推荐方案** |
+|----------|----------|
+| 调试打印（如 `printf`） | **阻塞轮询**（简单直接） |
+| 常规协议通信（AT/Modbus/自定义） | ✅ **中断 + 环形缓冲区** |
+| 高速连续流（`>100 KB/s`） | **DMA** |
+
+
+
+### 阻塞轮询
+#### 1. 实现示例（以 USART3 为例）
+```c
+void Usart3_Init(u32 baud) {
+    // 时钟、GPIO、USART 配置（略）
+    USART_InitTypeDef USART_InitStructure = {
+        .USART_BaudRate = baud,
+        .USART_WordLength = USART_WordLength_8b,
+        .USART_StopBits = USART_StopBits_1,
+        .USART_Parity = USART_Parity_No,
+        .USART_Mode = USART_Mode_Tx | USART_Mode_Rx,
+        .USART_HardwareFlowControl = USART_HardwareFlowControl_None
+    };
+    USART_Init(USART3, &USART_InitStructure);
+    USART_Cmd(USART3, ENABLE);
+}
+
+// 最基础的发送函数
+void Serial_SendByte(USART_TypeDef *USARTx, uint8_t Byte) {
+    USART_SendData(USARTx, Byte);
+    while (USART_GetFlagStatus(USARTx, USART_FLAG_TXE) == RESET); // 阻塞等待
+}
+```
+#### 2. 为什么用轮询？——工程权衡
+主动控制：发送由主程序发起，时机明确。
+低频够用：9600 bps 下发送 6 字节仅阻塞约 6ms。
+调试友好：若 printf 卡住，说明程序卡住，便于定位问题。
+> ✅ 适用场景：启动日志、人工交互、偶发调试输出
+
+#### 3. 致命缺陷：死锁风险
+⚠️ 典型死锁场景
+```c
+// 主循环
+while (1) {
+    Serial_SendString("Main loop...\r\n"); // 阻塞发送
+    Delay_ms(100);
+}
+
+// 高优先级定时器中断
+void TIM2_IRQHandler(void) {
+    Serial_SendString("Heartbeat\r\n"); // ❌ 危险！
+}
+```
+<details>
+<summary>阻塞发送中断死锁分析</summary>
+
+🔥 **死锁发生过程**
+
+**步骤 1：主循环开始发送**  
+- `Serial_SendString("Main loop running...\r\n")` 被调用（20+字节）  
+- 逐字节发送，当前发送 `'M'` 字节  
+- UART 硬件忙碌，`TXE = 0`
+
+**步骤 2：高优先级中断抢占**  
+- 定时器中断触发（优先级 > 主循环）  
+- CPU 暂停主循环的 `while(USART_FLAG_TXE == RESET)`  
+- 跳转到 `TIM2_IRQHandler()`
+
+**步骤 3：中断中再次发送**  
+- 中断服务程序调用 `Serial_SendString("Heartbeat\r\n")`（10+字节）  
+- 执行 `Serial_SendByte('H')` 时等待 `TXE` 标志  
+- **死等开始**：UART 仍在处理主循环的剩余数据，`TXE` 保持为 `0`
+
+**步骤 4：死锁形成**  
+- **主循环**：等待剩余 18+ 字节发送完成（被中断抢占无法继续）  
+- **中断**：等待 `TXE=1` 才能发送（主循环数据未完成，`TXE` 不会变 `1`）  
+- **结果**：互相等待，系统永久卡死
+
+🚫 **核心问题**  
+UART 硬件资源竞争：主循环的多字节发送过程被中断打断，中断中又尝试访问同一 UART 资源，造成不可解的死锁。
+
+---
+
+
+| 层级         | 状态                                      |
+|--------------|-------------------------------------------|
+| **主循环**   | 卡在 `while(!TXE)`，等待 UART 空闲        |
+| **TIM2 中断**| 卡在 `while(!TXE)`，也等待 UART 空闲      |
+| **UART 硬件**| 正在发送 `'M'`，完成后会置 `TXE=1`        |
+
+但问题在于：
+- 只有主循环能处理完当前发送（因为它在发 `"Main loop..."` 的后续字节）
+- 但主循环被 TIM2 中断抢占了
+- TIM2 中断又在等同一个 UART 资源  
+→ **资源竞争 + 优先级反转 = 死锁**
+
+</details>
+
+---
+
+#### 如何安全使用阻塞式串口发送？
+
+
+虽然 `Serial_SendByte()` 是阻塞轮询实现，但只要遵守以下 **三条简单规则**，就能在大多数场景中安全使用：
+
+
+#### ✅ 安全使用原则
+
+**1. 仅在主循环（或低优先级任务）中调用**
+- ❌ 禁止在任何中断服务程序（ISR）中调用 `Serial_SendXXX`
+- ✅ 只在 `main()` 的 `while(1)` 或 FreeRTOS 任务中使用
+
+> **原因**：避免中断嵌套死锁（见死锁分析）
+
+
+**2. 控制发送频率和数据量**
+- 单次发送 ≤ 20 字节（9600bps 下 ≈ 20ms 阻塞）
+- 发送间隔 ≥ 50ms
+
+**3. 绝不用于协议通信或高频日志**
+* ❌ 不要用它发送 AT 指令、Modbus 帧等协议数据
+* ❌ 不要在高速采样循环中打印（如 for(i=0;`i<1000`;i++) printf(...)）
+* ✅ 仅用于：启动信息、人工交互、偶发调试
+> 原因：协议通信需要可靠、非阻塞的发送机制
+
+| ✅ 适用场景 | ❌ 不适用场景 |
+|-----------|--------------|
+| 调试打印（`printf`） | 协议通信（AT/Modbus/NMEA） |
+| 启动阶段状态输出 | 高频数据上报（>10Hz） |
+| 交互式命令行（人工输入） | 多任务/RTOS 环境 |
+| 学习 UART 基础原理 | 产品级稳定通信 |
+
+### 参考代码
+- **[Serial_V1.c](https://github.com/EurekaShadow/wheels/blob/main/Hardware/Serial_V1.c)**  
+  👉 基于中断的简易串口驱动：发送采用阻塞式轮询，接收通过全局变量+标志位实现单字节回显，适用于简单调试场景。
+
+---
+
+### 中断 + 环形缓冲区
+
+#### 1. 工作原理（比喻）
+> **你 = 主程序，邮局 = 串口，邮箱 = 环形缓冲区**
+* ❌ 轮询：你亲手交信，站在邮局等寄出 → 阻塞
+* ✅ 中断+缓冲区：你把信扔进邮箱就走，邮递员（中断）自动取信寄出 → 非阻塞
+#### 2. 代码实现
+**(1) 缓冲区定义**
+```c
+#define TX_BUF_SIZE 128
+static uint8_t tx_buffer[TX_BUF_SIZE];
+static cbuf_handle_t tx_cbuf;
+static volatile bool tx_sending = false;
+```
+**(2) 主程序“扔信”**
+```c
+int Serial_SendByte(USART_TypeDef *USARTx, uint8_t Byte) {
+    __disable_irq();
+    int ret = circular_buf_put(tx_cbuf, Byte);
+    __enable_irq();
+
+    if (ret == 0 && !tx_sending) {
+        tx_sending = true;
+        USART_ITConfig(USARTx, USART_IT_TXE, ENABLE); // 唤醒中断
+    }
+    return ret; // 0=成功，非0=缓冲区满
+}
+```
+> **✅ 立即返回，不阻塞主程序**
+
+**(3) 中断“邮递员工作”**
+```c
+void USART3_IRQHandler(void) {
+    if (USART_GetITStatus(USART3, USART_IT_TXE)) {
+        uint8_t data;
+        if (circular_buf_get(tx_cbuf, &data) == 0) {
+            USART_SendData(USART3, data); // 发送1字节
+        } else {
+            tx_sending = false;
+            USART_ITConfig(USART3, USART_IT_TXE, DISABLE); // 关中断
+        }
+        USART_ClearITPendingBit(USART3, USART_IT_TXE);
+    }
+}
+```
+#### 3. 整体流程图（以发送 "Hello" 为例）
+```
+主程序：                     中断（后台）：
+                             ┌───────────────┐
+Serial_SendString("Hello")   │               │
+  ↓                          │               │
+H 入缓冲区                    │               │
+e 入缓冲区                    │               │
+l 入缓冲区                    │               │
+l 入缓冲区                    │               │
+o 入缓冲区                    │               │
+→ 立即返回！                  │               │
+                             │               │
+                             │ 检测到缓冲区非空 → 开启 TXE 中断
+                             │               │
+                             │ ← 中断触发     │
+                             │ 取出 'H' → 发送│
+                             │ ← 中断触发     │
+                             │ 取出 'e' → 发送│
+                             │ ← 中断触发     │
+                             │ 取出 'l' → 发送│
+                             │ ← 中断触发     │
+                             │ 取出 'l' → 发送│
+                             │ ← 中断触发     │
+                             │ 取出 'o' → 发送│
+                             │ 缓冲区空 → 关闭 TXE 中断│
+                             └───────────────┘
+```
+
+#### 4. 优势总结
+| 优点 | 说明 |
+|------|------|
+| 非阻塞 | 主程序调用后立即继续执行 |
+| 高吞吐 | 中断自动连续发送，CPU 利用率高 |
+| 防崩溃 | 缓冲区满时丢弃数据，而非死锁 |
+| 低耦合 | 业务逻辑与通信逻辑分离 |
+
+
+#### 5. 注意事项
+
+- **邮箱太小（缓冲区小）**：信太多会塞不下 → 后面的信丢掉  
+- **你扔信太快**：邮递员还没清空邮箱，你就又塞满 → 新信进不来  
+- **但系统不会死**：只是丢信（数据），程序继续跑  
+
+> 这就是突发长字符 `big_msg` 可能被截断的原因 —— 不是中断坏了，是邮箱满了！
+
+#### 💡 小结
+
+> * 环形缓冲区是“临时仓库”，串口中断是“搬运工”。  
+> * 主程序只管往仓库放货，搬运工自动把货发出去。  
+> * 两者配合，实现高效、不卡顿的串口发送。
+
+### 参考代码
+- **[Serial_V2.c](https://github.com/EurekaShadow/wheels/blob/main/Hardware/Serial_V2.c)**  
+  👉 基于环形缓冲区 + 中断的非阻塞串口驱动，支持多 USART 并实现 printf 重定向。
+
+<details>
+<summary>测试“**轶事**”</summary>
+
+在测试中断+环形缓冲区时，我写了这样一段突发大数据测试代码（节选）：
+```c
+if (count % 10 == 0) {
+    char big_msg[150];
+    snprintf(big_msg, sizeof(big_msg), 
+        ">>> Burst test: sending %d bytes of data... [", TX_BUF_SIZE - 10);
+    for (int i = 0; i < TX_BUF_SIZE - 50; i++) {
+        big_msg[48 + i] = 'A' + (i % 26); // ← 看似合理？
+    }
+    strcpy(big_msg + 48 + (TX_BUF_SIZE - 50), "]\r\n");
+    Serial_SendString(USART3, big_msg);
+}
+```
+> `%d`为什么对应的是`TX_BUF_SIZE - 10`？这是测试前期**硬编码的**大概需要发送的字节总数，不准确，无实际意义，后续已经修正。
+
+**预期行为**：
+由于缓冲区有限，`big_msg` 会被截断，输出类似：
+```
+Count: 29
+>>> Burst test: ... [ABC...（后面截断）
+Count: 30
+```
+即使 `]\r\n` 丢了、下一行日志紧贴着显示，也属正常——毕竟数据太多，缓冲区满了。
+
+**但实际输出却是**：
+```
+Count: 29
+>>> Burst test: sending 118 bytes of data... [Raw array: 012345
+Count: 30
+```
+`ABC...`**完全消失了**！字母那部分字符直接被莫名截断了？哪里？缓冲满而截断的？缓冲区再满，也不该把中间一大段直接吞掉吧？后来我修改了测试，试着在前缀末尾加了几个 `e`：
+```c
+snprintf(..., "... [eee", ...);       
+```
+输出变成了：（这是正常截断，是符合预期的）
+```
+Count: 29
+>>> Burst test: sending 118 bytes of data... [eeABC...
+Count: 30
+```
+
+刚开始我还没发觉什么问题，问AI，为什么加了`eee`就正常截断了？
+之前的字母没有ABC字母输出？它说我**观察偏差**，真是坑爹又气人。
+
+结果后来自己发现，问题是出现在：
+```
+  
+  for (int i = 0; i < TX_BUF_SIZE - 50; i++) {
+    // highlight-error-line
+    big_msg[48 + i] = 'A' + (i % 26); 
+  }
+```
+
+这里`48`这个索引位置计算不对，通过 OLED 打印 `strlen(big_msg)`，我发现前缀实际长度是 **46**，也就是说索引 `46` 是 `\0`。
+
+而我的循环却从 **`48` 开始写**，跳过了 `\0` 和位置 `47`（随机垃圾值）。
+于是 `Serial_SendString` 在遍历时，一遇到 `46` 处的 `\0` 就提前结束了——后面的 `ABC...` 根本没机会入队！
+
+**最最最关键的是**：48这个值是AI给出的，它甚至怀疑我`观察偏差`都愿意想相信它硬推演的这个错误的48值。😅
+
+这次教训深刻：
+> **AI 的逻辑推理可以参考，但涉及具体数值、地址、偏移量等计算，必须自己验证**！
+硬编码数字是魔鬼，动态计算（比如用 `strlen`）才是王道。
+
+不过，万幸的是——我的环形缓冲区本身没问题，它忠实地执行了“收到啥就发啥”。
+这一点，倒是让我松了口气 🥱。
+</details>
+
+<details>
+<summary>环形缓冲区截断真相🧐</summary>
+
+初学者可能认为：“缓冲区大小为 128，可用 127 字节 → 发 128 字节必丢”。  
+**这是对环形缓冲区最大的误解。**
+
+在串口通信中，**是否丢数据，取决于“生产速度”与“消费速度”的实时博弈**，而非静态容量。
+
+#### 🔄 动态行为示例
+- **129 字节的消息可能完整发送**  
+  → 因为主程序写入时，USART 中断正在后台逐字节发送，**动态腾出了空间**。
+- **80 字节的短消息也可能被丢弃**  
+  → 若缓冲区已满（如前一次突发未发完），且中断被高优先级任务阻塞。
+
+> ✅ **关键结论**：  
+> - 即使消息 > 127 字节，若消费及时，仍可完整入队。  
+> - 即使消息 < 127 字节，若缓冲区已满且消费停滞，也会截断。
+
+#### ⚙️ 工程实践建议
+
+#### 1. 发送函数必须逐字节入队
+```c
+   // ✅ 正确：边发边试，利用动态腾空
+   while (*str) {
+       if (!circular_buf_put(cbuf, *str)) break;
+       str++;
+   }
+```
+
+❌ 避免一次性检查 `strlen(str) <= free_space` —— 会错失动态腾空机会。
+
+#### 2. 缓冲区大小 = 最大突发量 − (突发时间 × 波特率吞吐)
+例：最大突发 200 B，115200 bps（≈11.5 KB/s），持续 10 ms →
+所需缓冲区 ≥ 200 − 115 = 85 字节。
+#### 3. 控制长期平均速率 ≤ 串口吞吐
+瞬时突发可靠缓冲区吸收，但持续超速必丢数据。
+#### 4. 主动测试边界
+用 `+2` / `+3` 字节测试极限（如 129B vs 130B），验证系统鲁棒性。
+#### 💡 小结
+> **环形缓冲区不是“固定水桶”，而是“动态流水线”**。
+它的价值不在于“能存多少”，而在于“**平滑突发、解耦速率**”。
+
+下次看到“缓冲区大小 128”，请记住：
+**在中断的节奏中，129 也可能安然通过**。
+
+</details>
+
+---
+
+下面内容不定期更新吧，现在没时间没精力。🥱
+
+### DMA
+
+## 接收
+
+## 总结
+
+
+

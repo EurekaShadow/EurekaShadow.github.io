@@ -1,0 +1,130 @@
+---
+slug: quick-notes
+title: 技术速记卡
+authors: eurekaX
+tags: [速记,调试,嵌入式,C语言]
+---
+
+import { QuickNoteCard, NoteSectionTitle } from '@site/src/components/ForMDX';
+
+> 💡 本页用于存放 **极简技术记录**：每个条目仅用 1–3 行说明问题现象、根因与解法，不求完整，但求可检索、可复用。  
+> 目标：未来遇到同类问题时，30 秒内唤醒记忆。
+
+{/* truncate */}
+
+### <NoteSectionTitle variant="default" id="stm32-闭环 - 双轮小车电机高速飞车震荡">[STM32 闭环] 双轮小车电机高速飞车/震荡</NoteSectionTitle>
+<QuickNoteCard 
+  phenomenon="开环运行平稳，开启速度闭环后电机瞬间饱和、高速乱转或剧烈震荡"
+  cause="双电机镜像安装导致物理旋转方向相反，编码器计数一正一负；若未统一逻辑极性，系统形成正反馈（误差越大输出越大）"
+  solution="软件中将对侧编码器读数取反（encoder_B = -encoder_B）或硬件交换该路编码器 A/B 相线，确保同向运动时反馈符号一致"
+  tags={['#PID 失控', '#正反馈', '#编码器', '#TB6612', '#平衡小车']}
+/>
+
+### <NoteSectionTitle variant="default">[旋转编码器] 模块按键功能缺失与引脚误导</NoteSectionTitle>
+<QuickNoteCard 
+  phenomenon="模块虽有 5 个引脚（A, B, C, VCC, GND），但 C 脚始终接地，无按键功能；且 VCC/GND位置与元件SW/GND物理位置对应，极易误导用户以为电源脚即按键脚"
+  cause='商家为降低成本或区分产品线，使用了带开关的 EC11 元件却未在 PCB 上引出 SW 信号（右侧电路悬空）；同时引脚命名不规范（用 C 代表公共地而非 K/SW 代表按键），造成视觉与逻辑双重误导'
+  solution='购买时认准丝印含"SW/KEY"且背面元件焊盘为 5 脚的模块（如 KY-040）；或用万用表实测按下旋钮时是否有引脚对地导通；自建原理图时明确分离旋转信号（A/B）与按键信号（SW）'
+  tags={['#硬件避坑', '#旋转编码器', '#EC11', '#STM32 外设']}
+/>
+### <NoteSectionTitle variant="default">[编码器读取] 清零 vs 差分模式选择</NoteSectionTitle>
+<QuickNoteCard 
+  phenomenon="使用 TIM_SetCounter(0) 读编码器看似简单，但无法实现位置控制或应对非固定周期采样"
+  cause="主动清零丢弃了累计位置（历史信息），仅保留瞬时增量；而定时器溢出本身不会丢失数据，正确差分可自动处理回绕"
+  solution="采用历史保留模式——不重置硬件计数器，用静态变量记录上次值，通过 (int16_t)(current - last) 获取带符号增量，既得 Δcount 又可重建绝对位置"
+  tags={['#编码器', '#STM32', '#嵌入式控制', '#位置控制', '#防溢出']}
+/>
+
+### <NoteSectionTitle variant="default">[编码器语义] 增量即速度说法的正确理解</NoteSectionTitle>
+<QuickNoteCard 
+  phenomenon='常听到"定时读取的编码器增量表示速度，累加后表示位置"，看似合理但易混淆物理概念'
+  cause='在固定采样周期 T下，增量 Δθ ∝ 速度（因 v = Δθ/T，T 为常数），故 Δθ 可直接用于速度反馈；而位置确实是 Δθ 的累加（积分）。但 Δθ 本质是脉冲计数，不是速度本身'
+  solution='将该说法视为工程近似——适用于固定周期的控制场景；若需真实转速、非固定周期或高精度应用，必须显式计算 v = Δθ / T。位置累加始终有效，前提是 Δθ 为真实增量'
+  tags={['#编码器', '#运动控制', '#嵌入式', '#PID', '#信号处理']}
+/>
+
+### <NoteSectionTitle variant="default" id="编码器测速 - 读取频率过高反而降低速度测量精度">[编码器测速] 读取频率过高反而降低速度测量精度</NoteSectionTitle>
+<QuickNoteCard 
+  phenomenon="在定时器中断中高频读取编码器增量（如 1ms 周期），低速时速度值剧烈跳变（0 与极大值交替），控制不稳定"
+  cause='采用 M 法（固定时间测速）时，采样周期越短，捕获的脉冲数越少；当脉冲数接近 0 或 1 时，±1 量化误差导致相对误差极大，形成"量化噪声"，并非电气干扰'
+  solution="根据目标转速合理选择采样周期——低速用较长周期（10~100ms）提升信噪比，高速可用短周期（1~5ms）；或改用 T 法（测脉冲间隔）、M/T 混合法，或对速度结果加低通滤波"
+  tags={['#编码器', '#测速', '#嵌入式控制', '#运动控制', '#信号处理']}
+/>
+
+
+### <NoteSectionTitle variant="default">[OLED 滚动卡顿] 长字符串后半段滚动卡顿</NoteSectionTitle>
+<QuickNoteCard 
+  phenomenon="菜单中长文本前半段滚动流畅，后半段（大量字符位于屏幕左侧外）明显卡顿"
+  cause="旧版 OLED_ShowImage 未实现区域裁剪功能，即使字符的 X 坐标为负值，仍会遍历整个字符串并执行边界判断，导致大量无效的 CPU 循环；而新版 OLED_ShowImageArea 通过计算图像与显示区域的交集，仅处理可见范围内的像素，有效避免了空转"
+  solution="采用支持区域裁剪的 OLED_ShowMixStringArea 或 OLED_PrintfMixArea 函数，确保底层绘图逻辑仅渲染 [0, OLED_WIDTH) 范围内的内容，从而提升滚动性能"
+  tags={['#嵌入式优化', '#OLED 驱动', '#UI 性能', '#区域裁剪']}
+/>
+
+### <NoteSectionTitle variant="default">[执行时序] 主循环阻塞导致控制失效</NoteSectionTitle>
+<QuickNoteCard 
+  phenomenon='代码逻辑设定为 5ms 执行一次控制，但实际小车反应迟钝、震荡剧烈，盲目增大 Kp 后电机"暴躁"乱转，最终导致 STM32 板子烧毁'
+  cause="控制函数被放置在 while(1) 主循环中，与耗时 30ms+ 的 UI 刷新串行执行。实际控制周期被拉长至~35-40ms（而非预期的 5ms）。巨大的相位滞后使得 PID 调节严重滞后，增大 Kp 反而引发高频自激振荡；同时保护逻辑同样被阻塞，无法在毫秒级切断大电流，导致硬件过流/过压损坏"
+  solution="将核心控制逻辑（传感器读取、滤波、PID 计算、电机输出）移入**定时器中断**（如 5ms 中断），确保硬实时任务不受主循环慢任务（UI、通信）阻塞；主循环仅处理非实时任务"
+  tags={['#实时系统', '#PID 调试', '#硬件保护', '#中断架构']}
+/>
+
+### <NoteSectionTitle variant="default">[速度环/编码器] 主循环与中断混用导致测速锯齿波</NoteSectionTitle>
+<QuickNoteCard 
+  phenomenon="速度反馈值呈现周期性锯齿波（如从正常值线性跌落至接近 0，随后瞬间跳回正常），导致 PID 输出异常波动，电机控制不稳"
+  cause={<>1. <strong>共享状态冲突</strong>：Hall_Encoder_Get 函数内部使用 static 变量记录"上次计数值"，该状态被<strong>定时器中断</strong>（高频、准时）和<strong>主循环任务</strong>（低频、受 UI 阻塞影响而抖动）共同修改<br/>2. <strong>时间窗口被侵蚀</strong>：主循环因 UI 刷新耗时过长，其调用时刻相对于中断不断滞后。主循环的读取操作意外更新了"上次计数值"，导致中断在下一次计算速度时，测量的<strong>时间间隔（Δt）被大幅压缩</strong>（从预期的 40ms 变为几毫秒）<br/>3. <strong>计算失真</strong>：由于脉冲增量对应的时间变短，而换算系数固定，导致计算出的速度值线性下跌；当时序错位积累到一定程度重新对齐时，速度值瞬间跳回</>}
+  solution={<>1. <strong>独占访问（已实施）</strong>：严禁在主循环中调用 Hall_Encoder_Get。编码器测速逻辑必须<strong>仅由定时器中断独占调用</strong>，确保"上次计数值"的更新节奏严格一致<br/>2. <strong>架构优化</strong>：将 UI 刷新等耗时操作改为非阻塞式（分时切片）或降低刷新频率，避免主循环长时间阻塞影响其他软实时任务的调度时序</>}
+  tags={['#嵌入式开发', '#编码器测速', '#中断冲突', '#静态变量陷阱', '#实时系统']}
+/>
+
+### <NoteSectionTitle variant="default">[vsprintf] Newlib-Nano 下不支持浮点格式化</NoteSectionTitle>
+<QuickNoteCard 
+  title=""
+  phenomenon='OLED 显示 "T_Kp:" 后无数值，串口输出 Serial_Printf: Value = 后无浮点数值'
+  cause="Newlib-Nano 的 vsnprintf/vsprintf 调用_vsyfmt_r 函数（只有整数版本），库中根本不存在_vsyfmt_f 浮点版本函数。即使添加-Wl,-u,_printf_float 链接标志也无效，因为该标志只强制链接 printf 相关的_printf_f，不影响 vsprintf 系列的_vsyfmt_r 实现路径。符号表验证显示：只有_vsyfmt_r（08002678 T），没有_vsyfmt_f"
+  solution="采用手动格式化方案 - 将浮点数拆分为整数部分 + 小数部分，使用 snprintf 拼接。优点：100% 可靠、Flash 仅增加 ~200B、执行速度快 3-5 倍；缺点：代码稍繁琐，需要处理负数和精度"
+  tags={['#Newlib-Nano', '#vsprintf', '#浮点格式化', '#嵌入式限制']}
+/>
+
+### <NoteSectionTitle variant="default">[printf] PlatformIO + CMSIS 重定向失败与救援</NoteSectionTitle>
+<QuickNoteCard 
+  phenomenon="初始时 printf 完全无输出（连整数都没有），串口助手收不到任何 printf 内容"
+  cause="PlatformIO (GCC + Newlib) 环境下，printf 底层调用_write() 系统调用而非 fputc()。Keil MDK 使用 ARM C Library/MicroLib 调用 fputc()，但 GCC 的 Newlib 使用_write()。最初实现了 fputc() 但未被调用，导致 printf 无法输出。添加-Wl,-u,fputc 链接标志试图强制链接也失败，因为 Newlib 优先使用内部的__sfputc_r"
+  solution='在 usart.c 中添加_write() 函数实现批量发送。实现后整数 printf 成功输出（"Value = 42"），但浮点仍失败（"Value = "）因为 Newlib-Nano 没有_printf_f 函数。最终状态："活了，但没完全活" - 整数 OK，浮点无解'
+  tags={['#printf', '#重定向', '#_write', '#PlatformIO', '#CMSIS']}
+/>
+
+### <NoteSectionTitle variant="default">[手动格式化] 浮点数显示的可靠替代方案</NoteSectionTitle>
+<QuickNoteCard 
+  phenomenon="在 vsprintf/printf 都无法格式化浮点数的情况下，需要一种不依赖 C 标准库的解决方案"
+  cause="Newlib-Nano 为优化体积（节省约 40% Flash）移除了浮点格式化代码。完整 Newlib 需要额外 8-10KB Flash 和 1.4KB RAM，对于 64KB Flash 的 STM32F103C8T6 代价过高（占 12.5-15.6%）"
+  solution={<>在 menu.c 中实现手动格式化：<br/><code style={{ fontSize: '0.85rem', backgroundColor: 'var(--ifm-pre-background)', padding: '0.5rem', borderRadius: '4px', display: 'block', margin: '0.5rem 0' }}>{`float value = *item->float_Value;
+int integer_part = (int)value;
+int decimal_part = (int)((value - integer_part) * 1000 + 0.5f);
+if (decimal_part < 0) decimal_part = -decimal_part;
+snprintf(buffer, sizeof(buffer), "%s%d.%03d", prefix, integer_part, decimal_part);`}</code><br/><strong>优点</strong>：100% 可靠、资源占用极低（~200 Bytes Flash）、性能优秀、可移植性强<br/><strong>缺点</strong>：需要手动处理精度缩放、四舍五入及负号逻辑</>}
+  tags={['#手动格式化', '#浮点数显示', '#实用主义', '#资源优化']}
+/>
+
+### <NoteSectionTitle variant="default">[配置清理] platformio.ini 无效链接标志移除</NoteSectionTitle>
+<QuickNoteCard 
+  phenomenon="配置文件中包含多个尝试启用浮点支持的链接标志，但实验证明全部无效，且造成配置冗余"
+  cause={<>基于错误的技术假设：认为通过链接标志可以"启用"浮点支持。<br/><strong>事实</strong>：Newlib-Nano 在<strong>编译阶段</strong>就彻底剔除了浮点格式化代码<br/><strong>机制</strong>：链接标志-u _printf_float 的作用是"强制链接<strong>已有</strong>符号"，而非"生成新符号"<br/><strong>比喻</strong>：就像拿着购物清单去一家<strong>空超市</strong>，无论你怎么强调要买苹果，店里没有就是没有</>}
+  solution="删除以下无效配置（共 9 行），保持配置文件简洁：-Wl,-u,_printf_float、-Wl,-u,fputc、-Wl,-u,vfprintf、--specs=nano.specs 等无效配置"
+  tags={['#配置清理', '#去冗余', '#Newlib-Nano', '#实用主义']}
+/>
+
+### <NoteSectionTitle variant="default">[技术对比] Keil MDK vs PlatformIO 浮点支持机制</NoteSectionTitle>
+<QuickNoteCard 
+  phenomenon="同一份代码在 Keil MDK 中可以正常显示浮点数，而在 PlatformIO (GCC) 中失败（通常显示 0.00、乱码或直接忽略小数部分）"
+  cause={<>两者使用完全不同的 C 标准库和底层实现机制：<br/><strong>Keil MDK</strong>：ARM C Library / MicroLib，默认包含完整浮点支持<br/><strong>PlatformIO</strong>：GCC + Newlib-Nano，为优化体积极简了浮点代码<br/><strong>核心差异</strong>：Newlib-Nano 在编译阶段就剔除了浮点格式化代码，链接标志无法无中生有</>}
+  solution={<><strong>最佳实践</strong>：<br/>1. 底层输出：正确实现_write() 用于串口/日志重定向<br/>2. 浮点显示：放弃对标准库 printf/vsprintf 原生浮点功能的执念<br/>3. 替代方案：手动定点数格式化（推荐）或引入轻量级专用库（如 tfp_printf）</>}
+  tags={['#Keil', '#PlatformIO', '#技术对比', '#C 标准库']}
+/>
+
+### <NoteSectionTitle variant="default">[Git 分支] 误删实验分支后的紧急救援</NoteSectionTitle>
+<QuickNoteCard 
+  phenomenon='删除实验分支 experiment/vsprintf-float-test 后，发现 dev 分支缺少关键修改（_write() 函数、清理后的 platformio.ini、测试文件），意识到删除前未合并分支，担心所有实验成果丢失'
+  cause='Git 分支删除只是删除了"分支指针"（引用），不是删除"提交对象"。提交到 Git 对象数据库的内容会永久保存（直到执行 git gc 垃圾回收）。Reflog（引用日志）记录了所有 HEAD 移动操作，包括已删除分支的提交历史（默认保留 90 天）。关键提交 6c88c1b 虽然在分支删除后变成"悬空提交"，但仍然可以通过哈希值或 reflog 访问'
+  solution="使用提交哈希从已删除分支恢复文件：git show 6c88c1b:path/to/file > path/to/file 或 git checkout 6c88c1b -- path/to/file"
+  tags={['#Git', '#分支管理', '#数据恢复', '#Reflog']}
+/>

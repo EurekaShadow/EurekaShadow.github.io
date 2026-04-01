@@ -15,18 +15,41 @@ function HomepageHeader() {
   return (
     <header className={clsx('hero hero--primary', styles.heroBanner)}>
       <div className="container">
+        {/* 宇宙飞船舷窗效果 - 多层星空背景（黑夜模式） */}
+        <div className={styles.starlayerMid}></div>
+        <div className={styles.starlayerFast}></div>
+        <div className={styles.brightStars}>  {/* 亮星闪烁层（含主星和环绕星）*/}
+          <div className={styles.starPink}></div>  {/* 粉色星独立层 */}
+        </div>
+        <div className={styles.cosmicDust}></div>
+        
+        {/* 浮动装饰物已移除 */}
+        
         <Heading as="h1" className="hero__title">
-          <Translate id="homepage.hero.title">我的网站</Translate>
+          <Translate id="homepage.hero.title">航行日志 · 技术星图</Translate>
         </Heading>
-        <p className="hero__subtitle">
-          <Translate id="homepage.hero.tagline">这是我的个人网站</Translate>
+        
+        {/* 副标题增加打字机效果 */}
+        <p className={clsx("hero__subtitle", styles.typewriter)}>
+          <Translate id="homepage.hero.tagline">
+            记录我在数字宇宙中的探索轨迹
+          </Translate>
         </p>
+        
+        {/* 多个 CTA 按钮 */}
         <div className={styles.buttons}>
           <Link
-            className="button button--secondary button--lg"
+            className="button button--primary button--lg"
             to="/docs/reflection-space">
-            <Translate id="homepage.hero.button" description="首页按钮文本">
-              回想空间 🌸
+            <Translate id="homepage.hero.button.reflection" description="首页按钮 - 回想空间">
+              🌸 回想空间
+            </Translate>
+          </Link>
+          <Link
+            className="button button--secondary button--lg"
+            to="/blog">
+            <Translate id="homepage.hero.button.blog" description="首页按钮 - 最新博客">
+              📝 最新博客
             </Translate>
           </Link>
         </div>

@@ -1,0 +1,175 @@
+---
+slug: onenet
+title: OneNET相关
+authors: eurekaX
+tags: [OneNET]
+---
+import { Highlight, Keyword, Light, B1, B2, B3, BH3, B3W, MyColor} from '@site/src/components/ForMDX';
+import CardImg from '@site/src/components/CardImg';
+
+
+### <B2>OneNET杂记</B2>
+
+{/* truncate */}
+
+最近尝试复盘之前使用了MQTT的项目，打算重走一遍设备到OneNet平台的连接。OneNet平台已经有较为详细的文档了，再次只列出在观看官方文档中，遇到的疑惑。
+因此最好的方法是结合[官方文档](https://iot.10086.cn/doc/aiot/fuse/detail/922)一起看。
+
+由于现在的我也只是一知半解，所以这篇博客的初稿肯定不怎么样，有了进一步理解后会进行完善的。
+
+下面主要讲设备连接onenet平台时，遇到的可能疑惑。
+
+Broker地址和端口在[这里](https://iot.10086.cn/doc/aiot/fuse/detail/919)查看。
+
+两个图片：
+
+
+连接成功后，就需要订阅主题
+```text
+$sys/{pid}/{device-name}/thing/property/post/reply
+```
+以**产品ID**为 `666666`，**设备名称**为`d1`时为例，那么这个需要订阅的主题为：
+
+```text
+$sys/666666/d1/thing/property/post/reply
+```
+这是为了设备能够接收来自平台的回复，告诉本地数据是发送失败了还是成功了。总之在如果想要设备发送数据给平台成功，那么需要先订阅这个主题。
+:::danger[注意]
+
+粘贴替换的时候要去掉 `{`、`}`
+
+:::
+
+之后就可以上传数据到平台了。
+```
+$sys/{pid}/{device-name}/thing/property/post
+```
+JSON格式是：
+```json
+{
+	"id": "123",
+	"version": "1.0",
+	"params": {
+		"temp": {
+			"value": 66
+		},
+		"humi": {
+			"value": 24
+		},
+		"reset": {
+			"value": true
+		}		
+	}
+}
+```
+
+
+而要想设备能够收到来自平台的数据，那么就需要订阅这个主题。
+```text
+$sys/{pid}/{device-name}/thing/property/set
+```
+
+设备端利用这个
+```
+$sys/{pid}/{device-name}/thing/property/set_reply
+```
+来回复平台已经收到数据。
+
+JSON格式是：
+```json
+{
+	"id": "2",
+	"code": 200,
+	"msg": "success"
+}
+```
+需要进行修改的就是`id`字段。平台下发数据的时候，会返回一个`id`字段，这个字段需要和发送数据时保持一致。其他的不用修改。
+
+### 事件上报
+订阅主题：
+```text
+$sys/{pid}/{device-name}/thing/event/post/reply
+```
+设备上报事件给平台，如果成功，会让你知道。
+
+上报先：
+```text
+$sys/{pid}/{device-name}/thing/event/post
+```
+JSON格式是：
+```json
+{
+	"id": "123",
+	"version": "1.0",
+	"params": {
+		"switch1": {
+			"value": {
+				"led1": 66,
+				"led2": 66
+			}
+		}
+	}
+}
+```
+
+### 🧩 属性？事件？服务？
+
+| 你的需求 | 该用哪种？ | 为什么？ |
+|----------|------------|----------|
+| 每 10 秒上报一次温度 | 属性 | 状态持续变化，需平台监控 |
+| 温度超过 50℃ 时通知平台 | 事件 | 异常情况，需告警而非持续上报 |
+| 平台想远程打开设备开关 | 属性（可写） | 开关是状态，可读可写 |
+| 平台想让设备立即重启 | 服务 | 是一个“动作”，需要确认是否执行成功 |
+| 记录用户每次按键操作 | 事件 | 操作是一次性行为，不是状态 |
+| 设备上报当前固件版本 | 属性 | 版本是静态状态，可被平台读取 |
+| 平台下发 OTA 升级指令 | 服务 | 需要设备返回“开始下载”或“失败原因” |
+
+---
+
+### Token 生产软件说明
+<p><CardImg src="/img/Blog/onenet_connect_1.jpg" alt="Token软件说明1" isCenter={true} /></p>
+<p><CardImg src="/img/Blog/onenet_connect_2.jpg" alt="Token软件说明2" isCenter={true} /></p>
+
+### ⚠️ 四、常见误区
+
+| 误区 | 正确做法 |
+|------|----------|
+| 用“事件”上报温度 | ❌ → 应用“属性” |
+| 用“属性”上报“门被打开” | ❌ → 应用“事件”（因为这是瞬时行为） |
+| 服务调用后不回复 | ❌ → 必须回复 `_reply`，否则平台认为超时失败 |
+| 属性设置后不更新本地状态 | ❌ → 收到 `property/set` 后，必须执行并更新自身状态 |
+
+---
+
+### ✅ 五、OneNET 控制台操作提示
+
+- **定义物模型时**：
+  - **属性** → 选“属性”，勾选“可读”、“可写”；
+  - **事件** → 选“事件”，设置“事件类型”（info/warning/error）；
+  - **服务** → 选“服务”，定义输入/输出参数。
+- **发布物模型后**，设备才能按对应 Topic 通信。
+- **规则引擎**可基于事件或属性变化触发自动化（如：当 `temp > 50` → 发短信）。
+
+---
+
+### ❤️ 总结
+
+> **属性 = 状态（What is）**  
+> **事件 = 通知（Something happened）**  
+> **服务 = 命令（Do this and tell me）**
+
+合理使用这三者，你的设备将：
+- 与平台高效通信；
+- 支持远程控制 + 告警 + 监控完整闭环；
+- 符合 OneNET AIoT 平台最佳实践，便于后续接入规则引擎、大屏、APP等上层应用。
+
+
+
+
+
+
+
+
+
+
+

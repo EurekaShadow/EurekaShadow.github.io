@@ -1,0 +1,154 @@
+---
+slug: avoid-circular-dependencies-in-embedded
+title: 如何避免循环依赖
+authors: eurekaX
+tags: [C语言]
+---
+import { Highlight, Keyword, Light, B1, B2, B3, BH3, B3W, MyColor} from '@site/src/components/ForMDX';
+import CardImg from '@site/src/components/CardImg';
+
+### <B2>嵌入式 C 开发中的头文件循环依赖</B2>
+
+在嵌入式软件开发中，随着模块增多，头文件之间的依赖关系逐渐复杂。一个常见却容易被忽视的问题是 **头文件循环依赖（Circular Dependency）** —— 它不仅导致编译失败，更暴露了架构设计的缺陷。本文将深入剖析其成因，并提供一套可落地的最佳实践方案。
+
+{/* truncate */}
+
+## 一、什么是头文件循环依赖？
+
+当两个或多个头文件相互包含，形成闭环时，即构成循环依赖：
+
+```c
+// a.h
+#include "b.h"
+typedef struct { B b; } A;
+
+// b.h
+#include "a.h"
+typedef struct { A a; } B;
+```
+由于 C 语言的预处理器按顺序展开头文件，编译器在解析 A 时需要知道 B 的完整内存布局，而 B 又依赖 A，导致 “类型未定义” 错误。  
+💡 注意：指针类型的互相引用是允许的（可通过前向声明解决），但值类型嵌套（结构体直接包含另一个结构体）在物理上不可能，必然失败。
+
+## 二、为什么会出现循环依赖？
+
+### 常见原因：
+- **过度包含**：在 `.h` 中无条件 `#include` 仅在 `.c` 实现中才需要的头文件。
+- **职责混淆**：将业务逻辑（如全局状态更新）暴露在驱动接口头文件中。
+- **架构耦合**：模块间直接依赖对方的数据结构，而非通过抽象接口通信。
+
+### 典型错误场景：
+- 在 `pms7003_drv.h` 中 `#include "sensors_data.h"`
+- 而 `sensors_data.h` 又 `#include "pms7003_drv.h"` 以使用 `PM_SensorData`
+- 结果：`PM_SensorData` 尚未定义，`sensors_data.h` 却已尝试使用它 → 编译失败
+
+## 三、如何识别循环依赖？
+
+- **编译报错**：`error: identifier 'XXX' is undefined`
+- **预处理分析**：使用 `gcc -E file.c` 查看宏展开后的代码顺序
+- **工具辅助**：`include-what-you-use` (IWYU)、Doxygen 生成依赖图
+
+## 四、避免循环依赖的五大最佳实践
+
+#### ✅ 1. 头文件只包含“必需”的依赖
+
+**原则**：`.h` 文件应仅包含编译该头文件本身所必需的内容。
+
+#### ❌ 错误示例：
+```c
+// sensor_drv.h
+#include "cloud_handler.h"  // 仅在 .c 中调用上传函数，不应出现在 .h
+void Sensor_Read(void);
+```
+
+#### ✅ 正确做法：
+```c
+// sensor_drv.h —— 保持干净
+typedef struct { int pm25; bool valid; } SensorData;
+SensorData read_sensor(void);
+
+// sensor_drv.c
+#include "sensor_drv.h"
+#include "cloud_handler.h"  // 实现文件才包含
+void Sensor_Read(void) {
+    SensorData d = read_sensor();
+    cloud_upload(&d);       // 这里才需要 cloud_handler
+}
+```
+#### ✅ 2. 使用前向声明（Forward Declaration）替代包含（仅适用于指针）
+若只需指针或函数参数，无需完整类型定义：
+```c
+// module_a.h
+struct ModuleB;  // 前向声明
+
+void process_b(struct ModuleB* b);  // 合法：只需指针
+
+// module_b.h
+struct ModuleA;
+void process_a(struct ModuleA* a);
+```
+> ⚠️ 限制：不能用于结构体成员（值类型）、`sizeof()`、直接访问成员。
+
+#### ✅ 3. 分离“公共类型”与“模块接口”
+将共享数据结构提取到独立头文件：
+```c
+// common_types.h
+typedef struct { uint16_t pm2_5_env; bool valid; } PM_SensorData;
+
+// sensors_data.h
+#include "common_types.h"
+typedef struct {
+    PM_SensorData pm;
+    float temp;
+} SystemSensorData;
+
+// pms7003_drv.h
+#include "common_types.h"  // 只依赖公共类型
+PM_SensorData PMS_ParseDataPacket(const uint8_t* buf);
+```
+这样，各模块通过 公共契约 通信，而非互相包含。
+
+---
+
+#### ✅ 4. 遵循 .c 文件包含顺序原则
+
+在 `.c` 文件中，按以下顺序包含头文件：
+1. 对应的 .h 文件（首先包含，可检测自完备性）
+2. 系统/标准库头文件
+3. 其他模块头文件
+```c
+// my_driver.c
+#include "my_driver.h"      // 1. 测试 my_driver.h 是否能独立编译
+#include <string.h>         // 2. 标准库
+#include "sensors_data.h"   // 3. 业务依赖（仅在 .c 中需要）
+```
+> ✅ 若 `my_driver.h` 缺少必要依赖，此写法会立即报错，帮助早期发现问题。
+
+#### ✅ 5. 通过函数接口解耦，而非暴露全局变量
+不要让模块直接操作全局结构体，而是提供 受控更新接口：
+```c
+// sensors_data.h
+void SensorsData_Update_PM(const PM_SensorData* pm);
+
+// pms7003_drv.c
+#include "pms7003_drv.h"
+#include "sensors_data.h"  // 仅在 .c 中包含
+
+void Dust_Data_Read(void) {
+    PM_SensorData data = PMS_ParseDataPacket(rx_buf);
+    if (data.is_valid) {
+        SensorsData_Update_PM(&data);  // 推送数据，而非直接赋值全局变量
+    }
+}
+```
+这既避免了 extern 滥用，也消除了头文件间的不必要依赖。
+
+## 五、总结：构建清晰架构的黄金法则
+| 原则 | 说明 |
+|------|------|
+| 最小包含 | `.h` 只包含编译自身必需的依赖 |
+| 公共类型集中管理 | 共享结构体放入 `common_types.h` |
+| 实现细节留在 `.c` | 业务逻辑、全局状态操作绝不污染 `.h` |
+| 用接口代替直接访问 | 通过函数更新数据，而非暴露全局变量 |
+| 每个 `.h` 应自完备 | 能被任何 `.c` 独立包含而不报错 |
+
+> 🎯 目标不是“让代码能编译”，而是“让架构可维护”。

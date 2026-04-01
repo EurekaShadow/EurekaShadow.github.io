@@ -1,0 +1,258 @@
+/*************************************************************************************
+ * QuickNote MDX 纯 CSS 卡片样式
+ * 功能：为纯 MDX 格式的速记卡片提供视觉样式（无需 React 组件）
+ * 支持：亮色/暗色模式、多种变体（default/warning/error/tip）
+ * 用法：在 MDX 文件中使用 className={styles.card} 等类名
+ *************************************************************************************/
+
+/* 卡片主容器 */
+.quickNoteCard {
+  border-radius: 10px;
+  padding: 1.25rem;
+  margin: 1.5rem 0;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
+  border-left: 5px solid var(--card-border-color);
+  background: var(--card-bg);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+/* 悬停效果 */
+.quickNoteCard:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+}
+
+/*---------------------------------------------
+  卡片变体 - 不同颜色主题
+------------------------------------------------*/
+
+/* 默认 variant (蓝色系) */
+.quickNoteDefault {
+  --card-bg: linear-gradient(135deg, rgba(135, 206, 250, 0.08), rgba(255, 255, 255, 0.02));
+  --card-border-color: #87CEFA;
+  --phenomenon-label-bg: rgba(135, 206, 250, 0.15);
+  --phenomenon-label-text: #87CEFA;
+  --cause-label-bg: rgba(242, 187, 224, 0.15);
+  --cause-label-text: #F2BBE0;
+  --solution-label-bg: rgba(106, 190, 48, 0.15);
+  --solution-label-text: #6abe30;
+}
+
+/* 警告 variant (橙色系) */
+.quickNoteWarning {
+  --card-bg: linear-gradient(135deg, rgba(255, 165, 0, 0.08), rgba(255, 255, 255, 0.02));
+  --card-border-color: #ffa500;
+  --phenomenon-label-bg: rgba(255, 165, 0, 0.15);
+  --phenomenon-label-text: #ffa500;
+  --cause-label-bg: rgba(255, 140, 0, 0.15);
+  --cause-label-text: #ff8c00;
+  --solution-label-bg: rgba(255, 215, 0, 0.15);
+  --solution-label-text: #ffd700;
+}
+
+/* 错误 variant (红色系) */
+.quickNoteError {
+  --card-bg: linear-gradient(135deg, rgba(240, 60, 70, 0.08), rgba(255, 255, 255, 0.02));
+  --card-border-color: #f03c46;
+  --phenomenon-label-bg: rgba(240, 60, 70, 0.15);
+  --phenomenon-label-text: #f03c46;
+  --cause-label-bg: rgba(220, 20, 60, 0.15);
+  --cause-label-text: #dc143c;
+  --solution-label-bg: rgba(255, 99, 71, 0.15);
+  --solution-label-text: #ff6347;
+}
+
+/* 提示 variant (绿色系) */
+.quickNoteTip {
+  --card-bg: linear-gradient(135deg, rgba(106, 190, 48, 0.08), rgba(255, 255, 255, 0.02));
+  --card-border-color: #6abe30;
+  --phenomenon-label-bg: rgba(106, 190, 48, 0.15);
+  --phenomenon-label-text: #6abe30;
+  --cause-label-bg: rgba(135, 206, 250, 0.15);
+  --cause-label-text: #87CEFA;
+  --solution-label-bg: rgba(106, 190, 48, 0.2);
+  --solution-label-text: #6abe30;
+}
+
+/*---------------------------------------------
+  标题区域
+------------------------------------------------*/
+.quickNoteTitle {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--ifm-heading-color);
+  margin-bottom: 1rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 2px solid var(--card-border-color);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.quickNoteTitle::before {
+  content: '📝';
+  font-size: 1.2em;
+}
+
+/*---------------------------------------------
+  内容区域
+------------------------------------------------*/
+.quickNoteContent {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+/* 每个小节（现象/根因/解法） */
+.quickNoteSection {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  line-height: 1.7;
+}
+
+/* 标签（现象/根因/解法） */
+.quickNoteLabel {
+  display: inline-block;
+  padding: 0.2rem 0.6rem;
+  border-radius: 6px;
+  font-weight: 700;
+  font-size: 0.85rem;
+  white-space: nowrap;
+  flex-shrink: 0;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+}
+
+/* 现象标签样式 */
+.quickNotePhenomenon {
+  background: var(--phenomenon-label-bg);
+  color: var(--phenomenon-label-text);
+}
+
+/* 根因标签样式 */
+.quickNoteCause {
+  background: var(--cause-label-bg);
+  color: var(--cause-label-text);
+}
+
+/* 解法标签样式 */
+.quickNoteSolution {
+  background: var(--solution-label-bg);
+  color: var(--solution-label-text);
+}
+
+/* 文本内容 */
+.quickNoteText {
+  color: var(--ifm-font-color-base);
+  flex: 1;
+  font-size: 0.95rem;
+}
+
+/*---------------------------------------------
+  代码块支持
+------------------------------------------------*/
+.quickNoteText pre {
+  background: var(--ifm-pre-background);
+  border-radius: 6px;
+  padding: 1rem;
+  margin: 0.75rem 0;
+  overflow-x: auto;
+  font-size: 0.85rem;
+  line-height: 1.5;
+  border: 1px solid var(--ifm-color-emphasis-200);
+}
+
+.quickNoteText code {
+  background: var(--ifm-code-background);
+  padding: 0.2rem 0.4rem;
+  border-radius: 4px;
+  font-size: 0.9em;
+  color: var(--ifm-color-primary);
+  font-family: var(--ifm-font-family-monospace);
+}
+
+.quickNoteText pre code {
+  background: transparent;
+  padding: 0;
+  color: inherit;
+  font-size: inherit;
+}
+
+/*---------------------------------------------
+  列表和链接支持
+------------------------------------------------*/
+.quickNoteText ul,
+.quickNoteText ol {
+  margin: 0.5rem 0;
+  padding-left: 1.5rem;
+}
+
+.quickNoteText li {
+  margin: 0.3rem 0;
+}
+
+.quickNoteText a {
+  color: var(--ifm-link-color);
+  text-decoration: underline;
+}
+
+.quickNoteText a:hover {
+  text-decoration: none;
+}
+
+/*---------------------------------------------
+  标签区域
+------------------------------------------------*/
+.quickNoteTags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 1rem;
+  padding-top: 0.75rem;
+  border-top: 1px dashed var(--ifm-color-emphasis-200);
+}
+
+.quickNoteTag {
+  display: inline-block;
+  padding: 0.25rem 0.6rem;
+  background: var(--ifm-color-secondary-lightest);
+  color: var(--ifm-color-content-secondary);
+  border-radius: 16px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.quickNoteTag:hover {
+  background: var(--card-border-color);
+  color: white;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+/*---------------------------------------------
+  暗色模式适配
+------------------------------------------------*/
+[data-theme='dark'] .quickNoteCard {
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.3);
+}
+
+[data-theme='dark'] .quickNoteCard:hover {
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+}
+
+[data-theme='dark'] .quickNoteLabel {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+[data-theme='dark'] .quickNoteTag {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--ifm-color-gray-400);
+}
+
+[data-theme='dark'] .quickNoteTag:hover {
+  background: var(--card-border-color);
+  color: white;
+}
