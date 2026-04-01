@@ -26,7 +26,8 @@
 
 - 🔭 目前专注于：嵌入式系统开发与物联网技术应用
 - 🌱 正在学习：RTOS
-- 📫 访问我的博客：[https://eurekax.space](https://eurekax.space)
+- 📫 访问我的博客：[https://eurekax.space](https://eurekax.space '更新较快') |
+  [https://eurekashadow.github.io/](https://eurekashadow.github.io/ '更新较慢')
 
 ---
 
